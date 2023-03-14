@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Fintechee | MFA</title>
+	<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+	<link rel="stylesheet" href="/adminlte/css/adminlte.min.css" />
+	<!-- Favicon and touch icons -->
+	<link rel="shortcut icon" href="favicon.ico" />
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+
+<!-- toolbar -->
+<nav class="main-header navbar navbar-expand navbar-dark">
+
+<ul class="navbar-nav ml-auto">
+
+<li class="nav-item dropdown">
+<a class="nav-link" data-toggle="dropdown" href="#" id="btnSyncMessage">
+<i class="far fa-comments"></i>
+<span class="badge badge-danger navbar-badge" id="syncMessageCount" style="display:none">0</span>
+</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="syncMessageList">
+<a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+</div>
+</li>
+
+<li class="nav-item dropdown">
+<a class="nav-link" data-toggle="dropdown" href="#" id="btnAsyncMessage">
+<i class="far fa-bell"></i>
+<span class="badge badge-warning navbar-badge" id="asyncMessageCount" style="display:none">0</span>
+</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="asyncMessageList">
+<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+</div>
+</li>
+
+<li class="nav-item dropdown">
+<a class="nav-link" data-toggle="dropdown" href="#">
+<i class="far fa-user"></i>
+</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+<a href="#" class="dropdown-item" data-toggle="modal" data-target="#signInDlg">
+Sign In
+</a>
+<div class="dropdown-divider"></div>
+<a href="#" class="dropdown-item" data-toggle="modal" data-target="#mfaDlg">
+MFA
+</a>
+</div>
+</li>
+
+</ul>
+</nav>
+<!-- toolbar -->
+
+
+<!-- menu -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+<a href="index3.html" class="brand-link">
+<span class="brand-text font-weight-light">Fintechee</span>
+</a>
+
+<div class="sidebar">
+
+<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+<div class="info">
+<div class="d-block">ID: <span id="accountId"></span></div>
+</div>
+</div>
+
+<div class="form-inline">
+<div class="input-group" data-widget="sidebar-search">
+<input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+<div class="input-group-append">
+<button class="btn btn-sidebar">
+<i class="fas fa-search fa-fw"></i>
+</button>
+</div>
+</div>
+</div>
+
+<nav class="mt-2">
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+<li class="nav-item">
+<a href="/testadmin_signup.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+Sign Up
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="/testadmin_signin.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+Sign In
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="/testadmin_resetpw.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+Reset Password
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="/testadmin_mfa.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+MFA
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="/testadmin_changepw.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+Change Password
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="/testadmin_fix.html" class="nav-link">
+<i class="nav-icon fas fa-th"></i>
+<p>
+FIX Settings
+</p>
+</a>
+</li>
+</ul>
+</nav>
+
+</div>
+
+</aside>
+<!-- menu -->
+
+
+<!-- payment -->
+<div class="content-wrapper" id="paymentSection" style="display:none">
+
+<div class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1 class="m-0">Payments</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-right">
+<li class="breadcrumb-item"><a href="#">Home</a></li>
+<li class="breadcrumb-item active">Payments</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+
+<div class="row">
+<!-- invoice -->
+<div class="col-md-6">
+
+<div class="card card-primary">
+<div class="card-header">
+<h3 class="card-title">Deposit</h3>
+</div>
+
+
+<form>
+<div class="card-body">
+<div class="form-group">
+<label for="fundsInvoice">Funds</label>
+<input type="text" class="form-control" id="fundsInvoice" placeholder="Funds">
+</div>
+<div class="form-group">
+<label for="commentInvoice">Comment</label>
+<input type="text" class="form-control" id="commentInvoice" placeholder="Comment">
+</div>
+<div class="form-group">
+<label for="xpubInvoice">xpub (Your Etherium Account's Public Address)</label>
+<input type="text" class="form-control" id="xpubInvoice" placeholder="xpub">
+</div>
+</div>
+
+<div class="card-footer">
+<button type="button" class="btn btn-primary" id="btnCreateInvoice">Deposit</button>
+</div>
+</form>
+</div>
+
+</div>
+<!-- invoice -->
+
+<!-- payout -->
+<div class="col-md-6">
+
+<div class="card card-primary">
+<div class="card-header">
+<h3 class="card-title">Withdraw</h3>
+</div>
+
+
+<form>
+<div class="card-body">
+<div class="form-group">
+<label for="fundsPayout">Funds</label>
+<input type="text" class="form-control" id="fundsPayout" placeholder="Funds">
+</div>
+<div class="form-group">
+<label for="commentPayout">Comment</label>
+<input type="text" class="form-control" id="commentPayout" placeholder="Comment">
+</div>
+<div class="form-group">
+<label for="xpubPayout">xpub (Your Etherium Account's Public Address)</label>
+<input type="text" class="form-control" id="xpubPayout" placeholder="xpub">
+</div>
+</div>
+
+<div class="card-footer">
+<button type="button" class="btn btn-primary" id="btnCreatePayout">Withdraw</button>
+</div>
+</form>
+</div>
+
+</div>
+<!-- payout -->
+
+</div>
+</div>
+</section>
+</div>
+<!-- payment -->
+
+<!-- white label list -->
+<div class="content-wrapper">
+
+<div class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1 class="m-0">Brokers</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-right">
+<li class="breadcrumb-item"><a href="#">Home</a></li>
+<li class="breadcrumb-item active">Brokers</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+
+<div class="row">
+<div class="col-12">
+
+<div class="card">
+<div class="card-header">
+<h3 class="card-title">White Label List</h3>
+</div>
+
+<div class="card-body">
+<table id="brokerList" class="table table-bordered table-striped">
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<!-- white label list -->
+
+<!-- account list -->
+<div class="content-wrapper">
+
+<div class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1 class="m-0">Accounts</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-right">
+<li class="breadcrumb-item"><a href="#">Home</a></li>
+<li class="breadcrumb-item active">Accounts</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+
+<div class="row">
+<div class="col-12">
+
+<div class="card">
+<div class="card-header">
+<h3 class="card-title">Account List</h3>
+</div>
+
+<div class="card-body">
+<table id="accountList" class="table table-bordered table-striped">
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<!-- account list -->
+
+<!-- symbol list -->
+<div class="content-wrapper">
+
+<div class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1 class="m-0">Symbols</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-right">
+<li class="breadcrumb-item"><a href="#">Home</a></li>
+<li class="breadcrumb-item active">Symbols</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+
+<div class="row">
+<div class="col-12">
+
+<div class="card">
+<div class="card-header">
+<h3 class="card-title">Symbol List</h3>
+</div>
+
+<div class="card-body">
+<table id="symbolList" class="table table-bordered table-striped">
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<!-- symbol list -->
+
+<!-- grouped open position list -->
+<div class="content-wrapper">
+
+<div class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1 class="m-0">Grouped Open Postions</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-right">
+<li class="breadcrumb-item"><a href="#">Home</a></li>
+<li class="breadcrumb-item active">Grouped Open Postions</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+
+<div class="row">
+<div class="col-12">
+
+<div class="card">
+<div class="card-header">
+<h3 class="card-title">Grouped Open Postion List</h3>
+</div>
+
+<div class="card-body">
+<table id="groupedOpenPosList" class="table table-bordered table-striped">
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<!-- grouped open position list -->
+
+<!-- sign in -->
+<div class="modal fade" id="signInDlg">
+<div class="modal-dialog">
+<div class="modal-content bg-info">
+<div class="modal-header">
+<h4 class="modal-title">Sign In</h4>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+
+<div class="login-box" style="width:auto">
+
+<div class="card">
+<div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+<p class="login-box-msg">Sign in to start your session</p>
+<form id="loginForm">
+<div class="input-group mb-3">
+<select class="form-control" style="color:#000;background:#eee" id="brokerNameSignIn">
+	<option>Fintechee Demo</option>
+	<option>Test Demo1</option>
+</select>
+</div>
+<div class="input-group mb-3">
+<input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdSignIn">
+<div class="input-group-append">
+<div class="input-group-text" style="background:#eee">
+<span class="fas fa-user"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="password" class="form-control" placeholder="Password" style="color:#000;background:#eee" id="passwordSignIn">
+<div class="input-group-append">
+<div class="input-group-text" style="background:#eee">
+<span class="fas fa-lock"></span>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+<input type="password" class="form-control" placeholder="Investor Password" style="color:#000;background:#eee" id="investorPasswordSignIn">
+<div class="input-group-append">
+<div class="input-group-text" style="background:#eee">
+<span class="fas fa-lock"></span>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-8">
+<div class="icheck-primary">
+<input type="checkbox" id="remember">
+<label for="remember">
+Remember Me
+</label>
+</div>
+</div>
+
+<div class="col-4">
+<button type="button" class="btn btn-primary btn-block" id="btnSignIn">Sign In</button>
+</div>
+
+</div>
+
+
+</form>
+
+<p class="mb-1">
+<a href="forgot-password.html" style="color:#fff">I forgot my password</a>
+</p>
+<p class="mb-0">
+<a href="register.html" class="text-center" style="color:#fff">Register a new membership</a>
+</p>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<!-- sign in -->
+
+<!-- verify mfa -->
+<div class="modal fade" id="verifyMfaDlg">
+<div class="modal-dialog">
+<div class="modal-content bg-info">
+<div class="modal-header">
+<h4 class="modal-title">MFA</h4>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+
+<div class="login-box" style="width:auto">
+
+<div class="card">
+<div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+<p class="login-box-msg">Check your MFA APP</p>
+<form id="verifyMfaForm">
+<div class="input-group mb-3">
+<input type="text" class="form-control" placeholder="MFA Code" style="color:#000;background:#eee" id="mfaCode">
+<div class="input-group-append">
+<div class="input-group-text" style="background:#eee">
+<span class="fas fa-envelope"></span>
+</div>
+</div>
+</div>
+<input type="hidden" id="mfaToken">
+<div class="row">
+<div class="col-12">
+<button type="button" class="btn btn-primary btn-block" id="btnVerifyMfa">Sign In</button>
+</div>
+</div>
+
+</form>
+
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<!-- verify mfa -->
+
+<!-- mfa -->
+<div class="modal fade" id="mfaDlg">
+<div class="modal-dialog">
+<div class="modal-content bg-info">
+<div class="modal-header">
+<h4 class="modal-title">MFA</h4>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+
+<div class="login-box" style="width:auto">
+
+<div class="card">
+<div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+<p class="login-box-msg">Enable or disable MFA</p>
+<form id="mfaForm">
+
+<div class="input-group mb-3">
+<div class="attachment-block clearfix">
+<img class="attachment-img" src="/images/mfa.png" alt="Attachment Image" id="qrCode">
+<div class="attachment-pushed">
+<div class="attachment-text">
+Enable or disable MFA?
+</div>
+
+</div>
+
+</div>
+</div>
+
+<div class="row">
+<div class="col-8">
+<div class="icheck-primary">
+<input type="checkbox" id="chkConfirmMfa">
+<label for="chkConfirmMfa">
+If you have scanned the QR code, please check this option.
+</label>
+</div>
+</div>
+
+<input type="hidden" id="mfaEnabled">
+
+<div class="col-4">
+<div class="btn-group">
+<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+<button type="button" class="btn btn-info" id="btnDisableMfa">Disable</button>
+<button type="button" class="btn btn-info" id="btnEnableMfa">Enable</button>
+<button type="button" class="btn btn-info" id="btnSetMfa">Ok</button>
+</div>
+</div>
+
+</div>
+</form>
+
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+<!-- mfa -->
+
+<aside class="control-sidebar control-sidebar-dark">
+
+<div class="p-3">
+<h5>Title</h5>
+<p>Sidebar content</p>
+</div>
+</aside>
+
+
+<footer class="main-footer">
+
+<div class="float-right d-none d-sm-inline">
+Anything you want
+</div>
+
+<strong>Copyright &copy; 2013-2023 <a href="https://www.fintechee.com">Fintechee.com</a>.</strong> All rights reserved. Powered by <a href="https://adminlte.io">AdminLTE.io</a>
+</footer>
+</div>
+
+<script type="text/javascript" src="/js/cc/lang/en.js"></script>
+<script type="text/javascript" src="/js/cc/lang/enm.js"></script>
+<script type="text/javascript" src="/js/cc/brokers.js"></script>
+<script type="text/javascript" src="/js/jquery/jquery-3.2.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/plugins/jquery-validation/additional-methods.min.js"></script>
+<script src="/adminlte/js/adminlte.min.js"></script>
+<script type="text/javascript" src="/js/d3/d3.min.js"></script>
+<script type="text/javascript" src="/js/cc/s.js"></script>
+<script type="text/javascript" src="/js/cc/testadmin_mfa.js"></script>
+<script src="https://bitcart.fxbankroll.com/admin/modal/bitcart.js"></script>
+<script defer>
+
+$(document).ready(function () {
+	initX(null);
+	setTimeout(function () {
+		loadDashboard();
+	}, 5000);
+})
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+table td {
+  white-space: nowrap;
+}
+thead th, tr td {
+  background-color: var(--bs-table-active-bg) !important;
+  color: var(--bs-table-active-color) !important;
+}
+thead th {
+  color:#e5d1b2!important;
+}
+tr td button {
+  background-color:#e5d1b2!important;
+  color:#2b3847!important;
+}
+html {
+  background-color:#2b3847!important;
+}
+.main-sidebar {
+  background-color:#2b3847!important;
+  color:#e5d1b2!important;
+}
+.brand-link {
+  background-color:#2b3847!important;
+}
+.nav-link {
+  color:#e5d1b2!important;
+}
+.main-header {
+  background-color:#2b3847!important;
+}
+.dropdown-menu {
+  background-color:#2b3847!important;
+  color:#e5d1b2!important;
+}
+.dropdown-item {
+  color:#e5d1b2!important;
+}
+.dropdown-item-hover {
+  color:#e5d1b2!important;
+}
+.main-footer {
+  background-color:#2b3847!important;
+}
+.content-wrapper {
+  background-color:#2b3847!important;
+}
+.card-header {
+  background-color:#2b3847!important;
+}
+.card-body {
+  background-color:#2b3847!important;
+}
+.card-footer {
+  background-color:#2b3847!important;
+}
+.login-card-body {
+  background-color:#17a2b8!important;
+}
+.breadcrumb a {
+  color:#e5d1b2!important;
+}
+.info-box {
+  background-color:#088093!important;
+}
+footer a {
+  color:#e5d1b2!important;
+}
