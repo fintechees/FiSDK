@@ -556,6 +556,7 @@ window.fiui.signUp = {
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
     }
+    dropdownList.push('<option value="Fintechee Demo">Fintechee Demo Server</option>');
     $("#brokerNameSignUp").html(dropdownList.join("\n"));
 
     fisdk.subscribeToNotification("verification_code_required", function (res) {
@@ -755,6 +756,7 @@ window.fiui.signIn = {
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
     }
+    dropdownList.push('<option value="Fintechee Demo">Fintechee Demo Server</option>');
     $("#brokerNameSignIn").html(dropdownList.join("\n"));
 
     fisdk.subscribeToNotification("verification_mfa_required", function (res) {
@@ -1118,6 +1120,7 @@ window.fiui.resetPw = {
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
     }
+    dropdownList.push('<option value="Fintechee Demo">Fintechee Demo Server</option>');
     $("#brokerNameResetPw").html(dropdownList.join("\n"));
 
     fisdk.subscribeToNotification("sending_reset_pw_email_done", function (res) {
