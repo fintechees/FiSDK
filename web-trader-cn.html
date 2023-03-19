@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+	<title>WEB Trader ~ Fintechee</title>
+	<meta name="description"
+		content="Fintechee provides the best WEB trader with algorithms for trading and backtesting a portfolio to help traders enhance their trading strategies." />
+	<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+
+	<link rel="stylesheet" type="text/css" href="/semantic-ui-build/semantic/dist/semantic.min.css" />
+	<link rel="stylesheet" type="text/css" href="/semantic/calendar.min.css" />
+
+	<link rel="stylesheet" type="text/css" href="/datatables/DataTables-1.10.18/css/jquery.dataTables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/datatables/DataTables-1.10.18/css/dataTables.semanticui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/datatables/RowReorder-1.2.4/css/rowReorder.dataTables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/datatables/RowReorder-1.2.4/css/rowReorder.semanticui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/datatables/Responsive-2.2.2/css/responsive.dataTables.min.css" />
+	<link rel="stylesheet" type="text/css" href="/datatables/Responsive-2.2.2/css/responsive.semanticui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/spectrum/spectrum.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/trade.min.css"/>
+
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+<div id="loading" class="ui active inverted dimmer" style="background:#fff;z-index:90000">
+	<div class="ui large text loader">Loading</div>
+</div>
+
+<div id="bd2" class="ui noanimation right vertical menu sidebar"
+	style="padding-left:5px;padding-right:0px;width:350px;height:100%;overflow:hidden">
+	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:35px;box-sizing:content-box;padding-top:10px">
+		<div class="row">
+			<div id="test_s"></div>
+		</div>
+	</div>
+</div>
+<div id="news" class="ui noanimation right vertical menu sidebar"
+	style="padding-left:0px;padding-right:0px;width:350px;height:100%;overflow:hidden;-ms-overflow-style:none;scrollbar-width:none;">
+	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:0px;box-sizing:content-box;padding-top:0px;-ms-overflow-style:none;scrollbar-width:none;">
+
+		<iframe src="https://www.fintechee.com/ccnews/"></iframe>
+	</div>
+</div>
+
+
+<div id="accountsummarysidebar" class="ui noanimation right vertical menu sidebar" style="width:350px">
+	<div id="test_a_s"></div>
+</div>
+<div id="orderstradessidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE;overflow-x:hidden">
+	<div class="row" style="width:100%">
+		<div id="test_o"></div>
+	</div>
+
+</div>
+<div id="indissidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+	<div class="row" style="width:100%">
+		<div id="test_i"></div>
+	</div>
+</div>
+<div id="eassidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+	<div class="row" style="width:100%">
+		<div id="test_e"></div>
+	</div>
+</div>
+<div id="console" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+	<div class="row" style="width:100%;height:550px;overflow:hidden">
+		<div class="ui tiny top attached tabular menu">
+			<a class="programl item" id="closeprograml"><i class="times circle icon"></i></a>
+			<a class="programl active item" data-tab="javascript" id="javascript">Javascript</a>
+			<a class="programl item" data-tab="cpp" id="cpp">C / C++</a>
+			<a class="programl item" data-tab="eastudio" id="eastudio">Expert Advisor Studio</a>
+		</div>
+		<div class="ui attached active tab segment programsl" id="javascriptseg" data-tab="javascript" style="width:100%;height:100%;padding-top:5px;padding-left:0;padding-right:0">
+			<div class="row" style="text-align:center;margin-bottom:5px">
+				<div class="ui button" id="run" onclick="run1()" style="width:200px;background:#EEEEEE">运行</div>
+			</div>
+			<div class="row" style="background:#FFFFFF;width:100%;border-top:1px solid #EEEEEE">
+				<div id="testtext"></div>
+			</div>
+		</div>
+		<div class="ui attached tab segment programsl" id="cppseg" data-tab="cpp" style="width:100%;height:100%;padding-left:0;padding-top:5px">
+			<iframe src="https://www.fintechee.com/cpp/"></iframe>
+		</div>
+		<div class="ui attached tab segment programsl" id="eastudioseg" data-tab="eastudio" style="width:100%;height:100%;padding:0">
+			<iframe src="https://www.fintechee.com/ea-studio/"></iframe>
+		</div>
+
+	</div>
+</div>
+
+<div class="ui small modal" id="calendar">
+	<div class="row" style="height:100%">
+		<iframe src="https://www.fintechee.com/calendar/"></iframe>
+	</div>
+</div>
+
+
+
+<div class="pusher" style="height:100%">
+<div class="main_panel" style="width:100%;height:100%;position:absolute;overflow:hidden" id="ccbrand">
+
+<div class="ui vertical footer segment" style="background:#D13E00">
+  <div class="ui container">
+    <div class="ui hidden divider"></div>
+    <nav>
+      <div class="ui stackable divided equal height stackable grid">
+        <div class="four wide column">
+          <h4 class="ui header" style="color:#FFE6C1">Features</h4>
+          <div class="ui link list" style="color:#FFFFFF">
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/">Best Trading Platform</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/ecosystem/">Fintechee's Ecosystem</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/architecture/">Fintechee's Architecture</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/forex-trading-strategies/">Forex Trading Strategies</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/algorithms-for-trading/">Algorithms for Trading</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/backtesting-a-portfolio/">Backtesting a Portfolio</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/expert-advisor-studio/">Expert Advisor Studio</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/automated-forex-trading/">Automated Forex Trading</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/trading-simulation/">Trading Simulation</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/fix-api-trading-platform/">FIX API Trading Platform</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/fix-api/">FIX API (Individual Version)</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/faq-for-fix-api/">FAQ for FIX API</a>
+
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/price-aggregator/">Price Aggregator</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/genetic-algorithm-for-trading/">Genetic Algorithm for Trading</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/spread-betting/">Spread Betting</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/payment-gateway/">Plugins for Payment Gateway</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/features/decentralized-exchange/">Plugins for Decentralized Exchange</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/compatible-with-mql/">Compatibility with C/C++/MQL</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/expert-advisor-cpp-compiler/">Expert Advisor C/C++/MQL Compiler</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/plugins/">Free Plugins</a>
+
+          </div>
+        </div>
+        <div class="four wide column">
+          <h4 class="ui header" style="color:#FFE6C1">Services</h4>
+          <div class="ui link list" style="color:#FFFFFF">
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/tutorial-for-forex-trading/">Tutorial for Forex Trading</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/forex-broker-white-label/">Forex Broker White Label</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/cryptocurrency-broker-white-label/">Cryptocurrency Broker White Label</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/individual-trader/">Individual Trader</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/liquidity-provider/">Liquidity Provider</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/introducing-broker/">Introducing Broker</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/chart-widget/">Chart Widget</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/services/historical-data-for-forex/">Historical Data for Forex</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/sdk-trading/">SDK Trading</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/sdk-doc/">SDK API Document</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.fintecher.org/">Advice of CEO</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.mql4web.com/">Marketplace of EA</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.angelinvestmentnetwork.org">Fintech Angel Investors</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.xcoinch.com">XCoinCH Clearing House</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.defi.video">DeFi Videos</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.fintechee.com/videostreaming">Live Video Streaming</a>
+          </div>
+        </div>
+        <div class="four wide column">
+          <h4 class="ui header" style="color:#FFE6C1">About</h4>
+          <div class="ui link list" style="color:#FFFFFF">
+            <a style="color:#FFFFFF" class="item" href="mailto:admin@fintechee.com">Contact Us</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/terms/">Terms and Conditions</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/policy/">Privacy Policy</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/marketing/reseller/">Reseller</a>
+            <a style="color:#FFFFFF" class="item" href="https://www.fintechee.com/marketing/affiliate/">Affiliate Program</a>
+            <a style="color:#FFFFFF" class="item" target="_blank" href="https://www.fintechee.shop">Official Online Shop</a>
+
+            <a class="item" href="https://play.google.com/store/apps/details?id=com.channelsea.fintechee"><img style="width:130px" alt='Get it on Google Play' src='https://www.fintechee.com/images/badges/en_badge_web_generic.png'/></a>
+          </div>
+        </div>
+        <div class="four wide column">
+          <h4 class="ui header" style="color:#FFE6C1">Disclaimer</h4>
+          <p style="color:#FFFFFF">
+            Our website(www.fintechee.com) provides demo trading accounts, we are trying our best to build the best trading platform, so your account here is risk-free.
+            Please note that leveraged trading in foreign currency contracts or other off-exchange products on margin carries a high level of risk and may not be suitable for everyone. We advise you to carefully consider whether trading is appropriate for you in light of your circumstances. You may lose more than you invest. Information on this website is general. We recommend that you seek independent financial advice and ensure you fully understand the risks involved before trading. Trading through an online platform carries additional risks.
+          </p>
+        </div>
+      </div>
+    </nav>
+    <div class="ui hidden divider"></div>
+  </div>
+</div>
+<div class="ui vertical footer segment" style="background:#FFFFFF">
+  <div class="ui center aligned container">
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="ui tiny images">
+      <img src="https://www.fintechee.com/images/fuyintaike_new_tm.png" class="ui centered tiny image" alt="Fintechee: Best trading platform and Fintech company with our WEB trader and FIX API trading platform">
+      <img src="https://www.fintechee.com/images/fintechee_logo.png" class="ui centered tiny image" alt="Fintechee: Best trading platform and Fintech company with our WEB trader and FIX API trading platform">
+      <img src="https://www.fintechee.com/images/new_logo.png" class="ui centered tiny image" alt="Fintechee: Best trading platform and Fintech company with our WEB trader and FIX API trading platform">
+    </div>
+    <div class="ui horizontal inverted small divided link list">
+      <p style="color:#222222;font-family: 'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif;">
+        <a href="https://www.fintechee.com/" style="color:#222222">The Best Trading Platform</a><br>
+        © 2013 - 2023 Channel-Sea Inc.上海丞喜金融信息服务有限公司版权所有<br>
+        <img src="https://www.fintechee.com/images/beian.png">沪公网安备31011402001114号/
+        沪ICP备15045031号<br>
+        The Past Drives The Future.
+      </p>
+    </div>
+  </div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+  <div class="ui hidden divider"></div>
+</div>
+</div>
+
+<div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
+	<div style="height:100%;text-align:center">
+		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="https://www.fintechee.com/">
+			<span style="color:#FFE6C1;font-size:50px">F</span>
+		</a>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="user icon"></i>
+			<div class="menu">
+				<a class="item" id="showaccounts" style="background:#E34400!important;color:#FFFFFF!important">账户</a>
+				<a class="item" id="showaccountssignin" style="background:#E34400!important;color:#FFFFFF!important">登录</a>
+				<a class="item" id="showaccountssignup" style="background:#E34400!important;color:#FFFFFF!important">注册</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="balance scale icon"></i>
+			<div class="menu">
+				<a class="item" id="showinstruments" style="background:#E34400!important;color:#FFFFFF!important">市场</a>
+				<a class="item" id="showinstruments2" style="background:#E34400!important;color:#FFFFFF!important">投资品种</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
+			<i class="handshake icon"></i>
+			<div class="menu">
+				<a class="item" id="showpendingorders" style="background:#E34400!important;color:#FFFFFF!important">挂单</a>
+				<a class="item" id="showopentrades" style="background:#E34400!important;color:#FFFFFF!important">当前的交易</a>
+				<a class="item" id="showhistorytrades" style="background:#E34400!important;color:#FFFFFF!important">已关闭的交易</a>
+				<a class="item" id="showcancelledorders" style="background:#E34400!important;color:#FFFFFF!important">已取消的挂单</a>
+				<a class="item" id="showhistoryoffunding" style="background:#E34400!important;color:#FFFFFF!important">出入金记录</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="graduation cap icon"></i>
+			<div class="menu">
+				<a class="item" id="showeas" style="background:#E34400!important;color:#FFFFFF!important">EA管理器</a>
+				<a class="item" id="showindis" style="background:#E34400!important;color:#FFFFFF!important">指标管理器</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showbt2">
+			<i class="gamepad icon"></i>
+			<div class="menu">
+				<a class="item" id="showbt" style="background:#E34400!important;color:#FFFFFF!important">回测</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="wrench icon"></i>
+			<div class="menu">
+				<a class="item" id="showconsole" style="background:#E34400!important;color:#FFFFFF!important">Javascript控制台</a>
+				<a class="item" id="showconsolecpp" style="background:#E34400!important;color:#FFFFFF!important">C / C++编译器</a>
+				<a class="item" id="showconsolegenerator" style="background:#E34400!important;color:#FFFFFF!important">EA生成器</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="newspaper outline icon"></i>
+			<div class="menu">
+				<a class="item" id="showcalendar" style="background:#E34400!important;color:#FFFFFF!important">日历</a>
+				<a class="item" id="shownews" style="background:#E34400!important;color:#FFFFFF!important">新闻</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="book icon"></i>
+			<div class="menu">
+				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/" style="background:#E34400!important;color:#FFFFFF!important">SDK说明</a>
+				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html" style="background:#E34400!important;color:#FFFFFF!important">Github</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="paint brush icon"></i>
+			<div class="menu">
+				<a class="item" id="showcolorpicker" style="background:#E34400!important;color:#FFFFFF!important">主题颜色更改</a>
+				<a class="item" id="changecolortobright" style="background:#E34400!important;color:#FFFFFF!important">明亮主题</a>
+				<a class="item" id="changecolortodark" style="background:#E34400!important;color:#FFFFFF!important">深色主题</a>
+				<a class="item" id="changecolortoblue" style="background:#E34400!important;color:#FFFFFF!important">蓝色主题</a>
+				<a class="item" id="changecolortosea" style="background:#E34400!important;color:#FFFFFF!important">海洋主题</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="table icon"></i>
+			<div class="menu">
+				<a class="item" id="changelayoutto1" style="background:#E34400!important;color:#FFFFFF!important"><i class="window maximize outline icon"></i></a>
+				<a class="item" id="changelayoutto2" style="background:#E34400!important;color:#FFFFFF!important"><i class="th large icon"></i></a>
+				<a class="item" id="changelayoutto3" style="background:#E34400!important;color:#FFFFFF!important"><i class="columns icon"></i></a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<div>中文</div>
+			<div class="menu">
+				<a class="item" style="background:#E34400!important;color:#FFFFFF!important" href="/web-trader.html">EN(English)</a>
+				<div class="item" style="background:#E34400!important;color:#FFFFFF!important">中文(Chinese)</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="test_s_m"></div>
+<div id="test_e_m"></div>
+<div id="test_w_m"></div>
+
+<div id="bd" class="ui grid" style="margin:0px;padding:0px;height:100%;position:relative">
+	<div id="charts" class="main_panel sixteen wide column"
+		style="padding-top:0px;padding-bottom:0px;padding-right:0px;width:100%;height:100%;overflow:hidden">
+		<div style="width:100%;height:100%;overflow:hidden;padding-right:0px;padding-bottom:10px;box-sizing:content-box;">
+			<div class="row" style="height:100%">
+				<div id="test_m_k_c" style="margin:0px;padding:0px;top:0;left:0;right:100%;bottom:100%;height:100%"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="test_i_d"></div>
+<div id="test_i_cd"></div>
+<div id="test_e_d"></div>
+<div id="test_e_cd"></div>
+<div id="test_s_d"></div>
+<div id="test_a_d"></div>
+
+<div id="test_r_d"></div>
+<div id="test_c_d"></div>
+<div id="test_p_d"></div>
+<div id="test_o_d"></div>
+<div id="test_w_d"></div>
+<div id="test_oc_d"></div>
+<div id="test_cl_d"></div>
+<div id="test_m_d"></div>
+<div id="test_em_d"></div>
+
+
+
+</div>
+<div id="reserved_zone"></div>
+
+<script type="text/javascript" src="/js/cc/lang/cn.js"></script>
+<script type="text/javascript" src="/js/cc/brokers.js"></script>
+<script type="text/javascript" src="/js/cc/builtin.js"></script>
+<script type="text/javascript" src="/js/jquery/jquery-3.2.1.min.js"></script>
+
+
+
+<script type="text/javascript" src="/semantic-ui-build/semantic/dist/semantic.min.js"></script>
+<script type="text/javascript" src="/semantic/calendar.min.js"></script>
+
+<script type="text/javascript" src="/datatables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/datatables/DataTables-1.10.18/js/dataTables.semanticui.min.js"></script>
+<script type="text/javascript" src="/datatables/RowReorder-1.2.4/js/dataTables.rowReorder.min.js"></script>
+<script type="text/javascript" src="/datatables/RowReorder-1.2.4/js/rowReorder.semanticui.min.js"></script>
+<script type="text/javascript" src="/datatables/Responsive-2.2.2/js/dataTables.responsive.min.js "></script>
+<script type="text/javascript" src="/datatables/Responsive-2.2.2/js/responsive.semanticui.min.js "></script>
+<script type="text/javascript" src="/spectrum/spectrum.js"></script>
+<script type="text/javascript" src="/js/d3/d3.min.js"></script>
+<script type="text/javascript" src="/js/cc/u.js"></script>
+
+
+<script type="text/javascript" src="/js/ace/ace.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/ace/theme-chrome.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/ace/mode-javascript.js" charset="utf-8"></script>
+
+<script src="/js/synaptic/synaptic.js"></script>
+
+<script defer>
+
+
+
+
+
+
+
+	var backtest_html = "https:\/\/www.fintechee.com\/backtest-cn/"
+	var editor = null
+	var colorStyle = "bright"
+	var brokerlessMode = false
+	var backboneMode = true
+	var layoutMode = true
+	var widgetMode = false
+	var defaultIndicatorsMode = true
+	var colorpickerMode = true
+	var newsMode = true
+	var calendarMode = true
+	var brokerless_html = "https://www.brokerless.cc/brokerless.html"
+	var report_html = "https:\/\/www.fintechee.com\/report.html"
+	var sharedBrokerName = null
+	var sharedAccount = null
+	var sharedInvestorPassword = null
+	var locationHash = location.hash.substr(1)
+	if (locationHash != "") {
+		sharedBrokerName = locationHash.split(":::")[0]
+		sharedAccount = locationHash.split(":::")[1]
+		sharedInvestorPassword = locationHash.split(":::")[2]
+	}
+
+	if (widgetMode) {
+		$('#showtradesmenuitem').hide()
+	}
+
+	$(document).ready(function(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		$('.ui.embed').embed()
+
+		$(".programl").tab()
+
+		$('.noanimation').transition('disable')
+
+		$('#showconsole').on('click', function () {
+			$('#console')
+			.sidebar('setting', 'transition', 'overlay')
+
+			.sidebar('toggle')
+
+			$('.programl').removeClass('active')
+			$('.programsl').removeClass('active')
+			$($('.programl')[1]).addClass('active')
+			$($('.programsl')[0]).addClass('active')
+		})
+
+		$('#showconsolecpp').on('click', function () {
+			$('#console')
+			.sidebar('setting', 'transition', 'overlay')
+
+			.sidebar('toggle')
+
+			$('.programl').removeClass('active')
+			$('.programsl').removeClass('active')
+			$($('.programl')[2]).addClass('active')
+			$($('.programsl')[1]).addClass('active')
+		})
+
+		$('#showconsolegenerator').on('click', function () {
+			$('#console')
+			.sidebar('setting', 'transition', 'overlay')
+
+			.sidebar('toggle')
+
+			$('.programl').removeClass('active')
+			$('.programsl').removeClass('active')
+			$($('.programl')[3]).addClass('active')
+			$($('.programsl')[2]).addClass('active')
+		})
+
+		$('#showindis').on('click', function () {
+            showIndicators()
+
+			$('#indissidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+		})
+
+		$('#showeas').on('click', function () {
+            showEAs()
+
+			$('#eassidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+		})
+
+		$('#showbt').on('click', function () {
+			showBackTest()
+		})
+
+		$('#showbt2').on('click', function () {
+			showBackTest()
+		})
+
+		$('#showopentrades').on('click', function () {
+			showTrades()
+
+			$('#orderstradessidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+			showTradesTab(2)
+		})
+
+		$('#showpendingorders').on('click', function () {
+			showTrades()
+
+			$('#orderstradessidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+			showTradesTab(1)
+		})
+
+		$('#showhistorytrades').on('click', function () {
+			showTrades()
+
+			$('#orderstradessidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+			showTradesTab(3)
+		})
+
+		$('#showcancelledorders').on('click', function () {
+			showTrades()
+
+			$('#orderstradessidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+			showTradesTab(4)
+		})
+
+		$('#showhistoryoffunding').on('click', function () {
+			showTrades()
+
+			$('#orderstradessidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+			showTradesTab(5)
+		})
+
+		$('#showinstruments').on('click', function () {
+			$('#bd2')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('setting', 'dimPage', false)
+				.sidebar('toggle')
+
+
+
+            $('#accountsummarysidebar').css('display', 'none')
+						$('#news').css('display', 'none')
+		})
+
+		$('#showinstruments2').on('click', function () {
+      $('#accountsummarysidebar').css('display', 'none')
+			$('#news').css('display', 'none')
+
+			showInstruments()
+		})
+
+		$('#changecolortobright').on('click', function () {
+			changeColorStyle("bright")
+		})
+
+		$('#changecolortodark').on('click', function () {
+			changeColorStyle("dark")
+		})
+
+		$('#changecolortoblue').on('click', function () {
+			changeColorStyle("blue")
+		})
+
+		$('#changecolortosea').on('click', function () {
+			changeColorStyle("sea")
+		})
+
+		$('#changelayoutto1').on('click', function () {
+			$('#ccbrand').hide()
+			changeLayout(1)
+		})
+
+		$('#changelayoutto2').on('click', function () {
+			$('#ccbrand').hide()
+			changeLayout(2)
+		})
+
+		$('#changelayoutto3').on('click', function () {
+			$('#ccbrand').hide()
+			changeLayout(3)
+		})
+
+		$('#showaccounts').on('click', function () {
+			$('#accountsummarysidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
+
+
+
+            $('#bd2').css('display', 'none')
+						$('#news').css('display', 'none')
+		})
+
+		$('#showaccountssignin').on('click', function () {
+			$('#bd2').css('display', 'none')
+			$('#news').css('display', 'none')
+
+			showAccountsSignIn()
+		})
+
+		$('#showaccountssignup').on('click', function () {
+			$('#bd2').css('display', 'none')
+			$('#news').css('display', 'none')
+
+			showAccountsSignUp()
+		})
+
+		$('#showcalendar').on('click', function () {
+			$('#calendar').css('height', '400px')
+			$('#calendar').transition('disable')
+			$('#calendar').modal({autofocus: false}).modal('show')
+		})
+
+		$('#shownews').on('click', function () {
+			$('#news')
+			.sidebar('setting', 'transition', 'overlay')
+			.sidebar('setting', 'dimPage', false)
+			.sidebar('toggle')
+
+			$('#accountsummarysidebar').css('display', 'none')
+			$('#bd2').css('display', 'none')
+		})
+
+		$('#showcolorpicker').on('click', function () {
+			showColorPicker()
+		})
+
+		$('#closeprograml').on({'click': function () {
+				$('#console').sidebar('hide')
+		}})
+
+
+
+
+		$(window).on('beforeunload', function() {
+			unload()
+        })
+
+		initForTrade()
+
+		editor = ace.edit("testtext")
+		editor.setTheme("ace/theme/chrome")
+		var JavaScriptMode = ace.require("ace/mode/javascript").Mode
+		editor.session.setMode(new JavaScriptMode())
+	})
+
+	function run1(){
+		eval(editor.getValue())
+		console.log(document.getElementById("testtext").value)
+		return false
+	}
+
+	function getMobileOsName () {
+		var userAgent = navigator.userAgent || navigator.vendor || window.opera
+
+		if (/windows phone/i.test(userAgent)) {
+			return "Windows Phone"
+		}
+
+		if (/android/i.test(userAgent)) {
+			return "Android"
+		}
+
+		if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+			return "iOS"
+		}
+
+		return "unknown"
+	}
+
+	var latestResizeTriggered = 0
+	var originalHeight = document.documentElement.clientHeight || document.body.clientHeight - 100
+	window.onresize = function () {
+		var dt = new Date().getTime()
+		if (dt - latestResizeTriggered > 3000) {
+			latestResizeTriggered = dt
+			var heightAfterResized = document.documentElement.clientHeight || document.body.clientHeight
+
+			if (heightAfterResized < originalHeight) {
+			} else {
+				if (getMobileOsName() == "Android") {
+					setTimeout(function () {
+						$(window).trigger("resize")
+					}, 2000)
+				}
+			}
+		}
+	}
+
+	document.body.addEventListener("focusout", () => {
+		if (getMobileOsName() == "iOS") {
+			setTimeout(function () {
+				$(window).trigger("resize")
+			}, 2000)
+		}
+	})
+</script>
+
+</body>
+</html>
