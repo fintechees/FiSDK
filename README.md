@@ -1,3 +1,5 @@
+![Fintechee](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/Indicators/extra_fractals/extra_fractals_screenshot.png?raw=true)
+
 ### FiSDK
 
 FiSDK is an API toolkit developed by Fintechee for managing and controlling the backend of the Fintechee trading platform. Fintechee uses the FIX API to connect to LP(liquidity providers) and provides REST API for traders to use. As a trading platform, there are inevitably a large number of asynchronous interactions between the client and server in order to respond quickly to customer requests. However, these asynchronous operations are very complex, making the REST API difficult to use and control for non-technical personnel. In order to attract more quant traders without technical backgrounds, Fintechee created FiSDK, which integrates a large number of REST APIs and repackages them with a simple interface based on JavaScript.
