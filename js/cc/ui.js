@@ -791,7 +791,7 @@ window.fiui.signIn = {
       window.fiui.sidebar.hideStatsMenu();
       window.fiui.payment.hide();
       window.fiui.stats.hide();
-      if ($("#chkRemember").prop("checked")) {
+      if ($("#chkRemember").prop("checked") || $("#accountIdSignIn").val() == "") {
         localStorage.setItem(window.fiac.getStorageName(), JSON.stringify({
           brokerName: window.fiac.brokerName,
           accountId: window.fiac.accountId,
@@ -1287,6 +1287,11 @@ window.fiui.payment = {
     </div>\
     <section class="content">\
     <div class="container-fluid">\
+    <div class="row">\
+    <div class="col-md-12">\
+    <p style="color:#ff5500">The payment gateway connected to the current Demo Server is on the Ethereum Testnet Goerli USDC, not the Mainnet USDC. Please do not use Mainnet USDC for payment transfers.</p>\
+    </div>\
+    </div>\
     <div class="row">\
     <!-- invoice -->\
     <div class="col-md-6">\
