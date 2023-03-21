@@ -1,4 +1,5 @@
-![Fintechee](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/Indicators/extra_fractals/extra_fractals_screenshot.png?raw=true)
+![Fintechee FiSDK dashboard template](https://github.com/fintechees/fisdk/blob/main/images/screenshot.png?raw=true)
+![Fintechee extra fractals indicator](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/Indicators/extra_fractals/extra_fractals_screenshot.png?raw=true)
 
 ### FiSDK
 
