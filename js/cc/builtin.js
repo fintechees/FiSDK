@@ -4418,6 +4418,543 @@ function importBuiltInIndicators () {
 
 		window.chartElements.lineSegment.render(chartHandle)
 	})
+
+	importBuiltInIndicator("cursor", "Cursor on hover(v1.0)", function (context) {
+	  // Please note, this indicator will make scrolling chart disabled. So, if you want to scroll the chart, please remove this indicator from the chart.
+	},[{
+	  name: "color",
+	  value: "#AAA",
+	  required: true,
+	  type: PARAMETER_TYPE.STRING,
+	  range: null
+	}, {
+	  name: "strokeWidth",
+	  value: 2,
+	  required: true,
+	  type: PARAMETER_TYPE.INTEGER,
+	  range: [1, 10]
+	}],
+	[{
+		name: DATA_NAME.TIME,
+		index: 0
+	}, {
+		name: DATA_NAME.CLOSE,
+		index: 1
+	}],
+	[{
+	  name: "line",
+	  visible: false
+	}],
+	WHERE_TO_RENDER.CHART_WINDOW,
+	function (context) { // Init()
+	  var color = getIndiParameter(context, "color")
+	  var strokeWidth = getIndiParameter(context, "strokeWidth")
+
+	  context.cursor = {
+	    timeArr: null,
+	    priceArr: null,
+	    canvas: null,
+	    barNum: null,
+	    cursor: null,
+	    width: null,
+	    height: null,
+	    xScale: null,
+	    yScale: null,
+	    color: color,
+	    xAxis: {
+				strokeWidth: strokeWidth,
+				val: null
+	    },
+			yAxis: {
+				strokeWidth: strokeWidth,
+				idx: null,
+				time: null
+	    },
+	    cursorFrame: null,
+	    cursorXAxis: null,
+	    cursorYAxis: null,
+	    xAxisText: null,
+	    yAxisText: null,
+	    xAxisText2: null,
+	    yAxisText2: null,
+			mousemove: function (x, y) {
+				if (context.cursor.timeArr == null) return
+
+				var canvas = context.cursor.canvas
+				var timeArr = context.cursor.timeArr
+				var barNum = context.cursor.barNum
+				var cursor = context.cursor.cursor
+				var width = context.cursor.width
+				var height = context.cursor.height
+				var xScale = context.cursor.xScale
+				var yScale = context.cursor.yScale
+
+				var idx = Math.round(xScale.invert(x))
+				if (idx < 0) {
+					idx = 0
+				} else if (idx >= barNum) {
+					idx = barNum - 1
+				}
+
+				var val = y
+				if (val < 0) {
+					val = 0
+				} else if (val > height) {
+					val = height
+				}
+
+				context.cursor.xAxis.val = yScale.invert(val)
+				context.cursor.yAxis.idx = idx
+				context.cursor.yAxis.time = (idx + cursor) >= timeArr.length ? timeArr[timeArr.length - 1] : ((idx + cursor) < 0 ? timeArr[0] : timeArr[idx + cursor])
+
+				this.render()
+			},
+			render: function () {
+				var canvas = context.cursor.canvas
+				var timeArr = context.cursor.timeArr
+	      var priceArr = context.cursor.priceArr
+				var barNum = context.cursor.barNum
+				var cursor = context.cursor.cursor
+				var width = context.cursor.width
+				var height = context.cursor.height
+				var xScale = context.cursor.xScale
+				var yScale = context.cursor.yScale
+
+				context.cursor.cursorFrame
+					.attr("width", width)
+					.attr("height", height)
+
+	      var y = yScale(context.cursor.xAxis.val)
+				context.cursor.cursorXAxis
+					.attr("x1", xScale(0))
+					.attr("y1", y)
+					.attr("x2", xScale(barNum - 1))
+					.attr("y2", y)
+
+	      var x = xScale(context.cursor.yAxis.idx)
+				context.cursor.cursorYAxis
+					.attr("x1", x)
+					.attr("y1", 0)
+					.attr("x2", x)
+					.attr("y2", height)
+
+	      context.cursor.xAxisText
+	        .attr("y", y)
+	        .text(context.cursor.xAxis.val)
+
+				context.cursor.yAxisText
+	        .attr("x", x)
+	        .text(new Date(context.cursor.yAxis.time * 1000).toLocaleString())
+
+	      context.cursor.xAxisText2
+	        .attr("y", y)
+	        .text(context.cursor.xAxis.val - priceArr[priceArr.length - 1])
+
+				context.cursor.yAxisText2
+	        .attr("x", x)
+	        .text(timeArr.length - 1 - (cursor + context.cursor.yAxis.idx))
+			}
+	  }
+
+		var chartHandle = getChartHandleByContext(context)
+	  context.cursor.canvas = getSvgCanvas(chartHandle)
+	},
+	function (context) { // Deinit()
+	  var chartHandle = getChartHandleByContext(context)
+
+		context.cursor.canvas.selectAll(".cursorFrame").data([]).exit().remove()
+	  context.cursor.canvas.selectAll(".cursorXAxis").data([]).exit().remove()
+		context.cursor.canvas.selectAll(".cursorYAxis").data([]).exit().remove()
+	  context.cursor.canvas.selectAll(".cursorXAxisText").data([]).exit().remove()
+		context.cursor.canvas.selectAll(".cursorYAxisText").data([]).exit().remove()
+	  context.cursor.canvas.selectAll(".cursorXAxisText2").data([]).exit().remove()
+		context.cursor.canvas.selectAll(".cursorYAxisText2").data([]).exit().remove()
+	},
+	function (context) { // Render()
+	  var barNum = getBarNum(context)
+	  var cursor = getCursor(context)
+	  var width = getCanvasWidth(context)
+	  var height = getCanvasHeight(context)
+	  var xScale = getXScale(context)
+	  var yScale = getYScale(context)
+
+		if (getCalculatedLength(context) == 0) {
+	    var timeArr = getDataInput(context, 0)
+			context.cursor.timeArr = timeArr
+	    context.cursor.priceArr = getDataInput(context, 1)
+			context.cursor.xAxis.val = yScale.invert(height / 2)
+			context.cursor.yAxis.idx = Math.floor(xScale.invert(width / 2))
+			context.cursor.yAxis.time = (context.cursor.yAxis.idx + cursor) >= timeArr.length ? timeArr[timeArr.length - 1] : ((context.cursor.yAxis.idx + cursor) < 0 ? timeArr[0] : timeArr[context.cursor.yAxis.idx + cursor])
+
+			var canvas = context.cursor.canvas
+
+			context.cursor.cursorFrame = canvas.selectAll(".cursorFrame").data([{}]).enter().append("rect")
+				.attr("class", "cursorFrame")
+				.attr("width", width)
+				.attr("height", height)
+				.attr("opacity", 0)
+				.on("mousemove", function () {
+	        var mouseX = d3.mouse(context.cursor.cursorFrame.node())[0] - context.cursor.cursorFrame.attr("x")
+	        var mouseY = d3.mouse(context.cursor.cursorFrame.node())[1] - context.cursor.cursorFrame.attr("y")
+					context.cursor.mousemove(mouseX, mouseY)
+				})
+
+			context.cursor.cursorXAxis = canvas.selectAll(".cursorXAxis").data([context.cursor.xAxis]).enter().append("line")
+				.attr("class", "cursorXAxis")
+				.attr("x1", function (d) {return xScale(0)})
+				.attr("y1", function (d) {return yScale(d.val)})
+				.attr("x2", function (d) {return xScale(barNum - 1)})
+				.attr("y2", function (d) {return yScale(d.val)})
+	      .attr("stroke", context.cursor.color)
+				.attr("strokeWidth", function (d) {return d.strokeWidth})
+
+			context.cursor.cursorYAxis = canvas.selectAll(".cursorYAxis").data([context.cursor.yAxis]).enter().append("line")
+				.attr("class", "cursorYAxis")
+				.attr("x1", function (d) {return xScale(d.idx)})
+				.attr("y1", 0)
+				.attr("x2", function (d) {return xScale(d.idx)})
+				.attr("y2", height)
+				.attr("stroke", context.cursor.color)
+				.attr("strokeWidth", function (d) {return d.strokeWidth})
+
+	    context.cursor.xAxisText = canvas.selectAll(".cursorXAxisText").data([context.cursor.xAxis]).enter().append("text")
+	      .attr("class", "cursorXAxisText")
+	      .attr("width", "50px")
+	      .attr("height", "10px")
+	      .attr("x", width - 30)
+	      .attr("y", function (d) {return yScale(d.val)})
+	      .attr("dx", -15)
+	      .attr("dy", -5)
+	      .attr("fill", context.cursor.color)
+	      .attr("textAnchor", "start")
+	      .style("font-size", "12px")
+	      .text(function (d) {return d.val})
+
+	    context.cursor.yAxisText = canvas.selectAll(".cursorYAxisText").data([context.cursor.yAxis]).enter().append("text")
+	      .attr("class", "cursorYAxisText")
+	      .attr("width", "50px")
+	      .attr("height", "10px")
+	      .attr("x", function (d) {return xScale(d.idx)})
+	      .attr("y", 10)
+	      .attr("dx", 5)
+	      .attr("dy", 3)
+	      .attr("fill", context.cursor.color)
+	      .attr("textAnchor", "start")
+	      .style("font-size", "12px")
+	      .text(function (d) {return new Date(d.time * 1000).toLocaleString()})
+
+	    context.cursor.xAxisText2 = canvas.selectAll(".cursorXAxisText2").data([context.cursor.xAxis]).enter().append("text")
+	      .attr("class", "cursorXAxisText2")
+	      .attr("width", "50px")
+	      .attr("height", "10px")
+	      .attr("x", width - 30)
+	      .attr("y", function (d) {return yScale(d.val)})
+	      .attr("dx", -15)
+	      .attr("dy", 10)
+	      .attr("fill", context.cursor.color)
+	      .attr("textAnchor", "start")
+	      .style("font-size", "12px")
+	      .text(function (d) {return d.val - context.cursor.priceArr[context.cursor.priceArr.length - 1]})
+
+	    context.cursor.yAxisText2 = canvas.selectAll(".cursorYAxisText2").data([context.cursor.yAxis]).enter().append("text")
+	      .attr("class", "cursorYAxisText2")
+	      .attr("width", "50px")
+	      .attr("height", "10px")
+	      .attr("x", function (d) {return xScale(d.idx)})
+	      .attr("y", 10)
+	      .attr("dx", 5)
+	      .attr("dy", 15)
+	      .attr("fill", context.cursor.color)
+	      .attr("textAnchor", "start")
+	      .style("font-size", "12px")
+	      .text(function (d) {return timeArr.length - 1 - (cursor + d.idx)})
+	  }
+
+		context.cursor.barNum = barNum
+	  context.cursor.cursor = cursor
+	  context.cursor.width = width
+	  context.cursor.height = height
+	  context.cursor.xScale = xScale
+	  context.cursor.yScale = yScale
+
+	  context.cursor.render()
+	})
+
+	importBuiltInIndicator("bidask", "Bid and Ask(v1.01)", function (context) {
+		var dataInput = getDataInput(context, 0)
+		if (dataInput.length == 0) return
+		var dataOutputBid = getDataOutput(context, "bid")
+		var dataOutputAsk = getDataOutput(context, "ask")
+		var spread = getIndiParameter(context, "spread")
+
+		var currPrice = dataInput[dataInput.length - 1]
+		var bid = currPrice - spread / 2
+		var ask = currPrice + spread / 2
+		var dataLen = dataInput.length
+		var barNum = typeof context.barNum == "undefined" ? dataInput.length : context.barNum
+
+		for (var i = dataLen - 1; i >= dataLen - 1 - barNum; i--) {
+			dataOutputBid[i] = bid
+			dataOutputAsk[i] = ask
+		}
+	},[{
+		name: "spread",
+		value: 0.0001,
+		required: true,
+		type: PARAMETER_TYPE.NUMBER,
+		range: [0, 0.1]
+	}],
+	[{
+		name: DATA_NAME.CLOSE,
+		index: 0
+	}],
+	[{
+		name: "bid",
+		visible: true,
+		renderType: RENDER_TYPE.DASHARRAY,
+		color: "red"
+	},{
+		name: "ask",
+		visible: true,
+		renderType: RENDER_TYPE.DASHARRAY,
+		color: "green"
+	}],
+	WHERE_TO_RENDER.CHART_WINDOW,
+	function (context) { // Init()
+	},
+	function (context) { // Deinit()
+	},
+	function (context) { // Render()
+	  context.barNum = getBarNum(context)
+	})
+
+	importBuiltInIndicator("heikin-ashi", "Heikin-Ashi(v1.01)", function (context) {
+	  var dataInputO = getDataInput(context, 0)
+	  var dataInputH = getDataInput(context, 1)
+	  var dataInputL = getDataInput(context, 2)
+	  var dataInputC = getDataInput(context, 3)
+	  var dataOutputO = getDataOutput(context, "ha_open")
+	  var dataOutputH = getDataOutput(context, "ha_high")
+	  var dataOutputL = getDataOutput(context, "ha_low")
+	  var dataOutputC = getDataOutput(context, "ha_close")
+
+	  var calculatedLength = getCalculatedLength(context)
+
+	  var i = calculatedLength
+
+	  if (i > 0) {
+	    i--
+	  } else {
+	    dataOutputC[i] = (dataInputO[i] + dataInputH[i] + dataInputL[i] + dataInputC[i]) / 4
+	    dataOutputO[i] = (dataInputO[i] + dataInputC[i]) / 2
+	    dataOutputH[i] = Math.max(dataInputH[i], dataOutputO[i], dataOutputC[i])
+	    dataOutputL[i] = Math.max(dataInputL[i], dataOutputO[i], dataOutputC[i])
+	    i = 1
+	  }
+
+	  while (i < dataInputC.length) {
+	    dataOutputC[i] = (dataInputO[i] + dataInputH[i] + dataInputL[i] + dataInputC[i]) / 4
+	    dataOutputO[i] = (dataOutputO[i - 1] + dataOutputC[i - 1]) / 2
+	    dataOutputH[i] = Math.max(dataInputH[i], dataOutputO[i], dataOutputC[i])
+	    dataOutputL[i] = Math.max(dataInputL[i], dataOutputO[i], dataOutputC[i])
+
+	    i++
+	  }
+	},[{
+	  name: "colorLong",
+	  value: "green",
+	  required: true,
+	  type: PARAMETER_TYPE.STRING,
+	  range: null
+	}, {
+	  name: "colorShort",
+	  value: "red",
+	  required: true,
+	  type: PARAMETER_TYPE.STRING,
+	  range: null
+	}],
+	[{
+		name: DATA_NAME.OPEN,
+		index: 0
+	}, {
+		name: DATA_NAME.HIGH,
+		index: 1
+	}, {
+		name: DATA_NAME.LOW,
+		index: 2
+	}, {
+		name: DATA_NAME.CLOSE,
+		index: 3
+	}],
+	[{
+	  name: "ha_open",
+	  visible: false
+	}, {
+	  name: "ha_high",
+	  visible: false
+	}, {
+	  name: "ha_low",
+	  visible: false
+	}, {
+	  name: "ha_close",
+	  visible: false
+	}],
+	WHERE_TO_RENDER.CHART_WINDOW,
+	function (context) { // Init()
+	  var colorLong = getIndiParameter(context, "colorLong")
+	  var colorShort = getIndiParameter(context, "colorShort")
+	  var chartHandle = getChartHandleByContext(context)
+
+	  context.heikinAshi = {
+	    colorLong: colorLong,
+	    colorShort: colorShort,
+	    canvas: getSvgCanvas(chartHandle)
+	  }
+	},
+	function (context) { // Deinit()
+	  var chartHandle = getChartHandleByContext(context)
+	  var canvas = context.heikinAshi.canvas
+
+	  canvas.selectAll(".haHL").select(function() { return this.parentNode; }).select(function() { return this.parentNode; }).each(function (d, i) {
+	    if (i == 0) {
+	      d3.select(this).selectAll(".cc_k_c_oc").attr("opacity", 1)
+	      d3.select(this).selectAll(".cc_k_c_hl").attr("opacity", 1)
+	    }
+	  })
+		canvas.selectAll(".haHL").data([]).exit().remove()
+	  canvas.selectAll(".haOC").data([]).exit().remove()
+	},
+	function (context) { // Render()
+	  var dataOutputO = getDataOutput(context, "ha_open")
+	  var dataOutputH = getDataOutput(context, "ha_high")
+	  var dataOutputL = getDataOutput(context, "ha_low")
+	  var dataOutputC = getDataOutput(context, "ha_close")
+	  var barNum = getBarNum(context)
+	  var cursor = getCursor(context)
+	  var width = getCanvasWidth(context)
+	  var height = getCanvasHeight(context)
+	  var xScale = getXScale(context)
+	  var yScale = getYScale(context)
+
+	  var ha = []
+	  var cursor2 = Math.min(cursor + barNum, dataOutputC.length)
+
+	  for (var i = cursor; i < cursor2; i++) {
+	    ha.push({
+	      o: dataOutputO[i],
+	      h: dataOutputH[i],
+	      l: dataOutputL[i],
+	      c: dataOutputC[i]
+	    })
+	  }
+
+	  var colorLong = context.heikinAshi.colorLong
+	  var colorShort = context.heikinAshi.colorShort
+		var canvas = context.heikinAshi.canvas
+
+	  var haHL = canvas.selectAll(".haHL").data(ha)
+
+	  haHL.attr("x1", function (d, i) {
+	      return xScale(i)
+	    })
+	    .attr("x2", function (d, i) {
+	      return xScale(i)
+	    })
+	    .attr("y1", function (d) {
+	      return yScale(d.h)
+	    })
+	    .attr("y2", function (d) {
+	      return yScale(d.l)
+	    })
+	    .attr("stroke", function (d) {
+	      return d.o > d.c ? colorShort : colorLong
+	    })
+
+	  haHL.enter().append("line")
+	    .attr("class", "haHL")
+	    .attr("x1", function (d, i) {
+	      return xScale(i)
+	    })
+	    .attr("x2", function (d, i) {
+	      return xScale(i)
+	    })
+	    .attr("y1", function (d) {
+	      return yScale(d.h)
+	    })
+	    .attr("y2", function (d) {
+	      return yScale(d.l)
+	    })
+	    .attr("stroke", function (d) {
+	      return d.o > d.c ? colorShort : colorLong
+	    })
+
+	  haHL.exit().remove()
+
+	  var barWidth = Math.floor(0.8 * width / barNum)
+	  var halfWidth = barWidth / 2
+
+	  var haOC = canvas.selectAll(".haOC").data(ha)
+
+	  haOC.attr("x", function (d, i) {
+	      return xScale(i) - halfWidth
+	    })
+	    .attr("y", function (d) {
+	      return yScale(Math.max(d.o, d.c))
+	    })
+	    .attr("width", barWidth)
+	    .attr("height", function (d) {
+	      return d.o == d.c ? 1 :
+	        (yScale(Math.min(d.o, d.c)) - yScale(Math.max(d.o, d.c)))
+	    })
+	    .attr("fill", function (d) {
+	      if (d.o == d.c)
+	        return "black"
+	      else
+	        return d.o > d.c ? colorShort : colorLong
+	    })
+	    .attr("stroke", function (d) {
+	      if (d.o == d.c)
+	        return "black"
+	      else
+	        return d.o > d.c ? colorShort : colorLong
+	    })
+
+	  haOC.enter().append("rect")
+	    .attr("class", "haOC")
+	    .attr("x", function (d, i) {
+	      return xScale(i) - halfWidth
+	    })
+	    .attr("y", function (d) {
+	      return yScale(Math.max(d.o, d.c))
+	    })
+	    .attr("width", barWidth)
+	    .attr("height", function (d) {
+	      return d.o == d.c ? 1 :
+	        (yScale(Math.min(d.o, d.c)) - yScale(Math.max(d.o, d.c)))
+	    })
+	    .attr("fill", function (d) {
+	      if (d.o == d.c)
+	        return "black"
+	      else
+	        return d.o > d.c ? colorShort : colorLong
+	    })
+	    .attr("stroke", function (d) {
+	      if (d.o == d.c)
+	        return "black"
+	      else
+	        return d.o > d.c ? colorShort : colorLong
+	    })
+	    .attr("strokeWidth", 2)
+
+	  haOC.exit().remove()
+
+	  canvas.selectAll(".haHL").select(function() { return this.parentNode; }).select(function() { return this.parentNode; }).each(function (d, i) {
+	    if (i == 0) {
+	      d3.select(this).selectAll(".cc_k_c_oc").attr("opacity", 0)
+	      d3.select(this).selectAll(".cc_k_c_hl").attr("opacity", 0)
+	    }
+	  })
+	})
 }
 
 function importBuiltInEAs () {
@@ -8865,323 +9402,6 @@ function importBuiltInEAs () {
 		    }
 		  }
 	  }
-	)
-
-	importBuiltInEA(
-		"copy_trading_for_oanda",
-		"An EA to copy trading for Oanda(v1.01)",
-		[],
-		function (context) { // Init()
-		  if (typeof window.oandaOrderApiLoader == "undefined") {
-		    window.oandaOrderApiLoader = {
-		      oandaDemo: true,
-		      oandaAccountId: "",
-		      oandaTradeKey: "",
-		      wrapperLibUrl: "https://www.fintechee.com/js/oanda/oanda_wrapper.js",
-		      interval: 120000,
-		      latestHBTime: 0,
-		      bMonitoring: false,
-		      bCopyTrading: false,
-		      sendOrder: function (symbolName, orderType, volume) {
-		        if (typeof window.oandaOrderAPI != "undefined") {
-		          window.oandaOrderAPI.orders.openOrder(this.oandaAccountId, {
-		            units: (orderType == ORDER_TYPE.OP_BUY ? (volume * 100000 + "") : (-volume * 100000 + "")),
-		            instrument: symbolName.replace("/", "_"),
-		            timeInForce: "FOK",
-		            type: "MARKET",
-		            positionFill: "DEFAULT"
-		          })
-		        }
-		      },
-		      oandaOrderCallback: function (res) {
-		        if (typeof window.oandaOrderApiLoader != "undefined") {
-		          if (typeof res.type != "undefined") {
-		            if (res.type == "ORDER_FILL") {
-		              window.oandaOrderApiLoader.updateTrade(res)
-		            } else if (res.type == "HEARTBEAT") {
-		              window.oandaOrderApiLoader.latestHBTime = new Date().getTime()
-		              if (!window.oandaOrderApiLoader.bMonitoring) {
-		                throw new Error("Disconnected.")
-		              }
-		            }
-		          }
-		        }
-		      },
-		      setupSocket: function () {
-		        var bLibLoaded = false
-		        var tags = document.getElementsByTagName("script")
-		        for (var i = tags.length - 1; i >= 0; i--) {
-		          if (tags[i] && tags[i].getAttribute("src") != null && tags[i].getAttribute("src") == this.wrapperLibUrl) {
-		            bLibLoaded = true
-		            break
-		          }
-		        }
-
-		        var that = this
-
-		        if (bLibLoaded) {
-		          if (typeof window.oandaOrderAPI != "undefined") {
-		            window.oandaOrderAPI.addToken(this.oandaDemo, this.oandaAccountId, this.oandaTradeKey)
-		            window.oandaOrderAPI.transactions.stream(this.oandaAccountId, this.oandaOrderCallback)
-		          }
-
-		          window.oandaOrderAPI.trades.listOpen(this.oandaAccountId)
-		          .then(function (res) {
-		            that.renderTrades(res.trades)
-		          })
-		          .catch(function () {})
-
-		          this.bMonitoring = true
-		          $("#connect_to_oanda").prop("disabled", false)
-		          setTimeout(function () {that.monitorConnection()}, this.interval)
-		        } else {
-		          var script = document.createElement("script")
-
-		          document.body.appendChild(script)
-		          script.onload = function () {
-		            if (typeof window.oandaOrderAPI != "undefined") {
-		              window.oandaOrderAPI.addToken(that.oandaDemo, that.oandaAccountId, that.oandaTradeKey)
-		              window.oandaOrderAPI.transactions.stream(that.oandaAccountId, that.oandaOrderCallback)
-		            }
-
-		            window.oandaOrderAPI.trades.listOpen(that.oandaAccountId)
-		            .then(function (res) {
-		              that.renderTrades(res.trades)
-		            })
-		            .catch(function () {})
-
-		            that.bMonitoring = true
-		            $("#connect_to_oanda").prop("disabled", false)
-		            setTimeout(function () {that.monitorConnection()}, that.interval)
-		          }
-		          script.onerror = function () {
-		            that.bMonitoring = false
-		            $("#connect_to_oanda").prop("disabled", false)
-		            popupErrorMessage("Failed to load required libs.")
-		          }
-		          script.async = true
-		          script.src = this.wrapperLibUrl
-		        }
-		      },
-		      monitorConnection: function () {
-		        if (this.latestHBTime != 0 && new Date().getTime() - this.latestHBTime >= this.interval) {
-		          this.resetupSocket()
-		        }
-		        if (this.bMonitoring) {
-		          var that = this
-		          setTimeout(function () {that.monitorConnection()}, this.interval)
-		        }
-		      },
-		      resetupSocket: function () {
-		        if (typeof window.oandaOrderAPI != "undefined") {
-		          window.oandaOrderAPI.addToken(this.oandaDemo, this.oandaAccountId, this.oandaTradeKey)
-		          window.oandaOrderAPI.transactions.stream(this.oandaAccountId, this.oandaOrderCallback)
-		        }
-		      },
-		      removeSocket: function () {
-		        if (typeof window.oandaOrderAPI != "undefined") {
-		          this.bCopyTrading = false
-		          this.bMonitoring = false
-		        }
-		      },
-		      updateTrade: function (trade) {
-		        var data = $("#oanda_trades_list").DataTable().rows().data()
-		        var rowId = -1
-		        var instrument = trade.instrument.replace("_", "/")
-		        var currentUnits = 0
-		        var units = parseFloat(trade.units)
-
-		        for (var i in data) {
-		          if (data[i][0] == instrument) {
-		            rowId = parseInt(i)
-		            if (data[i][2] == "Long") {
-		              currentUnits = data[i][1]
-		            } else {
-		              currentUnits = -data[i][1]
-		            }
-		            break
-		          }
-		        }
-
-		        if (rowId != -1) {
-		          if (units + currentUnits == 0) {
-		            $("#oanda_trades_list").dataTable().fnDeleteRow(rowId)
-		          } else if (units + currentUnits > 0) {
-		            $("#oanda_trades_list").dataTable().fnUpdate(units + currentUnits, rowId, 1, false, false)
-		            $("#oanda_trades_list").dataTable().fnUpdate("Long", rowId, 2, false, false)
-		          } else {
-		            $("#oanda_trades_list").dataTable().fnUpdate(Math.abs(units + currentUnits), rowId, 1, false, false)
-		            $("#oanda_trades_list").dataTable().fnUpdate("Short", rowId, 2, false, false)
-		          }
-		        } else {
-		          trade.currentUnits = trade.units
-		          this.addTradeToTable(trade)
-		        }
-		      },
-		      addTradeToTable: function (trade) {
-		        var currentUnits = parseFloat(trade.currentUnits)
-		        $("#oanda_trades_list").DataTable().row.add([
-		          trade.instrument.replace("_", "/"),
-		          Math.abs(currentUnits),
-		          currentUnits > 0 ? "Long" : "Short"
-		        ]).draw(false)
-		      },
-		      renderTrades: function (trades) {
-		        $("#oanda_trades_list").DataTable().clear().draw()
-
-		        for (var i in trades) {
-		          var trade = trades[i]
-		          trade.units = trade.currentUnits
-
-		          this.updateTrade(trade)
-		        }
-		      },
-		      init: function () {
-		        var that = this
-
-		        if (typeof $("#oanda_trades_dashboard").html() == "undefined") {
-		          var panel = '<div class="ui form modal" id="oanda_trades_dashboard">' +
-		            '<div class="content">' +
-		              '<div class="row">' +
-		                '<div class="ui fluid action input">' +
-		                  '<div class="ui selection dropdown" id="dropdownOandaDemo">' +
-		                    '<input type="hidden" id="oandaDemo">' +
-		                    '<i class="dropdown icon"></i>' +
-		                    '<div class="default text">Demo (Default)</div>' +
-		                    '<div class="menu">' +
-		                      '<div class="item" data-value="true">Demo</div>' +
-		                      '<div class="item" data-value="false">Live</div>' +
-		                    '</div>' +
-		                  '</div>' +
-		                  '<input type="text" id="oandaAccountId" placeholder="Oanda Account ID">' +
-		                  '<input type="password" id="oandaTradeKey" placeholder="Token">' +
-		                  '<button id="connect_to_oanda" class="ui button">Connect</button>' +
-		                '</div>' +
-		              '</div>' +
-		              '<div class="description">' +
-		                '<table id="oanda_trades_list" class="cell-border" cellspacing="0">' +
-		                '</table>' +
-		              '</div>' +
-		            '</div>' +
-		            '<div class="actions">' +
-		              '<div class="ui toggle checkbox">' +
-		                '<input type="checkbox" id="copy_trading">' +
-		                '<label></label>' +
-		              '</div>' +
-		              '<div class="ui button" id="close_oanda_dashboard">Close</div>' +
-		            '</div>' +
-		          '</div>'
-
-		          $("#reserved_zone").append(panel)
-
-		          $("#dropdownOandaDemo").dropdown()
-		          $("#copy_trading").checkbox()
-
-		          $("#connect_to_oanda").on("click", function () {
-		            if (that.bMonitoring) {
-		              $("#copy_trading").prop("checked", false)
-		              $("#connect_to_oanda").html("Connect")
-		              that.removeSocket()
-		            } else {
-		              that.oandaDemo = $("#oandaDemo").val() == "" || $("#oandaDemo").val() == "true"
-		              that.oandaAccountId = $("#oandaAccountId").val().trim()
-		              that.oandaTradeKey = $("#oandaTradeKey").val().trim()
-
-		              if (that.oandaAccountId != "" && that.oandaTradeKey != "") {
-		                $("#connect_to_oanda").prop("disabled", true)
-		                $("#connect_to_oanda").html("Disconnect")
-		                that.setupSocket()
-		              }
-		            }
-		          })
-
-		          $("#copy_trading").on("change", function () {
-		            if (!that.bMonitoring) {
-		              $("#copy_trading").prop("checked", false)
-		            }
-		            that.bCopyTrading = $("#copy_trading").prop("checked")
-		            printMessage(that.bCopyTrading)
-		          })
-
-		          $("#close_oanda_dashboard").on("click", function () {
-		            $("#oanda_trades_dashboard").modal("hide")
-		          })
-		        }
-
-		        if (!$.fn.dataTable.isDataTable("#oanda_trades_list")) {
-		          $("#oanda_trades_list").DataTable({
-		            data: [],
-		            columns: [
-		              {title: "Instrument"},
-		              {title: "Units"},
-		              {title: "Type"}
-		            ],
-		            ordering: false,
-		            searching: false,
-		            bPaginate: false,
-		            bLengthChange: false,
-		            bFilter: false,
-		            bInfo: false,
-		            scrollY: '50vh',
-		            scrollCollapse: true,
-		            paging: false,
-		            columnDefs: [
-		              {width: "40%", targets: 0, className: "dt-body-left"},
-		              {width: "30%", targets: 1, className: "dt-body-left"},
-		              {width: "30%", targets: 2, className: "dt-body-left"},
-		              {targets: [0, 1, 2], className: "dt-head-left"}
-		            ]
-		          })
-		        }
-
-		        if (typeof window.oandaOrderAPI != "undefined") {
-		          window.oandaOrderAPI.trades.listOpen(this.oandaAccountId)
-		          .then(function (res) {
-		            that.renderTrades(res.trades)
-		          })
-		          .catch(function () {})
-		        }
-
-		        $("#oanda_trades_dashboard").modal({autofocus:false}).modal("show")
-		      }
-		    }
-		  }
-
-		  window.oandaOrderApiLoader.init()
-		},
-		function (context) { // Deinit()
-		},
-		function (context) { // OnTick()
-		},
-		function (context) { // OnTransaction()
-		  if (typeof window.oandaOrderApiLoader != "undefined" && window.oandaOrderApiLoader.bCopyTrading) {
-		    var transType = getLatestTransType(context)
-
-		    if (transType == "Open Trade") {
-					var trade = getLatestTrans(context)
-			    var tradeSymbolName = getSymbolName(trade)
-			    var tradeOrderType = getOrderType(trade)
-			    var tradeLots = getOpenLots(trade)
-
-		      if (tradeOrderType == ORDER_TYPE.OP_BUY || tradeOrderType == ORDER_TYPE.OP_BUYLIMIT || tradeOrderType == ORDER_TYPE.OP_BUYSTOP) {
-		        window.oandaOrderApiLoader.sendOrder(tradeSymbolName, ORDER_TYPE.OP_BUY, tradeLots)
-		      } else if (tradeOrderType == ORDER_TYPE.OP_SELL || tradeOrderType == ORDER_TYPE.OP_SELLLIMIT || tradeOrderType == ORDER_TYPE.OP_SELLSTOP) {
-		        window.oandaOrderApiLoader.sendOrder(tradeSymbolName, ORDER_TYPE.OP_SELL, tradeLots)
-		      }
-		    } else if (transType == "Trade Closed") {
-					var trade = getLatestTrans(context)
-			    var tradeSymbolName = getSymbolName(trade)
-			    var tradeOrderType = getOrderType(trade)
-			    var tradeLots = getOpenLots(trade)
-
-		      if (tradeOrderType == ORDER_TYPE.OP_BUY || tradeOrderType == ORDER_TYPE.OP_BUYLIMIT || tradeOrderType == ORDER_TYPE.OP_BUYSTOP) {
-		        window.oandaOrderApiLoader.sendOrder(tradeSymbolName, ORDER_TYPE.OP_SELL, tradeLots)
-		      } else if (tradeOrderType == ORDER_TYPE.OP_SELL || tradeOrderType == ORDER_TYPE.OP_SELLLIMIT || tradeOrderType == ORDER_TYPE.OP_SELLSTOP) {
-		        window.oandaOrderApiLoader.sendOrder(tradeSymbolName, ORDER_TYPE.OP_BUY, tradeLots)
-		      }
-		    }
-		  }
-		}
 	)
 
 	importBuiltInEA(
