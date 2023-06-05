@@ -1,6 +1,8 @@
 var extension = {
   eaNames: [],
   indiNames: [],
+  githubRepo: [],
+  githubRes: [],
   getFile: async function (path) {
     try {
       var response = await fetch("https://raw.githubusercontent.com/fintechees/Expert-Advisor-Studio/master/" + path)
@@ -25,7 +27,7 @@ var extension = {
       throw new Error("Failed to fetch list from Github API.")
     }
   },
-  genFilesTree: function (tree, dir, type, path, fullPath) {
+  genFilesTree: function (tree, dir, type, path, fullPath, sha) {
     var index = path.indexOf("/")
     if (index != -1) {
       var found = false
@@ -41,7 +43,7 @@ var extension = {
       if (!found) {
         tree.objs.push(subTree)
       }
-      this.genFilesTree(subTree, name, type, path.slice(index + 1), fullPath)
+      this.genFilesTree(subTree, name, type, path.slice(index + 1), fullPath, sha)
     } else {
       var found = false
       var name = path
@@ -53,7 +55,7 @@ var extension = {
         var extName = nameArr.length > 1 ? nameArr.pop() : "undefined"
         var pathArr = fullPath.split("/")
         var dirName = pathArr.length > 1 ? pathArr[pathArr.length - 2] : "root"
-        subTree = {name: name, path: fullPath, extName: extName, dirName: dirName, type: "file", group: pathArr[0]}
+        subTree = {name: name, path: fullPath, extName: extName, dirName: dirName, type: "file", group: pathArr[0], sha: sha}
       }
 
       for (var i in tree.objs) {
@@ -116,7 +118,20 @@ var extension = {
               }
             }
             if (found) {
-              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>' + obj.path + ' installed</button>')
+              found = false
+              for (var j in this.githubRepo) {
+                if (this.githubRepo[j].path == obj.path) {
+                  if (this.githubRepo[j].sha == obj.sha) {
+                    found = true
+                  }
+                  break
+                }
+              }
+              if (found) {
+                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>' + obj.path + ' installed</button>')
+              } else {
+                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Update ' + obj.path + '</button>')
+              }
             } else {
               jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Install ' + obj.path + '</button>')
             }
@@ -193,11 +208,37 @@ var extension = {
     var target = event.target || event.srcElement
     if (target.tagName === "BUTTON") {
       var path = target.textContent.split(" ")[1]
+      var that = this
+
       this.getFile(path)
         .then(function (res) {
           eval(res)
           target.textContent = path + " installed"
           target.disabled = true
+
+          var sha = ""
+          for (var i in that.githubRes) {
+            if (that.githubRes[i].path == path) {
+              sha = that.githubRes[i].sha
+              break
+            }
+          }
+
+          var found = false
+          for (var i in this.githubRepo) {
+            if (that.githubRepo[i].path == path) {
+              found = true
+              that.githubRepo[i].sha = sha
+              break
+            }
+          }
+          if (!found) {
+            that.githubRepo.push({
+              path: path,
+              sha: sha
+            })
+          }
+          localStorage.githubRepo = JSON.stringify(that.githubRepo)
         })
         .catch(function (err) {
           console.error(err.message)
@@ -208,10 +249,21 @@ var extension = {
     var that = this
     this.getGithubList()
       .then(function(res) {
+        var eas = typeof localStorage.eas != "undefined" ? JSON.parse(localStorage.eas) : []
+        var indicators = typeof localStorage.indicators != "undefined" ? JSON.parse(localStorage.indicators) : []
+        for (var i in eas) {
+          that.eaNames.push(eas[i].eaName)
+        }
+        for (var i in indicators) {
+          that.indiNames.push(indicators[i].indiName)
+        }
+        that.githubRepo = typeof localStorage.githubRepo != "undefined" ? JSON.parse(localStorage.githubRepo) : []
+        that.githubRes = res
+
         var filesTree = {name: "root", objs: [], type: "dir"}
 
         for (var i in res) {
-          that.genFilesTree(filesTree, "root", res[i].type, res[i].path, res[i].path)
+          that.genFilesTree(filesTree, "root", res[i].type, res[i].path, res[i].path, res[i].sha)
         }
 
         var filesTable = []
@@ -224,14 +276,5 @@ var extension = {
       .catch(function(e) {
         console.error('Error:', e.message);
       })
-
-    var eas = JSON.parse(localStorage.eas)
-    var indicators = JSON.parse(localStorage.indicators)
-    for (var i in eas) {
-      this.eaNames.push(eas[i].eaName)
-    }
-    for (var i in indicators) {
-      this.indiNames.push(indicators[i].indiName)
-    }
   }
 }
