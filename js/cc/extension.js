@@ -1,6 +1,6 @@
 var extension = {
   eaNames: [],
-  indicatorNames: [],
+  indiNames: [],
   getFile: async function (path) {
     try {
       var response = await fetch("https://raw.githubusercontent.com/fintechees/Expert-Advisor-Studio/master/" + path)
@@ -116,9 +116,9 @@ var extension = {
               }
             }
             if (found) {
-              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>Install ' + obj.path + "</button>")
+              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>' + obj.path + ' installed</button>')
             } else {
-              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Install ' + obj.path + "</button>")
+              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Install ' + obj.path + '</button>')
             }
           }
         }
