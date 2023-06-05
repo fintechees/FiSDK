@@ -7,11 +7,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
-	<title>WEB Trader ~ Fintechee</title>
+	<title>WEB Trader ~ Backtesting ~ Fintechee</title>
 	<meta name="description"
 		content="Fintechee provides the best WEB trader with algorithms for trading and backtesting a portfolio to help traders enhance their trading strategies." />
-	<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-
+	<meta name="robots" content="noindex, follow" />
 
 	<link rel="stylesheet" type="text/css" href="/semantic-ui-build/semantic/dist/semantic.min.css" />
 	<link rel="stylesheet" type="text/css" href="/semantic/calendar.min.css" />
@@ -41,15 +40,6 @@
 		</div>
 	</div>
 </div>
-<div id="news" class="ui noanimation right vertical menu sidebar"
-	style="padding-left:0px;padding-right:0px;width:350px;height:100%;overflow:hidden;-ms-overflow-style:none;scrollbar-width:none;">
-	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:0px;box-sizing:content-box;padding-top:0px;-ms-overflow-style:none;scrollbar-width:none;">
-
-		<iframe src="https://www.fintechee.com/ccnews/"></iframe>
-	</div>
-</div>
-
-
 <div id="accountsummarysidebar" class="ui noanimation right vertical menu sidebar" style="width:350px">
 	<div id="test_a_s"></div>
 </div>
@@ -57,16 +47,15 @@
 	<div class="row" style="width:100%">
 		<div id="test_o"></div>
 	</div>
-
-</div>
-<div id="indissidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
-	<div class="row" style="width:100%">
-		<div id="test_i"></div>
-	</div>
 </div>
 <div id="eassidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
 	<div class="row" style="width:100%">
 		<div id="test_e"></div>
+	</div>
+</div>
+<div id="optimizationsidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+	<div class="row" style="width:100%">
+		<div id="test_op"></div>
 	</div>
 </div>
 <div id="console" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
@@ -79,24 +68,30 @@
 			<a class="programl item" data-tab="extension" id="extension">扩展</a>
 		</div>
 		<div class="ui attached active tab segment programsl" id="javascriptseg" data-tab="javascript" style="width:100%;height:100%;padding-top:5px;padding-left:0;padding-right:0">
-			<div class="row" style="text-align:center;margin-bottom:5px">
-				<div class="ui button" id="run" onclick="run1()" style="width:200px;background:#EEEEEE">运行</div>
-			</div>
-			<div class="row" style="background:#FFFFFF;width:100%;border-top:1px solid #EEEEEE">
-				<div id="testtext"></div>
+			<div class="ui grid" style="height:100%">
+				<div class="sixteen wide column" style="border-right:5px solid #EEEEEE;padding-right:0;padding-left:0">
+					<div class="row" style="text-align:center;margin-bottom:5px">
+						<div class="ui button" id="run" onclick="run1()" style="width:200px;background:#EEEEEE">运行</div>
+					</div>
+					<div class="row" style="background:#FFFFFF;width:100%;border-top:1px solid #EEEEEE">
+						<div id="testtext"></div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 		<div class="ui attached tab segment programsl" id="cppseg" data-tab="cpp" style="width:100%;height:100%;padding-left:0;padding-top:5px">
 			<iframe src="https://www.fintechee.com/cpp/"></iframe>
 		</div>
+
 		<div class="ui attached tab segment programsl" id="eastudioseg" data-tab="eastudio" style="width:100%;height:100%;padding:0">
 			<iframe src="https://www.fintechee.com/ea-studio/"></iframe>
 		</div>
+
 		<div class="ui attached tab segment programsl" id="extensionseg" data-tab="extension" style="width:100%;height:95%;padding:0;overflow-y:scroll">
 			<table id="filesList" class="table table-bordered table-striped">
 			</table>
 		</div>
-
 	</div>
 </div>
 
@@ -105,14 +100,6 @@
 		<img src="" alt="full size image">
 	</div>
 </div>
-
-<div class="ui small modal" id="calendar">
-	<div class="row" style="height:100%">
-		<iframe src="https://www.fintechee.com/calendar/"></iframe>
-	</div>
-</div>
-
-
 
 <div class="pusher" style="height:100%">
 <div class="main_panel" style="width:100%;height:100%;position:absolute;overflow:hidden" id="ccbrand">
@@ -230,23 +217,20 @@
 </div>
 
 <div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
-	<div style="height:100%;text-align:center">
+	<div style="height:100%">
 		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
 			<span style="color:#FFE6C1;font-size:50px">F</span>
 		</a>
-		<div class="main_menu_item ui winfrm simple dropdown item">
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showaccounts2">
 			<i class="user icon"></i>
 			<div class="menu">
 				<a class="item" id="showaccounts" style="background:#E34400!important;color:#FFFFFF!important">账户</a>
-				<a class="item" id="showaccountssignin" style="background:#E34400!important;color:#FFFFFF!important">登录</a>
-				<a class="item" id="showaccountssignup" style="background:#E34400!important;color:#FFFFFF!important">注册</a>
 			</div>
 		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showinstruments2">
 			<i class="balance scale icon"></i>
 			<div class="menu">
 				<a class="item" id="showinstruments" style="background:#E34400!important;color:#FFFFFF!important">市场</a>
-				<a class="item" id="showinstruments2" style="background:#E34400!important;color:#FFFFFF!important">投资品种</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
@@ -262,14 +246,9 @@
 		<div class="main_menu_item ui winfrm simple dropdown item">
 			<i class="graduation cap icon"></i>
 			<div class="menu">
-				<a class="item" id="showeas" style="background:#E34400!important;color:#FFFFFF!important">EA管理器</a>
-				<a class="item" id="showindis" style="background:#E34400!important;color:#FFFFFF!important">指标管理器</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showbt2">
-			<i class="gamepad icon"></i>
-			<div class="menu">
-				<a class="item" id="showbt" style="background:#E34400!important;color:#FFFFFF!important">回测</a>
+				<a class="item" id="showeas" style="background:#E34400!important;color:#FFFFFF!important">EA</a>
+				<a class="item" id="showreplay" style="background:#E34400!important;color:#FFFFFF!important">回放</a>
+				<a class="item" id="showoptimization" style="background:#E34400!important;color:#FFFFFF!important">优化</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item">
@@ -281,28 +260,11 @@
 				<a class="item" id="showextension" style="background:#E34400!important;color:#FFFFFF!important">扩展</a>
 			</div>
 		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="newspaper outline icon"></i>
-			<div class="menu">
-				<a class="item" id="showcalendar" style="background:#E34400!important;color:#FFFFFF!important">日历</a>
-				<a class="item" id="shownews" style="background:#E34400!important;color:#FFFFFF!important">新闻</a>
-			</div>
-		</div>
 		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
 			<i class="book icon"></i>
 			<div class="menu">
 				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/" style="background:#E34400!important;color:#FFFFFF!important">SDK说明</a>
 				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html" style="background:#E34400!important;color:#FFFFFF!important">Github</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="paint brush icon"></i>
-			<div class="menu">
-				<a class="item" id="showcolorpicker" style="background:#E34400!important;color:#FFFFFF!important">主题颜色更改</a>
-				<a class="item" id="changecolortobright" style="background:#E34400!important;color:#FFFFFF!important">明亮主题</a>
-				<a class="item" id="changecolortodark" style="background:#E34400!important;color:#FFFFFF!important">深色主题</a>
-				<a class="item" id="changecolortoblue" style="background:#E34400!important;color:#FFFFFF!important">蓝色主题</a>
-				<a class="item" id="changecolortosea" style="background:#E34400!important;color:#FFFFFF!important">海洋主题</a>
 			</div>
 		</div>
 		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
@@ -311,13 +273,6 @@
 				<a class="item" id="changelayoutto1" style="background:#E34400!important;color:#FFFFFF!important"><i class="window maximize outline icon"></i></a>
 				<a class="item" id="changelayoutto2" style="background:#E34400!important;color:#FFFFFF!important"><i class="th large icon"></i></a>
 				<a class="item" id="changelayoutto3" style="background:#E34400!important;color:#FFFFFF!important"><i class="columns icon"></i></a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<div>中文</div>
-			<div class="menu">
-				<a class="item" style="background:#E34400!important;color:#FFFFFF!important" href="/web-trader.html">EN(English)</a>
-				<div class="item" style="background:#E34400!important;color:#FFFFFF!important">中文(Chinese)</div>
 			</div>
 		</div>
 	</div>
@@ -332,7 +287,7 @@
 		style="padding-top:0px;padding-bottom:0px;padding-right:0px;width:100%;height:100%;overflow:hidden">
 		<div style="width:100%;height:100%;overflow:hidden;padding-right:0px;padding-bottom:10px;box-sizing:content-box;">
 			<div class="row" style="height:100%">
-				<div id="test_m_k_c" style="margin:0px;padding:0px;top:0;left:0;right:100%;bottom:100%;height:100%"></div>
+				<div id="test_m_k_c" style="margin:0px;padding:0px;width:100%;height:100%"></div>
 			</div>
 		</div>
 	</div>
@@ -344,22 +299,16 @@
 <div id="test_e_cd"></div>
 <div id="test_s_d"></div>
 <div id="test_a_d"></div>
-
+<div id="test_b_d"></div>
 <div id="test_r_d"></div>
 <div id="test_c_d"></div>
 <div id="test_p_d"></div>
 <div id="test_o_d"></div>
-<div id="test_w_d"></div>
-<div id="test_oc_d"></div>
 <div id="test_cl_d"></div>
-<div id="test_m_d"></div>
-<div id="test_em_d"></div>
-
 
 
 </div>
 <div id="reserved_zone"></div>
-
 <script type="text/javascript" src="/js/cc/lang/cn.js"></script>
 <script type="text/javascript" src="/js/cc/brokers.js"></script>
 <script type="text/javascript" src="/js/cc/builtin.js"></script>
@@ -391,33 +340,17 @@
 <script defer>
 
 
-
-
-
-
-
-	var backtest_html = "\/backtest-cn.html"
 	var editor = null
 	var colorStyle = "bright"
 	var brokerlessMode = false
 	var backboneMode = true
 	var layoutMode = true
 	var widgetMode = false
-	var defaultIndicatorsMode = true
+	var defaultIndicatorsMode = false
 	var colorpickerMode = true
 	var newsMode = true
 	var calendarMode = true
-	var brokerless_html = "https://www.brokerless.cc/brokerless.html"
 	var report_html = "\/report.html"
-	var sharedBrokerName = null
-	var sharedAccount = null
-	var sharedInvestorPassword = null
-	var locationHash = location.hash.substr(1)
-	if (locationHash != "") {
-		sharedBrokerName = locationHash.split(":::")[0]
-		sharedAccount = locationHash.split(":::")[1]
-		sharedInvestorPassword = locationHash.split(":::")[2]
-	}
 
 	if (widgetMode) {
 		$('#showtradesmenuitem').hide()
@@ -429,21 +362,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		$('.ui.embed').embed()
 
 		$(".programl").tab()
 
@@ -497,28 +415,12 @@
 			$($('.programsl')[3]).addClass('active')
 		})
 
-		$('#showindis').on('click', function () {
-            showIndicators()
-
-			$('#indissidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
-		})
-
 		$('#showeas').on('click', function () {
             showEAs()
 
 			$('#eassidebar')
 				.sidebar('setting', 'transition', 'overlay')
 				.sidebar('toggle')
-		})
-
-		$('#showbt').on('click', function () {
-			showBackTest()
-		})
-
-		$('#showbt2').on('click', function () {
-			showBackTest()
 		})
 
 		$('#showopentrades').on('click', function () {
@@ -580,30 +482,17 @@
 
 
             $('#accountsummarysidebar').css('display', 'none')
-						$('#news').css('display', 'none')
 		})
 
 		$('#showinstruments2').on('click', function () {
-      $('#accountsummarysidebar').css('display', 'none')
-			$('#news').css('display', 'none')
+			$('#bd2')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('setting', 'dimPage', false)
+				.sidebar('toggle')
 
-			showInstruments()
-		})
 
-		$('#changecolortobright').on('click', function () {
-			changeColorStyle("bright")
-		})
 
-		$('#changecolortodark').on('click', function () {
-			changeColorStyle("dark")
-		})
-
-		$('#changecolortoblue').on('click', function () {
-			changeColorStyle("blue")
-		})
-
-		$('#changecolortosea').on('click', function () {
-			changeColorStyle("sea")
+            $('#accountsummarysidebar').css('display', 'none')
 		})
 
 		$('#changelayoutto1').on('click', function () {
@@ -629,41 +518,26 @@
 
 
             $('#bd2').css('display', 'none')
-						$('#news').css('display', 'none')
 		})
 
-		$('#showaccountssignin').on('click', function () {
-			$('#bd2').css('display', 'none')
-			$('#news').css('display', 'none')
+		$('#showaccounts2').on('click', function () {
+			$('#accountsummarysidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
 
-			showAccountsSignIn()
+
+
+            $('#bd2').css('display', 'none')
 		})
 
-		$('#showaccountssignup').on('click', function () {
-			$('#bd2').css('display', 'none')
-			$('#news').css('display', 'none')
-
-			showAccountsSignUp()
+		$('#showoptimization').on('click', function () {
+			$('#optimizationsidebar')
+				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('toggle')
 		})
 
-		$('#showcalendar').on('click', function () {
-			$('#calendar').css('height', '400px')
-			$('#calendar').transition('disable')
-			$('#calendar').modal({autofocus: false}).modal('show')
-		})
-
-		$('#shownews').on('click', function () {
-			$('#news')
-			.sidebar('setting', 'transition', 'overlay')
-			.sidebar('setting', 'dimPage', false)
-			.sidebar('toggle')
-
-			$('#accountsummarysidebar').css('display', 'none')
-			$('#bd2').css('display', 'none')
-		})
-
-		$('#showcolorpicker').on('click', function () {
-			showColorPicker()
+		$('#showreplay').on('click', function () {
+			showReplay()
 		})
 
 		$('#closeprograml').on({'click': function () {
@@ -673,11 +547,8 @@
 
 
 
-		$(window).on('beforeunload', function() {
-			unload()
-        })
 
-		initForTrade()
+		initForBackTest()
 		extension.init()
 
 		editor = ace.edit("testtext")
@@ -737,6 +608,5 @@
 		}
 	})
 </script>
-
 </body>
 </html>

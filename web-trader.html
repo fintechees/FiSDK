@@ -23,6 +23,7 @@
 	<link rel="stylesheet" type="text/css" href="/datatables/Responsive-2.2.2/css/responsive.semanticui.min.css" />
 	<link rel="stylesheet" type="text/css" href="/spectrum/spectrum.css"/>
 	<link rel="stylesheet" type="text/css" href="/css/trade.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/extension.css"/>
 
 	<link rel="shortcut icon" href="/favicon.ico" />
 </head>
@@ -73,7 +74,8 @@
 			<a class="programl item" id="closeprograml"><i class="times circle icon"></i></a>
 			<a class="programl active item" data-tab="javascript" id="javascript">Javascript</a>
 			<a class="programl item" data-tab="cpp" id="cpp">C / C++</a>
-			<a class="programl item" data-tab="eastudio" id="eastudio">Expert Advisor Studio</a>
+			<a class="programl item" data-tab="eastudio" id="eastudio">EA Generator</a>
+			<a class="programl item" data-tab="extension" id="extension">Extension</a>
 		</div>
 		<div class="ui attached active tab segment programsl" id="javascriptseg" data-tab="javascript" style="width:100%;height:100%;padding-top:5px;padding-left:0;padding-right:0">
 			<div class="row" style="text-align:center;margin-bottom:5px">
@@ -89,7 +91,17 @@
 		<div class="ui attached tab segment programsl" id="eastudioseg" data-tab="eastudio" style="width:100%;height:100%;padding:0">
 			<iframe src="https://www.fintechee.com/ea-studio/"></iframe>
 		</div>
+		<div class="ui attached tab segment programsl" id="extensionseg" data-tab="extension" style="width:100%;height:95%;padding:0;overflow-y:scroll">
+			<table id="filesList" class="table table-bordered table-striped">
+			</table>
+		</div>
 
+	</div>
+</div>
+
+<div id="imgModal" class="img-modal">
+	<div class="modal-content">
+		<img src="" alt="full size image">
 	</div>
 </div>
 
@@ -218,7 +230,7 @@
 
 <div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
 	<div style="height:100%;text-align:center">
-		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="https://www.fintechee.com/">
+		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
 			<span style="color:#FFE6C1;font-size:50px">F</span>
 		</a>
 		<div class="main_menu_item ui winfrm simple dropdown item">
@@ -264,7 +276,8 @@
 			<div class="menu">
 				<a class="item" id="showconsole" style="background:#E34400!important;color:#FFFFFF!important">Javascript Console</a>
 				<a class="item" id="showconsolecpp" style="background:#E34400!important;color:#FFFFFF!important">C / C++ Compiler</a>
-				<a class="item" id="showconsolegenerator" style="background:#E34400!important;color:#FFFFFF!important">Expert Advisor Studio</a>
+				<a class="item" id="showconsolegenerator" style="background:#E34400!important;color:#FFFFFF!important">EA Generator</a>
+				<a class="item" id="showextension" style="background:#E34400!important;color:#FFFFFF!important">Extension</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item">
@@ -365,6 +378,7 @@
 <script type="text/javascript" src="/spectrum/spectrum.js"></script>
 <script type="text/javascript" src="/js/d3/d3.min.js"></script>
 <script type="text/javascript" src="/js/cc/u.js"></script>
+<script type="text/javascript" src="/js/cc/extension.js"></script>
 
 
 <script type="text/javascript" src="/js/ace/ace.js" charset="utf-8"></script>
@@ -381,7 +395,7 @@
 
 
 
-	var backtest_html = "https:\/\/www.fintechee.com\/backtest/"
+	var backtest_html = "\/backtest.html"
 	var editor = null
 	var colorStyle = "bright"
 	var brokerlessMode = false
@@ -393,7 +407,7 @@
 	var newsMode = true
 	var calendarMode = true
 	var brokerless_html = "https://www.brokerless.cc/brokerless.html"
-	var report_html = "https:\/\/www.fintechee.com\/report.html"
+	var report_html = "\/report.html"
 	var sharedBrokerName = null
 	var sharedAccount = null
 	var sharedInvestorPassword = null
@@ -468,6 +482,18 @@
 			$('.programsl').removeClass('active')
 			$($('.programl')[3]).addClass('active')
 			$($('.programsl')[2]).addClass('active')
+		})
+
+		$('#showextension').on('click', function () {
+			$('#console')
+			.sidebar('setting', 'transition', 'overlay')
+
+			.sidebar('toggle')
+
+			$('.programl').removeClass('active')
+			$('.programsl').removeClass('active')
+			$($('.programl')[4]).addClass('active')
+			$($('.programsl')[3]).addClass('active')
 		})
 
 		$('#showindis').on('click', function () {
@@ -651,6 +677,7 @@
         })
 
 		initForTrade()
+		extension.init()
 
 		editor = ace.edit("testtext")
 		editor.setTheme("ace/theme/chrome")
