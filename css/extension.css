@@ -1,0 +1,44 @@
+.long-text {
+word-wrap: break-word;
+overflow-wrap: break-word;
+white-space: pre-wrap;
+}
+.my-pre {
+font-family: inherit;
+font-size: inherit;
+margin: 0;
+}
+#filesList tbody td {
+border-bottom: 1px solid #ddd;
+}
+#filesList thead {
+display: none;
+}
+.thumbnail {
+max-width: 200px;
+max-height: 200px;
+cursor: pointer;
+}
+.img-modal {
+display: none;
+position: fixed;
+z-index: 9999;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.8);
+}
+.modal-content img {
+position: absolute;
+top: 10%;
+left: 10%;
+width: 80%;
+height: 80%;
+}
+.install-button {
+cursor: pointer;
+}
+.button-with-spacing {
+margin-bottom: 5px!important;
+}
