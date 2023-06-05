@@ -42,3 +42,11 @@ cursor: pointer;
 .button-with-spacing {
 margin-bottom: 5px!important;
 }
+@media (max-width: 767px), (max-height: 600px) {
+#extension{
+display:none;
+}
+#showextension{
+display:none;
+}
+}
