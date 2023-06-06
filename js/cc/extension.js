@@ -140,9 +140,10 @@ var extension = {
       }
 
       row.push(group)
-      row.push(pngFiles.join(""))
+      var pFiles = pngFiles.join("")
+      row.push(pFiles)
+      var txtContent = ""
       if (txtFiles.length > 0) {
-        var txtContent = ""
         for (var i in txtFiles) {
           txtContent += await this.getFile(txtFiles[i])
           txtContent += "\n"
@@ -151,9 +152,13 @@ var extension = {
       } else {
         row.push("")
       }
-      row.push(jsFiles.join(""))
+      var jFiles = jsFiles.join("")
+      row.push(jFiles)
 
-      table.push(row)
+      if (pFiles == "" && txtContent == "" && jFiles == "") {
+      } else {
+        table.push(row)
+      }
     }
   },
   renderFilesTable: function (files) {
