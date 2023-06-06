@@ -89,11 +89,11 @@ var extension = {
       for (var i in tree.objs) {
         var obj = tree.objs[i]
         if (obj.type == "file") {
-          if (obj.group != "EA" && obj.group != "Indicators") {
+          if ((obj.group != "EA" && obj.group != "Indicators") || obj.dirName == "Built-in") {
             return
           }
           group = obj.group
-          if (obj.extName == "png") {
+          if (obj.extName == "png" || obj.extName == "jpg" || obj.extName == "jpeg") {
             pngFiles.push('<img class="thumbnail" src="https://raw.githubusercontent.com/fintechees/Expert-Advisor-Studio/master/' + obj.path + '" onclick="extension.showImage(event)">')
           }
           if (obj.extName == "txt") {
