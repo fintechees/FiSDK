@@ -84,6 +84,7 @@ var extension = {
       var group = ""
       var pngFiles = []
       var txtFiles = []
+      var txtContents = []
       var jsFiles = []
 
       for (var i in tree.objs) {
@@ -145,9 +146,11 @@ var extension = {
       var txtContent = ""
       if (txtFiles.length > 0) {
         for (var i in txtFiles) {
-          txtContent += await this.getFile(txtFiles[i])
-          txtContent += "\n"
+          var txt = await this.getFile(txtFiles[i])
+          var escapedStr = $("<div/>").text(txt).html()
+          txtContents.push('<pre class="long-text my-pre">' + escapedStr + '</pre>')
         }
+        txtContent = txtContents.join("<hr>")
         row.push(txtContent)
       } else {
         row.push("")
@@ -181,13 +184,7 @@ var extension = {
         },
         {"title": "Type"},
         {"title": "Picture"},
-        {
-          "title": "Description",
-          "render": function (data, type, row) {
-            var escapedStr = $("<div/>").text(data).html()
-            return '<pre class="long-text my-pre">' + escapedStr + '</pre>'
-          }
-        },
+        {"title": "Description"},
         {"title": "Link"}
       ],
 
