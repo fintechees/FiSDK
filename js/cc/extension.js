@@ -1,4 +1,5 @@
 var extension = {
+  pathsMap: [],
   eaNames: [],
   indiNames: [],
   githubRepo: [],
@@ -102,18 +103,21 @@ var extension = {
           }
           if (obj.extName == "js") {
             var found = false
+            var updateDT = 0
             if (obj.group == "EA") {
               for (var j in this.eaNames) {
-                if (this.eaNames[j] + ".js" == obj.name) {
+                if (this.eaNames[j].name + ".js" == obj.name) {
                   found = true
+                  updateDT = this.eaNames[j].updateDT
                   break
                 }
               }
             }
             if (obj.group == "Indicators") {
               for (var j in this.indiNames) {
-                if (this.indiNames[j] + ".js" == obj.name) {
+                if (this.indiNames[j].name + ".js" == obj.name) {
                   found = true
+                  updateDT = this.indiNames[j].updateDT
                   break
                 }
               }
@@ -122,20 +126,21 @@ var extension = {
               found = false
               for (var j in this.githubRepo) {
                 if (this.githubRepo[j].path == obj.path) {
-                  if (this.githubRepo[j].sha == obj.sha) {
+                  if (this.githubRepo[j].sha == obj.sha && typeof this.githubRepo[j].updateDT != "undefined" && this.githubRepo[j].updateDT < updateDT) {
                     found = true
                   }
                   break
                 }
               }
               if (found) {
-                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>' + obj.path + ' installed</button>')
+                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)" disabled>' + obj.name + ' installed</button>')
               } else {
-                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Update ' + obj.path + '</button>')
+                jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Update ' + obj.name + '</button>')
               }
             } else {
-              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Install ' + obj.path + '</button>')
+              jsFiles.push('<button type="button" class="ui tiny blue button button-with-spacing" onclick="extension.installExtension(event)">Install ' + obj.name + '</button>')
             }
+            this.pathsMap[obj.name] = obj.path
           }
         }
       }
@@ -209,13 +214,15 @@ var extension = {
   installExtension: function (event) {
     var target = event.target || event.srcElement
     if (target.tagName === "BUTTON") {
-      var path = target.textContent.split(" ")[1]
+      var name = target.textContent.split(" ")[1]
+      if (typeof this.pathsMap[name] == "undefined") return
+      var path = this.pathsMap[name]
       var that = this
 
       this.getFile(path)
         .then(function (res) {
           eval(res)
-          target.textContent = path + " installed"
+          target.textContent = path
           target.disabled = true
 
           var sha = ""
@@ -227,17 +234,19 @@ var extension = {
           }
 
           var found = false
-          for (var i in this.githubRepo) {
+          for (var i in that.githubRepo) {
             if (that.githubRepo[i].path == path) {
               found = true
               that.githubRepo[i].sha = sha
+              that.githubRepo[i].updateDT = Math.floor(new Date().getTime() / 1000)
               break
             }
           }
           if (!found) {
             that.githubRepo.push({
               path: path,
-              sha: sha
+              sha: sha,
+              updateDT: Math.floor(new Date().getTime() / 1000)
             })
           }
           localStorage.githubRepo = JSON.stringify(that.githubRepo)
@@ -254,10 +263,16 @@ var extension = {
         var eas = typeof localStorage.eas != "undefined" ? JSON.parse(localStorage.eas) : []
         var indicators = typeof localStorage.indicators != "undefined" ? JSON.parse(localStorage.indicators) : []
         for (var i in eas) {
-          that.eaNames.push(eas[i].eaName)
+          that.eaNames.push({
+            name: eas[i].eaName,
+            updateDT: (typeof eas[i].updateDT == "undefined" ? 0 : eas[i].updateDT)
+          })
         }
         for (var i in indicators) {
-          that.indiNames.push(indicators[i].indiName)
+          that.indiNames.push({
+            name: indicators[i].indiName,
+            updateDT: (typeof indicators[i].updateDT == "undefined" ? 0 : indicators[i].updateDT)
+          })
         }
         that.githubRepo = typeof localStorage.githubRepo != "undefined" ? JSON.parse(localStorage.githubRepo) : []
         that.githubRes = res
