@@ -21,6 +21,7 @@ var dict = {
     aSH15: 'I Accept these Terms and Conditions for One-Click Trading.',
     aSH16: 'MFA - Multiple Factor Authentication',
     aSH17: 'Qualification Approved',
+    aSH18: 'Remove Account',
     cRBT1: 'Report',
     gR1: 'Account',
     gR2: 'Currency',
@@ -627,7 +628,7 @@ var dict = {
     m287: "[M287]: The withdrawal has arrived.",
     m288: "[M288]: The parameter: accountId is not correct.",
     m289: "[M289]: The parameter: email address is not correct.",
-    m290: "[M290]: The authentication component is missing.",
+    m290: "[M290]: The operation has been done successfully.",
     m291: "[M291]: An email with the verification code has been sent successfully.",
     m292: "[M292]: Please enter the verification code.",
     m293: "[M293]: You can't send an email with the verification code too frequently in a ",
@@ -641,6 +642,7 @@ var dict = {
     m301: "[M301]: Failed to send reset password email.",
     m302: "[M302]: Failed to reset password.",
     m303: "[M303]: The trade token must be filled.",
+    m304: "[M304]: Failed to operate due to investor mode.",
     clDH1: "Axis",
     clDH2: "Background",
     clDH3: "Text",
@@ -667,5 +669,7 @@ var dict = {
     mH6: "Please check this option if you have scanned the QR code by using MFA Authenticator.",
     mH7: "Disable MFA",
     mH8: "Enable MFA",
-    tF1: "tensorflow" // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
+    tF1: "tensorflow", // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
+    cRRADH1: "Remove Account",
+    cRRADD1: "Would you like to remove your account? Please press OK to continue."
 }

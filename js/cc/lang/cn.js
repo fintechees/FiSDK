@@ -21,6 +21,7 @@ var dict = {
     aSH15: '我接受一键式下单交易的条款。',
     aSH16: 'MFA - 多重验证',
     aSH17: '交易资格获批',
+    aSH18: '删除账户',
     cRBT1: '报表',
     gR1: '账户',
     gR2: '货币',
@@ -627,7 +628,7 @@ var dict = {
     m287: "[M287]: 提现已经到账。",
     m288: "[M288]: 参数: accountId不正确。",
     m289: "[M289]: 参数: 邮箱地址不正确。",
-    m290: "[M290]: 缺少认证组件。",
+    m290: "[M290]: 操作成功完成。",
     m291: "[M291]: 一封验证邮箱的邮件已经成功发送。",
     m292: "[M292]: 请输入验证码。",
     m293: "[M293]: 您不能在该时间段内过度发送验证邮件: ",
@@ -641,6 +642,7 @@ var dict = {
     m301: "[M301]: 无法发送重置密码邮件。",
     m302: "[M302]: 无法重置密码。",
     m303: "[M303]: 交易Token是必填项。",
+    m304: "[M304]: 因为是观摩模式, 操作失败。",
     clDH1: "坐标轴",
     clDH2: "面板色",
     clDH3: "文字",
@@ -667,5 +669,7 @@ var dict = {
     mH6: "如果您已经用MFA认证器扫描了二维码，请勾选本选项。",
     mH7: "禁用MFA",
     mH8: "启用MFA",
-    tF1: "tensorflow" // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
+    tF1: "tensorflow", // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
+    cRRADH1: "删除账户",
+    cRRADD1: "您想删除您的账户吗? 请确认继续。"
 }
