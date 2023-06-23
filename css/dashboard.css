@@ -2,7 +2,6 @@ table td {
   white-space: nowrap;
 }
 thead th, tr td {
-  background-color: var(--bs-table-active-bg) !important;
   color: var(--bs-table-active-color) !important;
 }
 thead th {
@@ -65,3 +64,14 @@ html {
 footer a {
   color:#e5d1b2!important;
 }
+table thead th {
+  background-color: #2b3847!important;
+  color:#e5d1b2!important;
+}
+table tbody tr.odd td {
+  background-color: #2b3847!important;
+}
+table tbody tr.even td {
+  background-color: #2f3f4f!important;
+}
+
