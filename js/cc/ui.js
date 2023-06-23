@@ -39,17 +39,22 @@ window.fiac = {
           }
         }
 
+        window.fiui.sidebar.hideManagersMenu();
         window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.showPaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
         window.fiui.profile.hideFixSettingsDiv();
         window.fiui.stats.hide();
       } else if (that.info.bManager && that.tradeToken != null) {
+        window.fiui.sidebar.showManagersMenu();
+        window.fiui.sidebar.showExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.showStatsMenu();
         window.fiui.profile.showFixSettingsDiv();
         window.fiui.payment.hide();
       } else {
+        window.fiui.sidebar.hideManagersMenu();
+        window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
         window.fiui.profile.hideFixSettingsDiv();
@@ -58,6 +63,7 @@ window.fiac = {
       }
 
       window.fiui.brokerList.render(res);
+      window.fiui.managerList.render(res);
       window.fiui.accountList.render(res);
       window.fiui.symbolList.render(res);
       window.fiui.openPosList.render(res);
@@ -278,6 +284,7 @@ window.fiui = {
       $("#btnShowBrokers").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.show();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -288,9 +295,25 @@ window.fiui = {
         window.fiui.stats.hide();
       });
 
+      $("#btnShowManagers").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.show();
+        window.fiui.accountList.hide();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.managerList.adjustCol();
+      });
+
       $("#btnShowAccounts").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.show();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -305,6 +328,7 @@ window.fiui = {
       $("#btnShowSymbols").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.show();
         window.fiui.openPosList.hide();
@@ -318,6 +342,7 @@ window.fiui = {
       $("#btnShowOpenPositions").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.show();
@@ -331,6 +356,7 @@ window.fiui = {
       $("#btnShowGroupedOpenPos").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -344,6 +370,7 @@ window.fiui = {
       $("#btnShowFundingHistory").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -357,6 +384,7 @@ window.fiui = {
       $("#btnShowExecReports").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -371,6 +399,7 @@ window.fiui = {
       $("#btnShowPayment").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -384,6 +413,7 @@ window.fiui = {
       $("#btnShowStats").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
         window.fiui.accountList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
@@ -397,6 +427,7 @@ window.fiui = {
     showSummary: function () {
       $("#summarySection").show();
       window.fiui.brokerList.hide();
+      window.fiui.managerList.hide();
       window.fiui.accountList.hide();
       window.fiui.symbolList.hide();
       window.fiui.openPosList.hide();
@@ -405,6 +436,15 @@ window.fiui = {
       window.fiui.execReports.hide();
       window.fiui.payment.hide();
       window.fiui.stats.hide();
+    },
+    showManagersMenu: function () {
+      $("#btnShowManagers").show();
+    },
+    hideManagersMenu: function () {
+      $("#btnShowManagers").hide();
+    },
+    showExecReportsMenu: function () {
+      $("#btnShowExecReports").show();
     },
     hideExecReportsMenu: function () {
       $("#btnShowExecReports").hide();
@@ -1746,6 +1786,24 @@ window.fiui.brokerList = {
     <input type="text" class="form-control" placeholder="Level" style="color:#000;background:#eee" id="levelBp">\
     </div>\
     <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Commission Opening Long" style="color:#000;background:#eee" id="commissionOpeningLongBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Commission Closing Long" style="color:#000;background:#eee" id="commissionClosingLongBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Commission Opening Short" style="color:#000;background:#eee" id="commissionOpeningShortBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Commission Closing Short" style="color:#000;background:#eee" id="commissionClosingShortBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Ask Mark Up" style="color:#000;background:#eee" id="askMarkUpBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Bid Mark Up" style="color:#000;background:#eee" id="bidMarkUpBp">\
+    </div>\
+    <div class="input-group mb-3">\
     <input type="text" class="form-control" placeholder="Currency" style="color:#000;background:#eee" id="currencyBp">\
     </div>\
     <div class="input-group mb-3">\
@@ -1786,6 +1844,9 @@ window.fiui.brokerList = {
     </div>\
     <div class="input-group mb-3">\
     <input type="text" class="form-control" placeholder="Success Redirect URL" style="color:#000;background:#eee" id="pgSuccessRedirectUrlBp">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Identifier(please type \"remove\" if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">\
     </div>\
     <div class="row">\
     <div class="col-12" style="text-align:center">\
@@ -1866,6 +1927,8 @@ window.fiui.brokerList = {
 
     $("#downloadWlReportSection").html(downloadReportHtml);
 
+    let that = this;
+
     fisdk.subscribeToNotification("broker_updated", function (res) {
       console.log("broker_updated");
       console.log(res);
@@ -1879,6 +1942,9 @@ window.fiui.brokerList = {
       console.log(res);
       if (typeof res.message != "undefined" && res.message != "") {
         toastr.info(res.message);
+      }
+      if (typeof that.brokerTable != "undefined") {
+        that.brokerTable.row.add(res.newBroker).draw(false);
       }
     });
 
@@ -1896,6 +1962,12 @@ window.fiui.brokerList = {
       if (typeof res.message != "undefined" && res.message != "") {
         toastr.info(res.message);
       }
+      if (typeof that.brokerDataTable != "undefined") {
+        that.brokerDataTable.fnDeleteRow(res.rowId);
+      }
+      if (typeof that.brokerTable != "undefined") {
+        that.brokerTable.row.add(res.broker).draw(false);
+      }
     });
 
     fisdk.subscribeToNotification("failed_to_modify_broker", function (res) {
@@ -1912,6 +1984,9 @@ window.fiui.brokerList = {
       if (typeof res.message != "undefined" && res.message != "") {
         toastr.info(res.message);
       }
+      if (typeof that.brokerDataTable != "undefined") {
+        that.brokerDataTable.fnDeleteRow(res.rowId);
+      }
     });
 
     fisdk.subscribeToNotification("failed_to_remove_broker", function (res) {
@@ -1925,8 +2000,6 @@ window.fiui.brokerList = {
     $("#btnShowBroker").on("click", function () {
       $("#brokerProfileDlg").modal("show");
     });
-
-    let that = this;
 
     $("#btnAddBroker").on("click", function () {
       $("#brokerProfileDlg").modal("hide");
@@ -1982,22 +2055,52 @@ window.fiui.brokerList = {
   },
   getBroker: function () {
     if ($("#brokerIdBp").val() == "") {
-      throw new Error("Broker ID is required.")
+      throw new Error("Broker ID is required.");
     }
     if ($("#BrokerNameBp").val() == "") {
-      throw new Error("Broker Name is required.")
+      throw new Error("Broker Name is required.");
     }
     if ($("#contactBp").val() == "") {
-      throw new Error("Contact Email Address is required.")
+      throw new Error("Contact Email Address is required.");
     }
-    if ($("#levelBp").val() == "") {
-      throw new Error("Level is required.")
+    let levelBp = -1
+    if ($("#levelBp").val() != "") {
+      levelBp = parseInt($("#levelBp").val());
+    }
+    let commissionOpeningLongBp = -1
+    if ($("#commissionOpeningLongBp").val() != "") {
+      commissionOpeningLongBp = parseFloat($("#commissionOpeningLongBp").val());
+    }
+    let commissionClosingLongBp = -1
+    if ($("#commissionClosingLongBp").val() != "") {
+      commissionClosingLongBp = parseFloat($("#commissionClosingLongBp").val());
+    }
+    let commissionOpeningShortBp = -1
+    if ($("#commissionOpeningShortBp").val() != "") {
+      commissionOpeningShortBp = parseFloat($("#commissionOpeningShortBp").val());
+    }
+    let commissionClosingShortBp = -1
+    if ($("#commissionClosingShortBp").val() != "") {
+      commissionClosingShortBp = parseFloat($("#commissionClosingShortBp").val());
+    }
+    let askMarkUpBp = -1
+    if ($("#askMarkUpBp").val() != "") {
+      askMarkUpBp = parseFloat($("#askMarkUpBp").val());
+    }
+    let bidMarkUpBp = -1
+    if ($("#bidMarkUpBp").val() != "") {
+      bidMarkUpBp = parseFloat($("#bidMarkUpBp").val());
+    }
+    let withdrawalLimitBp = -1
+    if ($("#withdrawalLimitBp").val() != "") {
+      withdrawalLimitBp = parseFloat($("#withdrawalLimitBp").val());
     }
     if ($("#creditsOnboardBp").val() == "") {
-      throw new Error("Credits Onboard is required. You need to explicitly set it to true or false.")
+      throw new Error("Credits Onboard is required. You need to explicitly set it to true or false.");
     }
-    if ($("#creditsOnboardLimitBp").val() == "") {
-      throw new Error("Credits Onboard Limit is required.")
+    let creditsOnboardLimitBp = -1
+    if ($("#creditsOnboardLimitBp").val() != "") {
+      creditsOnboardLimitBp = parseFloat($("#creditsOnboardLimitBp").val());
     }
     return {
       brokerName: $("#brokerIdBp").val(), // backend's brokerName == frontend's brokerId
@@ -2006,12 +2109,18 @@ window.fiui.brokerList = {
       enabled: true,
       brokerDesc: $("#descBp").val(),
       balance: parseFloat($("#balanceBp").val()),
-      level: parseInt($("#levelBp").val()),
+      level: levelBp,
+      buyOpnCmmssn: commissionOpeningLongBp,
+      buyClsdCmmssn: commissionClosingLongBp,
+      sellOpnCmmssn: commissionOpeningShortBp,
+      sellClsdCmmssn: commissionClosingShortBp,
+      ask: askMarkUpBp,
+      bid: bidMarkUpBp,
       currency: $("#currencyBp").val(),
       toFixed: parseFloat($("#toFixedBp").val()),
       hedgingEnabled: true,
       pl: 0.0,
-      withdrawalLimit: parseFloat($("#withdrawalLimitBp").val()),
+      withdrawalLimit: withdrawalLimitBp,
       marginCallLevel: parseFloat($("#marginCallLevelBp").val()),
       marginCloseoutLevel: parseFloat($("#marginCloseoutLevelBp").val()),
       equity: 0.0,
@@ -2026,11 +2135,12 @@ window.fiui.brokerList = {
       getBalanceURLForWP: "",
       syncBalanceURLForWP: "",
       creditsOnboard: ($("#creditsOnboardBp").val() == "true" ? true : false),
-      creditsOnboardLimit: parseFloat($("#creditsOnboardLimitBp").val()),
+      creditsOnboardLimit: creditsOnboardLimitBp,
       cryptoPaymentGatewayKey: $("#cryptoPaymentGatewayKeyBp").val(),
       paymentGatewayStoreId: $("#paymentGatewayStoreIdBp").val(),
       paymentGatewayWalletId: $("#paymentGatewayWalletIdBp").val(),
-      pgSuccessRedirect: $("#pgSuccessRedirectUrlBp").val()
+      pgSuccessRedirect: $("#pgSuccessRedirectUrlBp").val(),
+      identifier: $("#identifierBp").val()
     };
   },
   render: function (res) {
@@ -2178,6 +2288,143 @@ window.fiui.brokerList = {
   },
   hide: function () {
     $("#brokerSection").hide();
+  }
+};
+
+// manager list component
+window.fiui.managerList = {
+  init: function () {
+    let managerListHtml = '\
+    <div class="content-header">\
+    <div class="container-fluid">\
+    <div class="row mb-2">\
+    <div class="col-sm-6">\
+    <h1 class="m-0">Managers</h1>\
+    </div>\
+    <div class="col-sm-6">\
+    <ol class="breadcrumb float-sm-right">\
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
+    <li class="breadcrumb-item active">Managers</li>\
+    </ol>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    <section class="content">\
+    <div class="container-fluid">\
+    <div class="row">\
+    <div class="col-12">\
+    <div class="card">\
+    <div class="card-header">\
+    <h3 class="card-title">Manager List</h3>\
+    </div>\
+    <div class="card-body">\
+    <table id="managerList" class="table table-bordered table-striped">\
+    </table>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    </section>';
+
+    $("#managerSection").html(managerListHtml);
+
+    let that = this;
+
+    fisdk.subscribeToNotification("downgrading_role_done", function (res) {
+      console.log("downgrading_role_done");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+      if (typeof that.managerDataTable != "undefined") {
+        that.managerDataTable.fnDeleteRow(res.rowId);
+      }
+      if (typeof window.fiui.accountList != "undefined" && typeof window.fiui.accountList.accountTable != "undefined") {
+        window.fiui.accountList.accountTable.row.add(res.newAccount).draw(false);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_downgrade_role", function (res) {
+      console.error("failed_to_downgrade_role");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+  },
+  render: function (res) {
+    let managerTable = null;
+
+    if ($.fn.dataTable.isDataTable("#managerList")) {
+      managerTable = $("#managerList").DataTable();
+      managerTable.clear().draw();
+      managerTable.destroy();
+      $("#managerList").empty();
+    }
+
+    if (res.bManager && window.fiac.tradeToken != null) {
+      managerTable = $("#managerList").DataTable({
+        "responsive": false, "lengthChange": false, "autoWidth": true, "scrollX": true,
+        "buttons": ["copy", "csv", "print", "colvis"],
+        "columns": res.managers.columns,
+        "columnDefs": [
+          {targets: -1, data: null,
+          defaultContent:
+          '<div class="btn-group">' +
+          '<button class="btn btn-sm" id="btnDowngradeRole" title="Downgrade"><i class="fas fa-arrow-down nav-icon"></i></button>' +
+          '<button class="btn btn-sm" id="btnGetManagerLog" title="Get log"><i class="fas fa-map nav-icon"></i></button>' +
+          '</div>'}
+        ],
+        "fixedColumns": {
+          left: 1
+        }
+      });
+
+      managerTable.buttons().container().appendTo("#managerList_wrapper .col-md-6:eq(0)");
+      this.managerTable = managerTable;
+      this.managerDataTable = $("#managerList").dataTable();
+
+      $("#managerList tbody").on("click", "[id*=btnDowngradeRole]", function () {
+        if (managerTable != null) {
+          let data = managerTable.row($(this).parents("tr")).data();
+
+          window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+          window.fiui.confirmDlg.nextProcessCallback = function () {
+            fisdk.downgradeRole(window.fiui.confirmDlg.nextProcessTarget);
+          }
+
+          window.fiui.confirmDlg.show();
+        }
+      });
+
+      $("#managerList tbody").on("click", "[id*=btnGetManagerLog]", function () {
+        if (managerTable != null) {
+          let data = managerTable.row($(this).parents("tr")).data();
+
+          window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+          window.fiui.confirmDlg.nextProcessCallback = function () {
+            fisdk.getLog(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, window.fiui.confirmDlg.nextProcessTarget);
+          }
+
+          window.fiui.confirmDlg.show();
+        }
+      });
+
+      for (let i in res.managers.data) {
+        managerTable.row.add(res.managers.data[i]).draw(false);
+      }
+    }
+  },
+  show: function () {
+    $("#managerSection").show();
+  },
+  hide: function () {
+    $("#managerSection").hide();
+  },
+  adjustCol: function () {
+    $("#managerList").DataTable().columns.adjust();
   }
 };
 
@@ -2535,6 +2782,12 @@ window.fiui.accountList = {
       if (typeof res.message != "undefined" && res.message != "") {
         toastr.info(res.message);
       }
+      if (typeof that.accountDataTable != "undefined") {
+        that.accountDataTable.fnDeleteRow(res.rowId);
+      }
+      if (typeof window.fiui.managerList != "undefined" && typeof window.fiui.managerList.managerTable != "undefined") {
+        window.fiui.managerList.managerTable.row.add(res.newManager).draw(false);
+      }
     });
 
     fisdk.subscribeToNotification("failed_to_upgrade_role", function (res) {
@@ -2610,6 +2863,20 @@ window.fiui.accountList = {
 
     fisdk.subscribeToNotification("failed_to_download_report", function (res) {
       console.error("failed_to_download_report");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("getting_log_done", function (res) {
+      console.log("getting_log_done");
+
+      that.download(JSON.stringify(res.transactions), "report.json", "text/plain");
+    });
+
+    fisdk.subscribeToNotification("failed_to_get_log", function (res) {
+      console.error("failed_to_get_log");
       if (typeof res.message != "undefined" && res.message != "") {
         console.error(res.message);
         toastr.error(res.message);
@@ -2719,6 +2986,7 @@ window.fiui.accountList = {
           '<button class="btn btn-sm" id="btnChangeBookType" title="Change book type"><i class="fas fa-book nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnShowChangeLevelDlg" title="Change level, set commission and set markup"><i class="fas fa-sliders-h nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnShowDownloadTraderReportDlg" title="Download trader report"><i class="fas fa-download nav-icon"></i></button>' +
+          '<button class="btn btn-sm" id="btnGetTraderLog" title="Get log"><i class="fas fa-map nav-icon"></i></button>' +
           '</div>'}
         ],
         "fixedColumns": {
@@ -2880,6 +3148,19 @@ window.fiui.accountList = {
         $("#endDtDtr").datetimepicker({
           format: "L"
         });
+      }
+    });
+
+    $("#accountList tbody").on("click", "[id*=btnGetTraderLog]", function () {
+      if (accountTable != null) {
+        let data = accountTable.row($(this).parents("tr")).data();
+
+        window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+        window.fiui.confirmDlg.nextProcessCallback = function () {
+          fisdk.getLog(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, window.fiui.confirmDlg.nextProcessTarget);
+        }
+
+        window.fiui.confirmDlg.show();
       }
     });
 
@@ -4202,7 +4483,7 @@ window.fiui.stats = {
 };
 
 function loadDashboard () {
-  $("#version").html(getFintecheeVersion());
+  $("#version").html("Version-" + getFintecheeVersion());
 
   toastr.options = {
     "closeButton": true
@@ -4223,6 +4504,7 @@ function loadDashboard () {
   window.fiui.payment.init();
   window.fiui.fix.init();
   window.fiui.brokerList.init();
+  window.fiui.managerList.init();
   window.fiui.accountList.init();
   window.fiui.symbolList.init();
   window.fiui.openPosList.init();
