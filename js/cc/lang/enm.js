@@ -200,7 +200,7 @@ var dictM = {
     rB5: 'Operation',
     rB6: 'Balance',
     rB7: 'Broker',
-    rB8: 'Contact',
+    rB8: 'Email',
     bBN1: 'Broker ID',
   	bSBN1: "Broker Name",
   	bEM1: "Email",
