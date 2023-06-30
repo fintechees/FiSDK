@@ -643,6 +643,7 @@ var dict = {
     m302: "[M302]: Failed to reset password.",
     m303: "[M303]: The trade token must be filled.",
     m304: "[M304]: Failed to operate due to investor mode.",
+    m305: "[M305]: The IB doesn't exist.",
     clDH1: "Axis",
     clDH2: "Background",
     clDH3: "Text",
