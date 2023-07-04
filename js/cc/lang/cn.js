@@ -302,6 +302,7 @@ var dict = {
     sPAH4: '买入',
     sPAH5: '卖出价',
     sPAH6: '买入价',
+    sPAH7: '手数',
     rASL1: '品种',
     rASL2: '经纪商',
     rASL3: '账户', // sE 13

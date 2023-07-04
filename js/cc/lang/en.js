@@ -302,6 +302,7 @@ var dict = {
     sPAH4: 'Buy',
     sPAH5: 'Bid',
     sPAH6: 'Ask',
+    sPAH7: 'Lots',
     rASL1: 'Symbol',
     rASL2: 'Broker',
     rASL3: 'Account', // sE 13
