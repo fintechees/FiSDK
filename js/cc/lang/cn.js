@@ -293,9 +293,10 @@ var dict = {
     dSNH1: '选择品种', // kT 14
     aSDH1: '选择品种',
     sPHL1: '下单的量(手数)',
-    sPHL2: '更多品种...',
+    sPHL2: '更多品种',
     sPHL3: '下单的量(投注 / 点)',
     sPHL4: '一键式下单',
+    sPHL5: '观察品种',
     sPAH1: '图表',
     sPAH2: '发送订单',
     sPAH3: '卖出',
@@ -673,5 +674,16 @@ var dict = {
     mH8: "启用MFA",
     tF1: "tensorflow", // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
     cRRADH1: "删除账户",
-    cRRADD1: "您想删除您的账户吗? 请确认继续。"
+    cRRADD1: "您想删除您的账户吗? 请确认继续。",
+    eLB1: "编辑",
+    eLB2: "启动",
+    eLB3: "停止",
+    eLB4: "删除",
+    oLB1: "回测",
+    iLB1: "编辑",
+    iLB2: "删除",
+    oTLB1: "修改订单",
+    oTLB2: "取消订单",
+    oTLB3: "修改持仓止盈止损",
+    oTLB4: "关闭现有持仓"
 }

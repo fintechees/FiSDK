@@ -293,9 +293,10 @@ var dict = {
     dSNH1: 'Select Symbol', // kT 14
     aSDH1: 'Select Symbols',
     sPHL1: 'Volume(Lots) to Order',
-    sPHL2: 'More Symbols...',
+    sPHL2: 'More Symbols',
     sPHL3: 'Volume(Bet / Pip) to Order',
     sPHL4: 'One-Click Order',
+    sPHL5: 'Watch List',
     sPAH1: 'Chart Window',
     sPAH2: 'Send Order',
     sPAH3: 'Sell',
@@ -673,5 +674,16 @@ var dict = {
     mH8: "Enable MFA",
     tF1: "tensorflow", // Version update will remove localStorage, this term will prevent the trained models from being removed by mistake. Disclaimer: We are not affiliated with Tensorflow.
     cRRADH1: "Remove Account",
-    cRRADD1: "Would you like to remove your account? Please press OK to continue."
+    cRRADD1: "Would you like to remove your account? Please press OK to continue.",
+    eLB1: "Edit",
+    eLB2: "Start",
+    eLB3: "Stop",
+    eLB4: "Remove",
+    oLB1: "Backtest",
+    iLB1: "Edit",
+    iLB2: "Remove",
+    oTLB1: "Modify Pending Order",
+    oTLB2: "Cancel Pending Order",
+    oTLB3: "Modify TP or SL of Trade",
+    oTLB4: "Close Open Trade"
 }
