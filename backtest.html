@@ -34,6 +34,7 @@
 
 <div id="bd2" class="ui noanimation right vertical menu sidebar"
 	style="padding-left:5px;padding-right:0px;width:350px;height:100%;overflow:hidden">
+	<button class="close_sidebar" id="closebd2"><i class="caret right icon" style="margin-left:-5px"></i></button>
 	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:35px;box-sizing:content-box;padding-top:10px">
 		<div class="row">
 			<div id="test_s"></div>
@@ -41,24 +42,25 @@
 	</div>
 </div>
 <div id="accountsummarysidebar" class="ui noanimation right vertical menu sidebar" style="width:350px">
+	<button class="close_sidebar" id="closeaccountsummary" style="z-index:100"><i class="caret right icon" style="margin-left:-5px"></i></button>
 	<div id="test_a_s"></div>
 </div>
-<div id="orderstradessidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE;overflow-x:hidden">
+<div id="orderstradessidebar" class="bttmsdbr ui noanimation bottom menu sidebar" style="background:#EEEEEE;overflow-x:hidden">
 	<div class="row" style="width:100%">
 		<div id="test_o"></div>
 	</div>
 </div>
-<div id="eassidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+<div id="eassidebar" class="bttmsdbr ui noanimation bottom menu sidebar" style="background:#EEEEEE">
 	<div class="row" style="width:100%">
 		<div id="test_e"></div>
 	</div>
 </div>
-<div id="optimizationsidebar" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+<div id="optimizationsidebar" class="bttmsdbr ui noanimation bottom menu sidebar" style="background:#EEEEEE">
 	<div class="row" style="width:100%">
 		<div id="test_op"></div>
 	</div>
 </div>
-<div id="console" class="ui noanimation bottom menu sidebar" style="background:#EEEEEE">
+<div id="console" class="bttmsdbr ui noanimation bottom menu sidebar" style="background:#EEEEEE">
 	<div class="row" style="width:100%;height:550px;overflow:hidden">
 		<div class="ui tiny top attached tabular menu">
 			<a class="programl item" id="closeprograml"><i class="times circle icon"></i></a>
@@ -222,55 +224,55 @@
 		<div class="main_menu_item ui winfrm simple dropdown item" id="showaccounts2">
 			<i class="user icon"></i>
 			<div class="menu">
-				<a class="item" id="showaccounts" style="background:#E34400!important;color:#FFFFFF!important">Account</a>
+				<a class="item" id="showaccounts">Account</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item" id="showinstruments2">
 			<i class="balance scale icon"></i>
 			<div class="menu">
-				<a class="item" id="showinstruments" style="background:#E34400!important;color:#FFFFFF!important">Market</a>
+				<a class="item" id="showinstruments">Market</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
 			<i class="handshake icon"></i>
 			<div class="menu">
-				<a class="item" id="showpendingorders" style="background:#E34400!important;color:#FFFFFF!important">Pending Orders</a>
-				<a class="item" id="showopentrades" style="background:#E34400!important;color:#FFFFFF!important">Open Trades</a>
-				<a class="item" id="showhistorytrades" style="background:#E34400!important;color:#FFFFFF!important">History of Trades</a>
-				<a class="item" id="showcancelledorders" style="background:#E34400!important;color:#FFFFFF!important">Cancelled Orders</a>
-				<a class="item" id="showhistoryoffunding" style="background:#E34400!important;color:#FFFFFF!important">History of Funding</a>
+				<a class="item" id="showpendingorders">Pending Orders</a>
+				<a class="item" id="showopentrades">Open Trades</a>
+				<a class="item" id="showhistorytrades">History of Trades</a>
+				<a class="item" id="showcancelledorders">Cancelled Orders</a>
+				<a class="item" id="showhistoryoffunding">History of Funding</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item">
 			<i class="graduation cap icon"></i>
 			<div class="menu">
-				<a class="item" id="showeas" style="background:#E34400!important;color:#FFFFFF!important">EA</a>
-				<a class="item" id="showreplay" style="background:#E34400!important;color:#FFFFFF!important">Replayer</a>
-				<a class="item" id="showoptimization" style="background:#E34400!important;color:#FFFFFF!important">Optimization</a>
+				<a class="item" id="showeas">EA</a>
+				<a class="item" id="showreplay">Replayer</a>
+				<a class="item" id="showoptimization">Optimization</a>
 			</div>
 		</div>
 		<div class="main_menu_item ui winfrm simple dropdown item">
 			<i class="wrench icon"></i>
 			<div class="menu">
-				<a class="item" id="showconsole" style="background:#E34400!important;color:#FFFFFF!important">Javascript Console</a>
-				<a class="item" id="showconsolecpp" style="background:#E34400!important;color:#FFFFFF!important">C / C++ Compiler</a>
-				<a class="item" id="showconsolegenerator" style="background:#E34400!important;color:#FFFFFF!important">EA Generator</a>
-				<a class="item" id="showextension" style="background:#E34400!important;color:#FFFFFF!important">Extension</a>
+				<a class="item" id="showconsole">Javascript Console</a>
+				<a class="item" id="showconsolecpp">C / C++ Compiler</a>
+				<a class="item" id="showconsolegenerator">EA Generator</a>
+				<a class="item" id="showextension">Extension</a>
 			</div>
 		</div>
 		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
 			<i class="book icon"></i>
 			<div class="menu">
-				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/" style="background:#E34400!important;color:#FFFFFF!important">SDK Trading</a>
-				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html" style="background:#E34400!important;color:#FFFFFF!important">Github</a>
+				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/">SDK Trading</a>
+				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html">Github</a>
 			</div>
 		</div>
 		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
 			<i class="table icon"></i>
 			<div class="menu">
-				<a class="item" id="changelayoutto1" style="background:#E34400!important;color:#FFFFFF!important"><i class="window maximize outline icon"></i></a>
-				<a class="item" id="changelayoutto2" style="background:#E34400!important;color:#FFFFFF!important"><i class="th large icon"></i></a>
-				<a class="item" id="changelayoutto3" style="background:#E34400!important;color:#FFFFFF!important"><i class="columns icon"></i></a>
+				<a class="item" id="changelayoutto1"><i class="window maximize outline icon"></i></a>
+				<a class="item" id="changelayoutto2"><i class="th large icon"></i></a>
+				<a class="item" id="changelayoutto3"><i class="columns icon"></i></a>
 			</div>
 		</div>
 	</div>
@@ -510,6 +512,7 @@
 		$('#showaccounts').on('click', function () {
 			$('#accountsummarysidebar')
 				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('setting', 'dimPage', false)
 				.sidebar('toggle')
 
 
@@ -520,6 +523,7 @@
 		$('#showaccounts2').on('click', function () {
 			$('#accountsummarysidebar')
 				.sidebar('setting', 'transition', 'overlay')
+				.sidebar('setting', 'dimPage', false)
 				.sidebar('toggle')
 
 
@@ -541,6 +545,13 @@
 				$('#console').sidebar('hide')
 		}})
 
+		$('#closebd2').on({'click': function () {
+				$('#bd2').sidebar('hide')
+		}})
+
+		$('#closeaccountsummary').on({'click': function () {
+				$('#accountsummarysidebar').sidebar('hide')
+		}})
 
 
 
