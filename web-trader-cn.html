@@ -73,7 +73,7 @@
 	</div>
 </div>
 <div id="console" class="bttmsdbr ui noanimation bottom menu sidebar" style="background:#EEEEEE">
-	<div class="row" style="width:100%;height:550px;overflow:hidden">
+	<div class="row" style="width:100%;overflow:hidden">
 		<div class="ui tiny top attached tabular menu">
 			<a class="programl item" id="closeprograml"><i class="times circle icon"></i></a>
 			<a class="programl active item" data-tab="javascript" id="javascript">Javascript控制台</a>
@@ -473,6 +473,9 @@
 
 		$('#showconsole').on('click', function () {
 			showSidebar('console', false)
+			if (window.fullScreenMode) {
+				$("#console > .row").css("height", "550px");
+			}
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -482,6 +485,9 @@
 
 		$('#showconsolecpp').on('click', function () {
 			showSidebar('console', false)
+			if (window.fullScreenMode) {
+				$("#console > .row").css("height", "550px");
+			}
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -491,6 +497,9 @@
 
 		$('#showconsolegenerator').on('click', function () {
 			showSidebar('console', false)
+			if (window.fullScreenMode) {
+				$("#console > .row").css("height", "550px");
+			}
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -500,6 +509,9 @@
 
 		$('#showextension').on('click', function () {
 			showSidebar('console', false)
+			if (window.fullScreenMode) {
+				$("#console > .row").css("height", "550px");
+			}
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
