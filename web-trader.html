@@ -427,13 +427,18 @@
 		$('#showtradesmenuitem').hide()
 	}
 
-	function showSidebar (sidebar) {
+	function showSidebar (sidebar, bRight) {
 		if (window.fullScreenMode) {
 			$('#' + sidebar)
 			.sidebar('setting', 'transition', 'overlay')
+			// .sidebar('setting', 'dimPage', false)
 			.sidebar('toggle')
 		} else {
-			window.currBottomSidebar = sidebar
+			if (bRight) {
+				window.currRightSidebar = sidebar
+			} else {
+				window.currBottomSidebar = sidebar
+			}
 			$('#' + sidebar).css('display', 'block')
 			adjustPlatformLayout()
 		}
@@ -466,7 +471,7 @@
 		$('.noanimation').transition('disable')
 
 		$('#showconsole').on('click', function () {
-			showSidebar('console')
+			showSidebar('console', false)
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -475,7 +480,7 @@
 		})
 
 		$('#showconsolecpp').on('click', function () {
-			showSidebar('console')
+			showSidebar('console', false)
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -484,7 +489,7 @@
 		})
 
 		$('#showconsolegenerator').on('click', function () {
-			showSidebar('console')
+			showSidebar('console', false)
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -493,7 +498,7 @@
 		})
 
 		$('#showextension').on('click', function () {
-			showSidebar('console')
+			showSidebar('console', false)
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -504,13 +509,13 @@
 		$('#showindis').on('click', function () {
       showIndicators()
 
-			showSidebar('indissidebar')
+			showSidebar('indissidebar', false)
 		})
 
 		$('#showeas').on('click', function () {
       showEAs()
 
-			showSidebar('eassidebar')
+			showSidebar('eassidebar', false)
 		})
 
 		$('#showbt').on('click', function () {
@@ -524,7 +529,7 @@
 		$('#showopentrades').on('click', function () {
 			showTrades()
 
-			showSidebar('orderstradessidebar')
+			showSidebar('orderstradessidebar', false)
 
 			showTradesTab(2)
 		})
@@ -532,7 +537,7 @@
 		$('#showpendingorders').on('click', function () {
 			showTrades()
 
-			showSidebar('orderstradessidebar')
+			showSidebar('orderstradessidebar', false)
 
 			showTradesTab(1)
 		})
@@ -540,7 +545,7 @@
 		$('#showhistorytrades').on('click', function () {
 			showTrades()
 
-			showSidebar('orderstradessidebar')
+			showSidebar('orderstradessidebar', false)
 
 			showTradesTab(3)
 		})
@@ -548,7 +553,7 @@
 		$('#showcancelledorders').on('click', function () {
 			showTrades()
 
-			showSidebar('orderstradessidebar')
+			showSidebar('orderstradessidebar', false)
 
 			showTradesTab(4)
 		})
@@ -556,13 +561,13 @@
 		$('#showhistoryoffunding').on('click', function () {
 			showTrades()
 
-			showSidebar('orderstradessidebar')
+			showSidebar('orderstradessidebar', false)
 
 			showTradesTab(5)
 		})
 
 		$('#showinstruments').on('click', function () {
-			showSidebar('bd2')
+			showSidebar('bd2', true)
 
       $('#accountsummarysidebar').css('display', 'none')
 			$('#news').css('display', 'none')
@@ -607,7 +612,7 @@
 		})
 
 		$('#showaccounts').on('click', function () {
-			showSidebar('accountsummarysidebar')
+			showSidebar('accountsummarysidebar', true)
 
       $('#bd2').css('display', 'none')
 			$('#news').css('display', 'none')
@@ -634,7 +639,7 @@
 		})
 
 		$('#shownews').on('click', function () {
-			showSidebar('news')
+			showSidebar('news', true)
 
 			$('#accountsummarysidebar').css('display', 'none')
 			$('#bd2').css('display', 'none')
