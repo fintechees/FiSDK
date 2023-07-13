@@ -589,6 +589,10 @@
       $('#accountsummarysidebar').css('display', 'none')
 			$('#news').css('display', 'none')
 
+			window.currRightSidebar = 'bd2'
+			$('#bd2').css('display', 'block')
+			adjustPlatformLayout()
+
 			showInstruments()
 		})
 
@@ -634,12 +638,20 @@
 			$('#bd2').css('display', 'none')
 			$('#news').css('display', 'none')
 
+			window.currRightSidebar = 'accountsummarysidebar'
+			$('#accountsummarysidebar').css('display', 'block')
+			adjustPlatformLayout()
+
 			showAccountsSignIn()
 		})
 
 		$('#showaccountssignup').on('click', function () {
 			$('#bd2').css('display', 'none')
 			$('#news').css('display', 'none')
+
+			window.currRightSidebar = 'accountsummarysidebar'
+			$('#accountsummarysidebar').css('display', 'block')
+			adjustPlatformLayout()
 
 			showAccountsSignUp()
 		})
