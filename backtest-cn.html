@@ -25,6 +25,14 @@
 	<link rel="stylesheet" type="text/css" href="/css/trade.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/css/extension.css"/>
 
+	<style>
+	div#bd2 {
+	  padding-left: 5px !important;
+	  padding-right: 5px !important;
+	  padding-top: 5px;
+	}
+	</style>
+
 	<link rel="shortcut icon" href="/favicon.ico" />
 </head>
 <body>
@@ -100,6 +108,68 @@
 <div id="imgModal" class="img-modal">
 	<div class="modal-content">
 		<img src="" alt="full size image">
+	</div>
+</div>
+
+<div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
+	<div style="height:100%">
+		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
+			<span style="color:#FFE6C1;font-size:50px">F</span>
+		</a>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showaccounts2">
+			<i class="user icon"></i>
+			<div class="menu">
+				<a class="item" id="showaccounts">账户</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showinstruments2">
+			<i class="balance scale icon"></i>
+			<div class="menu">
+				<a class="item" id="showinstruments">市场</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
+			<i class="handshake icon"></i>
+			<div class="menu">
+				<a class="item" id="showpendingorders">挂单</a>
+				<a class="item" id="showopentrades">当前的交易</a>
+				<a class="item" id="showhistorytrades">已关闭的交易</a>
+				<a class="item" id="showcancelledorders">已取消的挂单</a>
+				<a class="item" id="showhistoryoffunding">出入金记录</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="graduation cap icon"></i>
+			<div class="menu">
+				<a class="item" id="showeas">EA</a>
+				<a class="item" id="showreplay">回放</a>
+				<a class="item" id="showoptimization">优化</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="wrench icon"></i>
+			<div class="menu">
+				<a class="item" id="showconsole">Javascript控制台</a>
+				<a class="item" id="showconsolecpp">C / C++编译器</a>
+				<a class="item" id="showconsolegenerator">EA生成器</a>
+				<a class="item" id="showextension">扩展</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="book icon"></i>
+			<div class="menu">
+				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/">SDK说明</a>
+				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html">Github</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="table icon"></i>
+			<div class="menu">
+				<a class="item" id="changelayoutto1"><i class="window maximize outline icon"></i></a>
+				<a class="item" id="changelayoutto2"><i class="th large icon"></i></a>
+				<a class="item" id="changelayoutto3"><i class="columns icon"></i></a>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -218,67 +288,6 @@
 </div>
 </div>
 
-<div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
-	<div style="height:100%">
-		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
-			<span style="color:#FFE6C1;font-size:50px">F</span>
-		</a>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showaccounts2">
-			<i class="user icon"></i>
-			<div class="menu">
-				<a class="item" id="showaccounts">账户</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showinstruments2">
-			<i class="balance scale icon"></i>
-			<div class="menu">
-				<a class="item" id="showinstruments">市场</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
-			<i class="handshake icon"></i>
-			<div class="menu">
-				<a class="item" id="showpendingorders">挂单</a>
-				<a class="item" id="showopentrades">当前的交易</a>
-				<a class="item" id="showhistorytrades">已关闭的交易</a>
-				<a class="item" id="showcancelledorders">已取消的挂单</a>
-				<a class="item" id="showhistoryoffunding">出入金记录</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="graduation cap icon"></i>
-			<div class="menu">
-				<a class="item" id="showeas">EA</a>
-				<a class="item" id="showreplay">回放</a>
-				<a class="item" id="showoptimization">优化</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="wrench icon"></i>
-			<div class="menu">
-				<a class="item" id="showconsole">Javascript控制台</a>
-				<a class="item" id="showconsolecpp">C / C++编译器</a>
-				<a class="item" id="showconsolegenerator">EA生成器</a>
-				<a class="item" id="showextension">扩展</a>
-			</div>
-		</div>
-		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
-			<i class="book icon"></i>
-			<div class="menu">
-				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/">SDK说明</a>
-				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html">Github</a>
-			</div>
-		</div>
-		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
-			<i class="table icon"></i>
-			<div class="menu">
-				<a class="item" id="changelayoutto1"><i class="window maximize outline icon"></i></a>
-				<a class="item" id="changelayoutto2"><i class="th large icon"></i></a>
-				<a class="item" id="changelayoutto3"><i class="columns icon"></i></a>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div id="test_s_m"></div>
 <div id="test_e_m"></div>
@@ -343,7 +352,7 @@
 
 
 	var editor = null
-	var colorStyle = "bright"
+	var colorStyle = "blue"
 	var brokerlessMode = false
 	var backboneMode = true
 	var layoutMode = true
@@ -618,6 +627,8 @@
 			}, 2000)
 		}
 	})
+
+	window.fullScreenMode = true
 </script>
 </body>
 </html>

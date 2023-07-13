@@ -35,7 +35,7 @@
 <div id="bd2" class="ui noanimation right vertical menu sidebar"
 	style="padding-left:5px;padding-right:0px;width:350px;height:100%;overflow:hidden">
 	<button class="close_sidebar" id="closebd2"><i class="caret right icon" style="margin-left:-5px"></i></button>
-	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:35px;box-sizing:content-box;padding-top:10px">
+	<div style="width:100%;height:100%;overflow-y:scroll;padding-right:35px;box-sizing:content-box">
 		<div class="row">
 			<div id="test_s"></div>
 		</div>
@@ -114,7 +114,101 @@
 	</div>
 </div>
 
-
+<div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
+	<div style="height:100%;text-align:center">
+		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
+			<span style="color:#FFE6C1;font-size:50px">F</span>
+		</a>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="user icon"></i>
+			<div class="menu">
+				<a class="item" id="showaccounts">Account</a>
+				<a class="item" id="showaccountssignin">Sign In</a>
+				<a class="item" id="showaccountssignup">Sign Up</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="balance scale icon"></i>
+			<div class="menu">
+				<a class="item" id="showinstruments">Market</a>
+				<a class="item" id="showinstruments2">More Symbols</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
+			<i class="handshake icon"></i>
+			<div class="menu">
+				<a class="item" id="showpendingorders">Pending Orders</a>
+				<a class="item" id="showopentrades">Open Trades</a>
+				<a class="item" id="showhistorytrades">History of Trades</a>
+				<a class="item" id="showcancelledorders">Cancelled Orders</a>
+				<a class="item" id="showhistoryoffunding">History of Funding</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="graduation cap icon"></i>
+			<div class="menu">
+				<a class="item" id="showeas">EA Manager</a>
+				<a class="item" id="showindis">Indicator Manager</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item" id="showbt2">
+			<i class="gamepad icon"></i>
+			<div class="menu">
+				<a class="item" id="showbt">Back Testing</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="wrench icon"></i>
+			<div class="menu">
+				<a class="item" id="showconsole">Javascript Console</a>
+				<a class="item" id="showconsolecpp">C / C++ Compiler</a>
+				<a class="item" id="showconsolegenerator">EA Generator</a>
+				<a class="item" id="showextension">Extension</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="newspaper outline icon"></i>
+			<div class="menu">
+				<a class="item" id="showcalendar">Calendar</a>
+				<a class="item" id="shownews">News</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="book icon"></i>
+			<div class="menu">
+				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/">SDK Trading</a>
+				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html">Github</a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<i class="paint brush icon"></i>
+			<div class="menu">
+				<a class="item" id="showcolorpicker">Color Picker</a>
+				<a class="item" id="changecolortobright">Bright Theme</a>
+				<a class="item" id="changecolortodark">Dark Theme</a>
+				<a class="item" id="changecolortoblue">Blue Theme</a>
+				<a class="item" id="changecolortosea">Sea Theme</a>
+			</div>
+		</div>
+		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
+			<i class="table icon"></i>
+			<div class="menu">
+				<a class="item" id="defaultlayout"><i class="newspaper icon"></i></a>
+				<a class="item" id="fullscreen"><i class="expand arrows alternate icon"></i></a>
+				<a class="item" id="changelayoutto1"><i class="window maximize outline icon"></i></a>
+				<a class="item" id="changelayoutto2"><i class="th large icon"></i></a>
+				<a class="item" id="changelayoutto3"><i class="columns icon"></i></a>
+			</div>
+		</div>
+		<div class="main_menu_item ui winfrm simple dropdown item">
+			<div>EN</div>
+			<div class="menu">
+				<a class="item" href="/web-trader-cn.html">中文(Chinese)</a>
+				<div class="item">EN(English)</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="pusher" style="height:100%">
 <div class="main_panel" style="width:100%;height:100%;position:absolute;overflow:hidden" id="ccbrand">
@@ -231,99 +325,6 @@
 </div>
 </div>
 
-<div class="winfrm2 main_menu ui fixed left vertical icon menu" style="height:100%;border-radius:0px">
-	<div style="height:100%;text-align:center">
-		<a class="main_menu_item item" style="background:#D13E00;font-family:'Arial Black'" target="_blank" href="/">
-			<span style="color:#FFE6C1;font-size:50px">F</span>
-		</a>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="user icon"></i>
-			<div class="menu">
-				<a class="item" id="showaccounts">Account</a>
-				<a class="item" id="showaccountssignin">Sign In</a>
-				<a class="item" id="showaccountssignup">Sign Up</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="balance scale icon"></i>
-			<div class="menu">
-				<a class="item" id="showinstruments">Market</a>
-				<a class="item" id="showinstruments2">More Symbols</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showtradesmenuitem">
-			<i class="handshake icon"></i>
-			<div class="menu">
-				<a class="item" id="showpendingorders">Pending Orders</a>
-				<a class="item" id="showopentrades">Open Trades</a>
-				<a class="item" id="showhistorytrades">History of Trades</a>
-				<a class="item" id="showcancelledorders">Cancelled Orders</a>
-				<a class="item" id="showhistoryoffunding">History of Funding</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="graduation cap icon"></i>
-			<div class="menu">
-				<a class="item" id="showeas">EA Manager</a>
-				<a class="item" id="showindis">Indicator Manager</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item" id="showbt2">
-			<i class="gamepad icon"></i>
-			<div class="menu">
-				<a class="item" id="showbt">Back Testing</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="wrench icon"></i>
-			<div class="menu">
-				<a class="item" id="showconsole">Javascript Console</a>
-				<a class="item" id="showconsolecpp">C / C++ Compiler</a>
-				<a class="item" id="showconsolegenerator">EA Generator</a>
-				<a class="item" id="showextension">Extension</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="newspaper outline icon"></i>
-			<div class="menu">
-				<a class="item" id="showcalendar">Calendar</a>
-				<a class="item" id="shownews">News</a>
-			</div>
-		</div>
-		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
-			<i class="book icon"></i>
-			<div class="menu">
-				<a class="item" id="showdoc" target="doc" href="https://www.fintechee.com/sdk-trading/">SDK Trading</a>
-				<a class="item" id="showdoc2" target="doc" href="https://www.fintechee.com/github/Expert-Advisor-Studio.html">Github</a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<i class="paint brush icon"></i>
-			<div class="menu">
-				<a class="item" id="showcolorpicker">Color Picker</a>
-				<a class="item" id="changecolortobright">Bright Theme</a>
-				<a class="item" id="changecolortodark">Dark Theme</a>
-				<a class="item" id="changecolortoblue">Blue Theme</a>
-				<a class="item" id="changecolortosea">Sea Theme</a>
-			</div>
-		</div>
-		<div class="main_menu_item main_menu_item2 ui winfrm simple dropdown item">
-			<i class="table icon"></i>
-			<div class="menu">
-				<a class="item" id="changelayoutto1"><i class="window maximize outline icon"></i></a>
-				<a class="item" id="changelayoutto2"><i class="th large icon"></i></a>
-				<a class="item" id="changelayoutto3"><i class="columns icon"></i></a>
-			</div>
-		</div>
-		<div class="main_menu_item ui winfrm simple dropdown item">
-			<div>EN</div>
-			<div class="menu">
-				<a class="item" href="/web-trader-cn.html">中文(Chinese)</a>
-				<div class="item">EN(English)</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div id="test_s_m"></div>
 <div id="test_e_m"></div>
@@ -401,7 +402,7 @@
 
 	var backtest_html = "\/backtest.html"
 	var editor = null
-	var colorStyle = "bright"
+	var colorStyle = "blue"
 	var brokerlessMode = false
 	var backboneMode = true
 	var layoutMode = true
@@ -424,6 +425,18 @@
 
 	if (widgetMode) {
 		$('#showtradesmenuitem').hide()
+	}
+
+	function showSidebar (sidebar) {
+		if (window.fullScreenMode) {
+			$('#' + sidebar)
+			.sidebar('setting', 'transition', 'overlay')
+			.sidebar('toggle')
+		} else {
+			window.currBottomSidebar = sidebar
+			$('#' + sidebar).css('display', 'block')
+			adjustPlatformLayout()
+		}
 	}
 
 	$(document).ready(function(){
@@ -453,10 +466,7 @@
 		$('.noanimation').transition('disable')
 
 		$('#showconsole').on('click', function () {
-			$('#console')
-			.sidebar('setting', 'transition', 'overlay')
-
-			.sidebar('toggle')
+			showSidebar('console')
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -465,10 +475,7 @@
 		})
 
 		$('#showconsolecpp').on('click', function () {
-			$('#console')
-			.sidebar('setting', 'transition', 'overlay')
-
-			.sidebar('toggle')
+			showSidebar('console')
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -477,10 +484,7 @@
 		})
 
 		$('#showconsolegenerator').on('click', function () {
-			$('#console')
-			.sidebar('setting', 'transition', 'overlay')
-
-			.sidebar('toggle')
+			showSidebar('console')
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -489,10 +493,7 @@
 		})
 
 		$('#showextension').on('click', function () {
-			$('#console')
-			.sidebar('setting', 'transition', 'overlay')
-
-			.sidebar('toggle')
+			showSidebar('console')
 
 			$('.programl').removeClass('active')
 			$('.programsl').removeClass('active')
@@ -501,19 +502,15 @@
 		})
 
 		$('#showindis').on('click', function () {
-            showIndicators()
+      showIndicators()
 
-			$('#indissidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('indissidebar')
 		})
 
 		$('#showeas').on('click', function () {
-            showEAs()
+      showEAs()
 
-			$('#eassidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('eassidebar')
 		})
 
 		$('#showbt').on('click', function () {
@@ -527,9 +524,7 @@
 		$('#showopentrades').on('click', function () {
 			showTrades()
 
-			$('#orderstradessidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('orderstradessidebar')
 
 			showTradesTab(2)
 		})
@@ -537,9 +532,7 @@
 		$('#showpendingorders').on('click', function () {
 			showTrades()
 
-			$('#orderstradessidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('orderstradessidebar')
 
 			showTradesTab(1)
 		})
@@ -547,9 +540,7 @@
 		$('#showhistorytrades').on('click', function () {
 			showTrades()
 
-			$('#orderstradessidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('orderstradessidebar')
 
 			showTradesTab(3)
 		})
@@ -557,9 +548,7 @@
 		$('#showcancelledorders').on('click', function () {
 			showTrades()
 
-			$('#orderstradessidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('orderstradessidebar')
 
 			showTradesTab(4)
 		})
@@ -567,23 +556,16 @@
 		$('#showhistoryoffunding').on('click', function () {
 			showTrades()
 
-			$('#orderstradessidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('toggle')
+			showSidebar('orderstradessidebar')
 
 			showTradesTab(5)
 		})
 
 		$('#showinstruments').on('click', function () {
-			$('#bd2')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('setting', 'dimPage', false)
-				.sidebar('toggle')
+			showSidebar('bd2')
 
-
-
-            $('#accountsummarysidebar').css('display', 'none')
-						$('#news').css('display', 'none')
+      $('#accountsummarysidebar').css('display', 'none')
+			$('#news').css('display', 'none')
 		})
 
 		$('#showinstruments2').on('click', function () {
@@ -625,15 +607,10 @@
 		})
 
 		$('#showaccounts').on('click', function () {
-			$('#accountsummarysidebar')
-				.sidebar('setting', 'transition', 'overlay')
-				.sidebar('setting', 'dimPage', false)
-				.sidebar('toggle')
+			showSidebar('accountsummarysidebar')
 
-
-
-            $('#bd2').css('display', 'none')
-						$('#news').css('display', 'none')
+      $('#bd2').css('display', 'none')
+			$('#news').css('display', 'none')
 		})
 
 		$('#showaccountssignin').on('click', function () {
@@ -657,10 +634,7 @@
 		})
 
 		$('#shownews').on('click', function () {
-			$('#news')
-			.sidebar('setting', 'transition', 'overlay')
-			.sidebar('setting', 'dimPage', false)
-			.sidebar('toggle')
+			showSidebar('news')
 
 			$('#accountsummarysidebar').css('display', 'none')
 			$('#bd2').css('display', 'none')
@@ -686,6 +660,15 @@
 				$('#news').sidebar('hide')
 		}})
 
+		$('#defaultlayout').on({'click': function () {
+			localStorage.fullScreenMode = 'false'
+			window.location.reload()
+		}})
+
+		$('#fullscreen').on({'click': function () {
+			localStorage.fullScreenMode = 'true'
+			window.location.reload()
+		}})
 
 
 		$(window).on('beforeunload', function() {
@@ -699,6 +682,8 @@
 		editor.setTheme("ace/theme/chrome")
 		var JavaScriptMode = ace.require("ace/mode/javascript").Mode
 		editor.session.setMode(new JavaScriptMode())
+
+		prepareForDeviceType();
 	})
 
 	function run1(){
@@ -751,6 +736,205 @@
 			}, 2000)
 		}
 	})
+
+	function prepareForDeviceType() {
+	  var isMobile =
+	    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+	      navigator.userAgent
+	    );
+
+	  if (!isMobile) {
+			if (typeof localStorage.fullScreenMode == "undefined") {
+				localStorage.fullScreenMode = "false";
+				window.fullScreenMode = false;
+			} else {
+				window.fullScreenMode = localStorage.fullScreenMode == "false" ? false : true;
+			}
+
+			if (!window.fullScreenMode) {
+				var styleTag = $("<style>");
+
+		    var cssRules = `
+		      .bttmsdbr .ui.grid> .row:first-child {
+		        display: none;
+		      }
+
+		      .bttmsdbr div.dataTables_wrapper div.row.dt-table {
+		        padding-top: 0px;
+		        height: 210px;
+		        overflow-x: auto;
+		      }
+
+					.bttmsdbr div.dataTables_wrapper div.row.dt-table td {
+						padding-top: 6px;
+						padding-bottom: 6px;
+					}
+
+		      .pushable>.pusher:after {
+		        display: none;
+		      }
+
+		      .ui.bottom.overlay.sidebar {
+		        -webkit-transform: translate3d(0,0,0);
+		        transform: translate3d(0,0,0);
+		      }
+
+		      .bttmsdbr .ui.attached.active.segment {
+		        height: 263px !important;
+		        overflow: auto;
+		      }
+
+		      .ui.bottom.overlay.sidebar > div {
+		        height: auto !important;
+		      }
+
+		      .ui.right.overlay.sidebar > div {
+		        height: calc(100% - 302px);
+		        overflow-x: auto;
+		      }
+
+		      .ui.visible.bottom.sidebar~.fixed, .ui.visible.bottom.sidebar~.pusher {
+		          transform: translate3d(0,0px,0);
+		      }
+
+		      .ui.right.overlay.sidebar {
+		        transform: translate3d(0,0,0);
+		      }
+
+					#bd2 > div {
+						padding-top: 3px;
+					}
+
+					.bttmsdbr .ui.grid > .row > [class*="sixteen wide"].column {
+						padding: 0px 0px;
+					}
+
+					.ui.grid > .row {
+						padding-top: 0rem;
+						padding-bottom: 0rem;
+					}
+
+					.main_menu_item.ui.dropdown .menu {
+						z-index: 200;
+					}
+
+					.main_menu_item.ui.vertical.icon.menu {
+						z-index: 201;
+					}
+
+					.ui.visible.bottom.sidebar ~ .pusher {
+						position: unset!important;
+					}
+
+					#cc_o_t_cl_bt, #cc_ind_cl_bt, #cc_ea_cl_bt, #closeprograml, #cc_s_p_c, #closeaccountsummary {
+						display: none;
+					}
+		    `;
+
+		    styleTag.html(cssRules);
+
+		    $("head").append(styleTag);
+
+				window.currBottomSidebar = "orderstradessidebar";
+				window.currRightSidebar = "bd2";
+				window.chartCurrStyle = $("#charts").attr("style") || "";
+				window.msgCurrStyle = $(".ui.overlay.message").attr("style") || "";
+				window.bd2CurrStyle = $("#bd2").attr("style") || "";
+				window.bd2CurrStyle2 = $("#cc_s_p_t").attr("style") || "";
+				window.accountCurrStyle = $("#accountsummarysidebar").attr("style") || "";
+				window.accountCurrStyle2 = $("#cc_a_s_sdbr").attr("style") || "";
+				window.newsCurrStyle = $("#news").attr("style") || "";
+			}
+	  } else {
+			window.fullScreenMode = true;
+
+			var styleTag = $("<style>");
+
+	    var cssRules = `
+				#bd2 {
+					padding-left: 10px !important;
+					padding-right: 10px !important;
+					padding-top: 5px;
+				}
+
+				#bd2 > div {
+					padding-top: 10px;
+				}
+	    `;
+
+	    styleTag.html(cssRules);
+
+	    $("head").append(styleTag);
+		}
+	}
+
+	function adjustPlatformLayout() {
+		if ($(window).width() > 768 && !window.fullScreenMode) {
+			var fixedWidth = "350px";
+			var fixedHeight = "302px";
+			var fixedHeight2 = "362px";
+
+			$("#charts").attr("style", window.chartCurrStyle + (window.chartCurrStyle == "" ? "" : ";") + "width:calc(100% - " + fixedWidth + ") !important;padding-bottom:" + fixedHeight);
+			if (window.msgCurrStyle.indexOf("padding-left") == -1) {
+				window.msgCurrStyle = $(".ui.overlay.message").attr("style");
+			}
+			$(".ui.overlay.message").attr("style", window.msgCurrStyle + (window.msgCurrStyle == "" ? "" : ";") + "width:calc(100% - " + fixedWidth + ") !important;");
+
+			$("#orderstradessidebar").removeClass("visible");
+			$("#indissidebar").removeClass("visible");
+			$("#eassidebar").removeClass("visible");
+			$("#console").removeClass("visible");
+			if (window.currBottomSidebar == "orderstradessidebar") {
+				$("#orderstradessidebar").addClass("visible");
+			} else if (window.currBottomSidebar == "indissidebar") {
+				$("#indissidebar").addClass("visible");
+			} else if (window.currBottomSidebar == "eassidebar") {
+				$("#eassidebar").addClass("visible");
+			} else {
+				$("#console").addClass("visible");
+			}
+			$("#bd2").removeClass("visible");
+			$("#accountsummarysidebar").removeClass("visible");
+			$("#news").removeClass("visible");
+			if (window.currRightSidebar == "bd2") {
+				$("#bd2").addClass("visible");
+				if (window.bd2CurrStyle.indexOf("background") == -1) {
+					window.bd2CurrStyle = $("#bd2").attr("style");
+				}
+				$("#bd2").attr("style", window.bd2CurrStyle + (window.bd2CurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
+				$("#cc_s_p_t").attr("style", window.bd2CurrStyle2 + (window.bd2CurrStyle2 == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight2 + ")!important");
+			} else if (window.currRightSidebar == "accountsummarysidebar") {
+				$("#accountsummarysidebar").addClass("visible");
+				$("#accountsummarysidebar").attr("style", window.accountCurrStyle + (window.accountCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
+			} else {
+				$("#news").addClass("visible");
+				$("#accountsummarysidebar").attr("style", window.newsCurrStyle + (window.newsCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
+			}
+
+			$(".ui.visible.overlay.sidebar~.pusher").css(
+				"cssText",
+				"position: unset; height: 100%;"
+			);
+			$(".ui.vertical.icon.menu").css(
+				"z-index", 999
+			);
+			$(".pusher").css(
+				"position", "unset!important"
+			)
+			$(".ui.vertical.icon.menu").css(
+				"height", "100%"
+			);
+			$(".ui.vertical.icon.menu").css(
+				"border-radius", "0px"
+			);
+			$(".ui.bottom.sidebar").attr(
+				"style",
+				"margin-left: 52px !important;width: calc(100% - 52px) !important;"
+			);
+			$(".bttmsdbr .ui.grid> .row:first-child").hide();
+		}
+	}
+
 </script>
 
 </body>
