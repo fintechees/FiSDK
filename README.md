@@ -23,3 +23,10 @@ For testing purposes, Fintechee provides a test white label called "Test Demo1".
 
 ### White Label
 This repository is a template for the client software of Fintechee trading platform’s main white-label and sub white-label. Once becoming a Fintechee authorized main white-label or sub white-label, acquiring and publishing the client software(including the WEB-trader and the backoffice) is very simple. All that is necessary is to fork this repo, obtain the latest version, replace the original brokers.js with the one delivered by Fintechee, and load it with a regular HTTP server.
+
+### How to Monetize the Open Source Repo?
+
+This repository actually is a showcase about how to monetize the open source repo without investing even one penny.
+
+Please check this post to know our reseller plan:
+https://www.fintechee.com/marketing/reseller/
