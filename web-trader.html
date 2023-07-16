@@ -809,7 +809,7 @@
 		      }
 
 		      .bttmsdbr .ui.attached.active.segment {
-		        height: 263px !important;
+		        height: 253px !important;
 		        overflow: auto;
 		      }
 
@@ -900,8 +900,8 @@
 	function adjustPlatformLayout() {
 		if ($(window).width() > 768 && !window.fullScreenMode) {
 			var fixedWidth = "350px";
-			var fixedHeight = "302px";
-			var fixedHeight2 = "362px";
+			var fixedHeight = "292px";
+			var fixedHeight2 = "352px";
 
 			$("#charts").attr("style", window.chartCurrStyle + (window.chartCurrStyle == "" ? "" : ";") + "width:calc(100% - " + fixedWidth + ") !important;padding-bottom:" + fixedHeight);
 			if (window.msgCurrStyle.indexOf("padding-left") == -1) {
