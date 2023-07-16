@@ -191,9 +191,15 @@ var extension = {
         {"title": "Picture"},
         {"title": "Description"},
         {"title": "Link"}
-      ],
-
+      ]
     })
+
+    if (!window.fullScreenMode) {
+      $("#filesList_wrapper .ui.grid").css("margin-top", "0px")
+      $("#filesList_wrapper .ui.grid").css("margin-bottom", "0px")
+      $("#filesList_wrapper .ui.grid").css("margin-left", "0px")
+      $("#filesList_wrapper .ui.grid").css("margin-right", "0px")
+    }
 
     for (var i in files) {
       filesTable.row.add(files[i]).draw(false)
