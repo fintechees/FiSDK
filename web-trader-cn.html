@@ -938,7 +938,7 @@
 				$("#accountsummarysidebar").attr("style", window.accountCurrStyle + (window.accountCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
 			} else {
 				$("#news").addClass("visible");
-				$("#accountsummarysidebar").attr("style", window.newsCurrStyle + (window.newsCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
+				$("#news").attr("style", window.newsCurrStyle + (window.newsCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
 			}
 
 			$(".ui.visible.overlay.sidebar~.pusher").css(
