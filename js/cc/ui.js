@@ -43,6 +43,7 @@ window.fiac = {
         window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.showPaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
+        window.fiui.sidebar.hidePrivilegesMenu();
         window.fiui.profile.hideFixSettingsDiv();
         window.fiui.stats.hide();
       } else if (that.info.bManager && that.tradeToken != null) {
@@ -50,6 +51,7 @@ window.fiac = {
         window.fiui.sidebar.showExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.showStatsMenu();
+        window.fiui.sidebar.showPrivilegesMenu();
         window.fiui.profile.showFixSettingsDiv();
         window.fiui.payment.hide();
       } else {
@@ -57,6 +59,7 @@ window.fiac = {
         window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
+        window.fiui.sidebar.hidePrivilegesMenu();
         window.fiui.profile.hideFixSettingsDiv();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -70,6 +73,8 @@ window.fiac = {
       window.fiui.groupedOpenPosList.render(res);
       window.fiui.fundingHistory.render(res);
       window.fiui.execReports.render(res);
+      window.fiui.copyTradeList.render(res);
+      window.fiui.privilegeList.render(res);
 
       that.calculateStats();
       if (that.info.bManager) {
@@ -293,6 +298,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowManagers").on("click", function () {
@@ -307,6 +314,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
         window.fiui.managerList.adjustCol();
       });
 
@@ -322,6 +331,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
         window.fiui.accountList.adjustCol();
       });
 
@@ -337,6 +348,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowOpenPositions").on("click", function () {
@@ -351,6 +364,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowGroupedOpenPos").on("click", function () {
@@ -365,6 +380,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowFundingHistory").on("click", function () {
@@ -379,6 +396,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowExecReports").on("click", function () {
@@ -393,6 +412,8 @@ window.fiui = {
         window.fiui.execReports.show();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
         window.fiui.execReports.adjustCol();
       });
 
@@ -408,6 +429,8 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.show();
         window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
       });
 
       $("#btnShowStats").on("click", function () {
@@ -422,6 +445,40 @@ window.fiui = {
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.show();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
+      });
+
+      $("#btnShowCopyTrades").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
+        window.fiui.accountList.hide();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.copyTradeList.show();
+        window.fiui.privilegeList.hide();
+      });
+
+      $("#btnShowPrivileges").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
+        window.fiui.accountList.hide();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.show();
       });
     },
     showSummary: function () {
@@ -460,6 +517,12 @@ window.fiui = {
     },
     hideStatsMenu: function () {
       $("#btnShowStats").hide();
+    },
+    showPrivilegesMenu: function () {
+      $("#btnShowPrivileges").show();
+    },
+    hidePrivilegesMenu: function () {
+      $("#btnShowPrivileges").hide();
     }
   },
   confirmDlg: {
@@ -1998,7 +2061,11 @@ window.fiui.brokerList = {
     });
 
     $("#btnShowBroker").on("click", function () {
-      $("#brokerProfileDlg").modal("show");
+      if (window.fiac.tradeToken != null) {
+        $("#brokerProfileDlg").modal("show");
+      } else {
+        toastr.error("Please login.");
+      }
     });
 
     $("#btnAddBroker").on("click", function () {
@@ -3334,7 +3401,11 @@ window.fiui.symbolList = {
     });
 
     $("#btnShowSymbolsDlg").on("click", function () {
-      $("#symbolsDlg").modal("show");
+      if (window.fiac.tradeToken != null) {
+        $("#symbolsDlg").modal("show");
+      } else {
+        toastr.error("Please login.");
+      }
     });
 
     $("#btnAddSymbols").on("click", function () {
@@ -4482,6 +4553,545 @@ window.fiui.stats = {
   }
 };
 
+// copytrade list component
+window.fiui.copyTradeList = {
+  init: function () {
+    let copyTradeListHtml =
+    `<div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Copy Trades</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Copy Trades</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div id="proList">
+    </div>
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Copy Trade List</h3>
+    </div>
+    <div class="card-body">
+    <table id="copyTradeList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnShowCopyTrade">Add</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
+
+    $("#copyTradeSection").html(copyTradeListHtml);
+
+    fetch("https://s3.eu-central-1.amazonaws.com/fintechee.net/trades/shared.json")
+    .then(response => response.json())
+    .then(data => {
+      let cardsHtml = '<div class="row">';
+
+      for (let i in data) {
+        let account = data[i];
+
+        cardsHtml += '<div>';
+        cardsHtml += `<div class="custom-card my-3">
+          <div class="username text-center">${account.accountId}</div>
+          <div class="rounded-label mx-5" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
+          <div class="graph">
+            <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${account.brokerName}-${account.accountId}.png" alt="">
+          </div>
+        </div>`;
+        cardsHtml += '</div>';
+      }
+      $("#proList").html(cardsHtml)
+
+      $(".rounded-label").click(function() {
+        let buttonId = $(this).attr("id");
+        let pro = buttonId.split("_");
+
+        $("#commentCt").val(pro[1] + ":" + pro[2]);
+        $("#copyTradeDlg").modal("show");
+      });
+    })
+
+
+    let copyTradeDlgHtml = '\
+    <div class="modal fade" id="copyTradeDlg">\
+    <div class="modal-dialog">\
+    <div class="modal-content bg-info">\
+    <div class="modal-header">\
+    <h4 class="modal-title">Copy Trade</h4>\
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+    <span aria-hidden="true">&times;</span>\
+    </button>\
+    </div>\
+    <div class="modal-body">\
+    <div class="login-box" style="width:auto">\
+    <div class="card">\
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
+    <p class="login-box-msg">Please propose to copy trade an account.</p>\
+    <form id="copyTradeForm">\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="ID of Account to Copy Trade" style="color:#000;background:#eee" id="copyTradedCt">\
+    </div>\
+    <div class="input-group mb-3">\
+    <div class="icheck-primary">\
+    <input type="checkbox" id="chkReverseCt">\
+    <label for="chkReverseCt">\
+    Reverse\
+    </label>\
+    </div>\
+    </div>\
+    <div class="input-group mb-3">\
+    <div class="form-group">\
+    <div class="form-check">\
+    <input class="form-check-input" type="radio" name="modeCt" value="Lots" checked>\
+    <label class="form-check-label">Lots</label>\
+    </div>\
+    <div class="form-check">\
+    <input class="form-check-input" type="radio" name="modeCt" value="Multiplier">\
+    <label class="form-check-label">Multiplier</label>\
+    </div>\
+    </div>\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Lots or Multiplier" style="color:#000;background:#eee" id="multiplierCt">\
+    </div>\
+    <div class="input-group mb-3">\
+    <input type="text" class="form-control" placeholder="Comment" style="color:#000;background:#eee" id="commentCt">\
+    </div>\
+    <div class="row">\
+    <div class="col-12" style="text-align:center">\
+    <div class="btn-group">\
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
+    <button type="button" class="btn btn-primary" id="btnProposeCopyTrade">Propose</button>\
+    </div>\
+    </div>\
+    </div>\
+    </form>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    </div>\
+    </div>';
+
+    $("#copyTradeDlgSection").html(copyTradeDlgHtml);
+
+    let that = this;
+
+    fisdk.subscribeToNotification("copytrade_added", function (res) {
+      console.log("copytrade_added");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+      if (typeof window.fiui.copyTradeList != "undefined" && typeof window.fiui.copyTradeList.copyTradeTable != "undefined") {
+        window.fiui.copyTradeList.copyTradeTable.row.add(res.newCopyTrade).draw(false);
+      }
+    });
+
+    fisdk.subscribeToNotification("copytrade_updated", function (res) {
+      console.log("copytrade_updated");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+
+      if (typeof that.copyTradeDataTable != "undefined") {
+        that.copyTradeDataTable.fnUpdate(res.val, res.rowId, res.colId, false, false);
+      }
+    });
+
+    fisdk.subscribeToNotification("copytrade_removed", function (res) {
+      console.log("copytrade_removed");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+      if (typeof that.copyTradeDataTable != "undefined") {
+        that.copyTradeDataTable.fnDeleteRow(res.rowId);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_propose_copytrade", function (res) {
+      console.error("failed_to_propose_copytrade");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_approve_copytrade", function (res) {
+      console.error("failed_to_approve_copytrade");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_disable_copytrade", function (res) {
+      console.error("failed_to_disable_copytrade");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    $("#btnShowCopyTrade").on("click", function () {
+      $("#copyTradeDlg").modal("show");
+    });
+
+    $("#btnProposeCopyTrade").on("click", function () {
+      $("#copyTradeDlg").modal("hide");
+
+      if (window.fiac.tradeToken != null) {
+        if (!window.fiac.info.bManager) {
+          var copyTraded = null;
+          var bReverse = null;
+          var mode = null;
+          var multiplier = null;
+          var comment = null;
+
+          try {
+            copyTraded = $("#copyTradedCt").val();
+            if (copyTraded == "") {
+              throw new Error("The ID of the account to copy trade is required.");
+            }
+            bReverse = $("#chkReverseCt").prop("checked");
+            mode = $('input[name="modeCt"]:checked', '#copyTradeForm').val();
+            multiplier = $("#multiplierCt").val();
+            if (multiplier == "") {
+              throw new Error("The multiplier is required.");
+            }
+            multiplier = parseFloat(multiplier);
+            comment = $("#commentCt").val();
+            if (comment == "") {
+              comment = null;
+            }
+          } catch (e) {
+            toastr.error(e.message);
+          }
+
+          fisdk.proposeCopyTrade(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, copyTraded, bReverse, mode, multiplier, comment);
+        } else {
+          toastr.error("The managers can't propose to copy trade an account.");
+        }
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't propose to copy trade an account in the investor mode.");
+        } else {
+          toastr.error("Please login.");
+        }
+      }
+    });
+  },
+  render: function (res) {
+    let copyTradeTable = null;
+
+    if ($.fn.dataTable.isDataTable("#copyTradeList")) {
+      copyTradeTable = $("#copyTradeList").DataTable();
+      copyTradeTable.clear().draw();
+      copyTradeTable.destroy();
+      $("#copyTradeList").empty();
+    }
+
+    if (window.fiac.tradeToken != null) {
+      if (res.bManager) {
+        res.copyTrades.columns.splice(res.copyTrades.columns.length - 1, 1)
+        copyTradeTable = $("#copyTradeList").DataTable({
+          "responsive": false, "lengthChange": false, "autoWidth": false,
+          "buttons": ["copy", "csv", "print", "colvis"],
+          "columns": res.copyTrades.columns
+        });
+      } else {
+        copyTradeTable = $("#copyTradeList").DataTable({
+          "responsive": false, "lengthChange": false, "autoWidth": false,
+          "buttons": ["copy", "csv", "print", "colvis"],
+          "columns": res.copyTrades.columns,
+          "columnDefs": [
+            {targets: -1, data: null,
+            defaultContent:
+            '<div class="btn-group">' +
+            '<button class="btn btn-sm" id="btnApproveCopyTrade" title="Approve"><i class="fas fa-check nav-icon"></i></button>' +
+            '<button class="btn btn-sm" id="btnDisableCopyTrade" title="Disable"><i class="fas fa-eraser nav-icon"></i></button>' +
+            '</div>'}
+          ]
+        });
+      }
+
+      copyTradeTable.buttons().container().appendTo("#copyTradeList_wrapper .col-md-6:eq(0)");
+      this.copyTradeTable = copyTradeTable;
+      this.copyTradeDataTable = $("#copyTradeList").dataTable();
+
+      $("#copyTradeList tbody").on("click", "[id*=btnApproveCopyTrade]", function () {
+        if (copyTradeTable != null) {
+          let data = copyTradeTable.row($(this).parents("tr")).data();
+
+          window.fiui.confirmDlg.nextProcessTarget = {
+            copyTrading: data[res.copyTrades.colIndex.copyTrading],
+            comment: data[res.copyTrades.colIndex.comment]
+          };
+          window.fiui.confirmDlg.nextProcessCallback = function () {
+            fisdk.approveCopyTrade(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken,
+              window.fiui.confirmDlg.nextProcessTarget.copyTrading, window.fiui.confirmDlg.nextProcessTarget.comment);
+          }
+
+          window.fiui.confirmDlg.show();
+        }
+      });
+
+      $("#copyTradeList tbody").on("click", "[id*=btnDisableCopyTrade]", function () {
+        if (copyTradeTable != null) {
+          let data = copyTradeTable.row($(this).parents("tr")).data();
+
+          window.fiui.confirmDlg.nextProcessTarget = {
+            copyTraded: data[res.copyTrades.colIndex.copyTraded],
+            copyTrading: data[res.copyTrades.colIndex.copyTrading],
+            comment: data[res.copyTrades.colIndex.comment]
+          };
+          window.fiui.confirmDlg.nextProcessCallback = function () {
+            fisdk.disableCopyTrade(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken,
+              window.fiui.confirmDlg.nextProcessTarget.copyTraded, window.fiui.confirmDlg.nextProcessTarget.copyTrading, window.fiui.confirmDlg.nextProcessTarget.comment);
+          }
+
+          window.fiui.confirmDlg.show();
+        }
+      });
+
+      for (let i in res.copyTrades.data) {
+        copyTradeTable.row.add(res.copyTrades.data[i]).draw(false);
+      }
+    }
+  },
+  show: function () {
+    $("#copyTradeSection").show();
+  },
+  hide: function () {
+    $("#copyTradeSection").hide();
+  },
+  adjustCol: function () {
+    $("#copyTradeList").DataTable().columns.adjust();
+  }
+};
+
+// privilege list component
+window.fiui.privilegeList = {
+  init: function () {
+    let privilegeListHtml =
+    `<div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Privileges</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Privileges</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Privilege List</h3>
+    </div>
+    <div class="card-body">
+    <table id="privilegeList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnShowPrivilege">Add</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
+
+    $("#privilegeSection").html(privilegeListHtml);
+
+    let privilegeDlgHtml =
+    `<div class="modal fade" id="copyTradeDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Privilege</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Please grant the privilege.</p>
+    <form id="privilegeForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdPv">
+    </div>
+    <div class="input-group mb-3">
+    <select class="form-control" style="color:#000;background:#eee" id="privilegePv">
+    <option>Copy Trading</option>
+  	<option>Copy Traded</option>
+    </select>
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnPrivilege">Propose</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
+
+    $("#privilegeDlgSection").html(privilegeDlgHtml);
+
+    let that = this;
+
+    fisdk.subscribeToNotification("privilege_added", function (res) {
+      console.log("privilege_added");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+      if (typeof window.fiui.privilegeList != "undefined" && typeof window.fiui.privilegeList.privilegeTable != "undefined") {
+        window.fiui.privilegeList.privilegeTable.row.add(res.newPrivilege).draw(false);
+      }
+    });
+
+    fisdk.subscribeToNotification("privilege_removed", function (res) {
+      console.log("privilege_removed");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+      if (typeof that.privilegeDataTable != "undefined") {
+        that.privilegeDataTable.fnDeleteRow(res.rowId);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_grant_privilege", function (res) {
+      console.error("failed_to_grant_privilege");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_revoke_privilege", function (res) {
+      console.error("failed_to_revoke_privilege");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    $("#btnShowPrivilege").on("click", function () {
+      $("#privilegeDlg").modal("show");
+    });
+
+    $("#btnGrantPrivilege").on("click", function () {
+      $("#privilegeDlg").modal("hide");
+
+      if (window.fiac.info.bManager && window.fiac.tradeToken != null) {
+        fisdk.grantPrivilege($("#accountIdPv").val(), $("#privilegePv").val());
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't grant the privilege in the investor mode.");
+        } else {
+          toastr.error("Please login.");
+        }
+      }
+    });
+  },
+  render: function (res) {
+    let privilegeTable = null;
+
+    if ($.fn.dataTable.isDataTable("#privilegeList")) {
+      privilegeTable = $("#privilegeList").DataTable();
+      privilegeTable.clear().draw();
+      privilegeTable.destroy();
+      $("#privilegeList").empty();
+    }
+
+    if (res.bManager && window.fiac.tradeToken != null) {
+      privilegeTable = $("#privilegeList").DataTable({
+        "responsive": false, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "print", "colvis"],
+        "columns": res.privileges.columns,
+        "columnDefs": [
+          {targets: -1, data: null,
+          defaultContent:
+          '<div class="btn-group">' +
+          '<button class="btn btn-sm" id="btnRevokePrivilege" title="Revoke"><i class="fas fa-eraser nav-icon"></i></button>' +
+          '</div>'}
+        ]
+      });
+
+      privilegeTable.buttons().container().appendTo("#privilegeList_wrapper .col-md-6:eq(0)");
+      this.privilegeTable = privilegeTable;
+      this.privilegeDataTable = $("#privilegeList").dataTable();
+
+      $("#privilegeList tbody").on("click", "[id*=btnRevokePrivilege]", function () {
+        if (privilegeTable != null) {
+          let data = privilegeTable.row($(this).parents("tr")).data();
+
+          window.fiui.confirmDlg.nextProcessTarget = {
+            accountId: data[res.privileges.colIndex.accountId],
+            privilege: data[res.privileges.colIndex.privilege]
+          };
+          window.fiui.confirmDlg.nextProcessCallback = function () {
+            fisdk.revokePrivilege(window.fiui.confirmDlg.nextProcessTarget.accountId, window.fiui.confirmDlg.nextProcessTarget.privilege);
+          }
+
+          window.fiui.confirmDlg.show();
+        }
+      });
+
+      for (let i in res.privileges.data) {
+        privilegeTable.row.add(res.privileges.data[i]).draw(false);
+      }
+    }
+  },
+  show: function () {
+    $("#privilegeSection").show();
+  },
+  hide: function () {
+    $("#privilegeSection").hide();
+  },
+  adjustCol: function () {
+    $("#privilegeList").DataTable().columns.adjust();
+  }
+};
+
 function loadDashboard () {
   $("#version").html("Version-" + getFintecheeVersion());
 
@@ -4512,6 +5122,8 @@ function loadDashboard () {
   window.fiui.fundingHistory.init();
   window.fiui.execReports.init();
   window.fiui.summary.init();
+  window.fiui.copyTradeList.init();
+  window.fiui.privilegeList.init();
 
   window.fiac.load();
 }
