@@ -4931,7 +4931,7 @@ window.fiui.privilegeList = {
     $("#privilegeSection").html(privilegeListHtml);
 
     let privilegeDlgHtml =
-    `<div class="modal fade" id="copyTradeDlg">
+    `<div class="modal fade" id="privilegeDlg">
     <div class="modal-dialog">
     <div class="modal-content bg-info">
     <div class="modal-header">
