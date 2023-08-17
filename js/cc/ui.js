@@ -4597,7 +4597,7 @@ window.fiui.copyTradeList = {
 
     $("#copyTradeSection").html(copyTradeListHtml);
 
-    fetch("https://s3.eu-central-1.amazonaws.com/fintechee.net/trades/shared.json")
+    fetch("https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/shared.json")
     .then(response => response.json())
     .then(data => {
       let cardsHtml = '<div class="row">';
