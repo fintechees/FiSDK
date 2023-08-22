@@ -17,7 +17,7 @@ Considering that there are a large number of quant traders without technical bac
 
 ### Usage
 
-We provide a website, www.fisdk.com/dashboard.html, specifically for managing the Fintechee backend. If you need custom development, you can download this repository and unzip it to your local computer, and then use it after loading it with any web server, which is very simple.
+We provide a website, https://fisdk.com/dashboard/, specifically for managing the Fintechee backend. If you need custom development, you can download this repository and unzip it to your local computer, and then use it after loading it with any web server, which is very simple.
 
 For testing purposes, Fintechee provides a test white label called "Test Demo1". Admin accounts can log in to test administrator functions, and regular users can log in to test regular trader functions (Fintechee now supports affiliate accounts, so traders can introduce other traders to use the platform and the introducer can view the introduced trader's trading records). If you are interested in becoming the main white label, you can contact us at admin@fintechee.com and we will set up a guest account for you to visit the administrator interface. Regular trader accounts do not need to be specially activated, just register and use them.
 
