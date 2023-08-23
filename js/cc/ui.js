@@ -2216,8 +2216,8 @@ window.fiui.brokerList = {
       brokerTable = $("#brokerList").DataTable();
       if (brokerTable.data().count() > 0) {
         brokerTable.clear().draw();
-        brokerTable.destroy();
       }
+      brokerTable.destroy();
       $("#brokerList").empty();
     }
 
@@ -2430,8 +2430,8 @@ window.fiui.managerList = {
       managerTable = $("#managerList").DataTable();
       if (managerTable.data().count() > 0) {
         managerTable.clear().draw();
-        managerTable.destroy();
       }
+      managerTable.destroy();
       $("#managerList").empty();
     }
 
@@ -3033,8 +3033,8 @@ window.fiui.accountList = {
       accountTable = $("#accountList").DataTable();
       if (accountTable.data().count() > 0) {
         accountTable.clear().draw();
-        accountTable.destroy();
       }
+      accountTable.destroy();
       $("#accountList").empty();
     }
 
@@ -3466,8 +3466,8 @@ window.fiui.symbolList = {
       symbolTable = $("#symbolList").DataTable();
       if (symbolTable.data().count() > 0) {
         symbolTable.clear().draw();
-        symbolTable.destroy();
       }
+      symbolTable.destroy();
       $("#symbolList").empty();
     }
 
@@ -3613,8 +3613,8 @@ window.fiui.openPosList = {
       openPosTable = $("#openPosList").DataTable();
       if (openPosTable.data().count() > 0) {
         openPosTable.clear().draw();
-        openPosTable.destroy();
       }
+      openPosTable.destroy();
       $("#openPosList").empty();
     }
 
@@ -3732,8 +3732,8 @@ window.fiui.groupedOpenPosList = {
       groupedOpenPosTable = $("#groupedOpenPosList").DataTable();
       if (groupedOpenPosTable.data().count() > 0) {
         groupedOpenPosTable.clear().draw();
-        groupedOpenPosTable.destroy();
       }
+      groupedOpenPosTable.destroy();
       $("#groupedOpenPosList").empty();
     }
 
@@ -3831,8 +3831,8 @@ window.fiui.fundingHistory = {
       fundingHistoryTable = $("#fundingHistory").DataTable();
       if (fundingHistoryTable.data().count() > 0) {
         fundingHistoryTable.clear().draw();
-        fundingHistoryTable.destroy();
       }
+      fundingHistoryTable.destroy();
       $("#fundingHistory").empty();
     }
 
@@ -3912,8 +3912,8 @@ window.fiui.execReports = {
       execReportTable = $("#execReports").DataTable();
       if (execReportTable.data().count() > 0) {
         execReportTable.clear().draw();
-        execReportTable.destroy();
       }
+      execReportTable.destroy();
       $("#execReports").empty();
     }
 
@@ -4822,8 +4822,8 @@ window.fiui.copyTradeList = {
       copyTradeTable = $("#copyTradeList").DataTable();
       if (copyTradeTable.data().count() > 0) {
         copyTradeTable.clear().draw();
-        copyTradeTable.destroy();
       }
+      copyTradeTable.destroy();
       $("#copyTradeList").empty();
     }
 
@@ -5057,8 +5057,8 @@ window.fiui.privilegeList = {
       privilegeTable = $("#privilegeList").DataTable();
       if (privilegeTable.data().count() > 0) {
         privilegeTable.clear().draw();
-        privilegeTable.destroy();
       }
+      privilegeTable.destroy();
       $("#privilegeList").empty();
     }
 
