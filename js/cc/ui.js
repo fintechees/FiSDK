@@ -2214,8 +2214,10 @@ window.fiui.brokerList = {
     let brokerTable = null;
     if ($.fn.dataTable.isDataTable("#brokerList")) {
       brokerTable = $("#brokerList").DataTable();
-      brokerTable.clear().draw();
-      brokerTable.destroy();
+      if (brokerTable.data().count() > 0) {
+        brokerTable.clear().draw();
+        brokerTable.destroy();
+      }
       $("#brokerList").empty();
     }
 
@@ -2426,8 +2428,10 @@ window.fiui.managerList = {
 
     if ($.fn.dataTable.isDataTable("#managerList")) {
       managerTable = $("#managerList").DataTable();
-      managerTable.clear().draw();
-      managerTable.destroy();
+      if (managerTable.data().count() > 0) {
+        managerTable.clear().draw();
+        managerTable.destroy();
+      }
       $("#managerList").empty();
     }
 
@@ -3027,8 +3031,10 @@ window.fiui.accountList = {
 
     if ($.fn.dataTable.isDataTable("#accountList")) {
       accountTable = $("#accountList").DataTable();
-      accountTable.clear().draw();
-      accountTable.destroy();
+      if (accountTable.data().count() > 0) {
+        accountTable.clear().draw();
+        accountTable.destroy();
+      }
       $("#accountList").empty();
     }
 
@@ -3458,8 +3464,10 @@ window.fiui.symbolList = {
     let symbolTable = null;
     if ($.fn.dataTable.isDataTable("#symbolList")) {
       symbolTable = $("#symbolList").DataTable();
-      symbolTable.clear().draw();
-      symbolTable.destroy();
+      if (symbolTable.data().count() > 0) {
+        symbolTable.clear().draw();
+        symbolTable.destroy();
+      }
       $("#symbolList").empty();
     }
 
@@ -3603,8 +3611,10 @@ window.fiui.openPosList = {
     let openPosTable = null;
     if ($.fn.dataTable.isDataTable("#openPosList")) {
       openPosTable = $("#openPosList").DataTable();
-      openPosTable.clear().draw();
-      openPosTable.destroy();
+      if (openPosTable.data().count() > 0) {
+        openPosTable.clear().draw();
+        openPosTable.destroy();
+      }
       $("#openPosList").empty();
     }
 
@@ -3720,8 +3730,10 @@ window.fiui.groupedOpenPosList = {
     let groupedOpenPosTable = null;
     if ($.fn.dataTable.isDataTable("#groupedOpenPosList")) {
       groupedOpenPosTable = $("#groupedOpenPosList").DataTable();
-      groupedOpenPosTable.clear().draw();
-      groupedOpenPosTable.destroy();
+      if (groupedOpenPosTable.data().count() > 0) {
+        groupedOpenPosTable.clear().draw();
+        groupedOpenPosTable.destroy();
+      }
       $("#groupedOpenPosList").empty();
     }
 
@@ -3817,8 +3829,10 @@ window.fiui.fundingHistory = {
     let fundingHistoryTable = null;
     if ($.fn.dataTable.isDataTable("#fundingHistory")) {
       fundingHistoryTable = $("#fundingHistory").DataTable();
-      fundingHistoryTable.clear().draw();
-      fundingHistoryTable.destroy();
+      if (fundingHistoryTable.data().count() > 0) {
+        fundingHistoryTable.clear().draw();
+        fundingHistoryTable.destroy();
+      }
       $("#fundingHistory").empty();
     }
 
@@ -3896,8 +3910,10 @@ window.fiui.execReports = {
     let execReportTable = null;
     if ($.fn.dataTable.isDataTable("#execReports")) {
       execReportTable = $("#execReports").DataTable();
-      execReportTable.clear().draw();
-      execReportTable.destroy();
+      if (execReportTable.data().count() > 0) {
+        execReportTable.clear().draw();
+        execReportTable.destroy();
+      }
       $("#execReports").empty();
     }
 
@@ -4804,8 +4820,10 @@ window.fiui.copyTradeList = {
 
     if ($.fn.dataTable.isDataTable("#copyTradeList")) {
       copyTradeTable = $("#copyTradeList").DataTable();
-      copyTradeTable.clear().draw();
-      copyTradeTable.destroy();
+      if (copyTradeTable.data().count() > 0) {
+        copyTradeTable.clear().draw();
+        copyTradeTable.destroy();
+      }
       $("#copyTradeList").empty();
     }
 
@@ -5037,8 +5055,10 @@ window.fiui.privilegeList = {
 
     if ($.fn.dataTable.isDataTable("#privilegeList")) {
       privilegeTable = $("#privilegeList").DataTable();
-      privilegeTable.clear().draw();
-      privilegeTable.destroy();
+      if (privilegeTable.data().count() > 0) {
+        privilegeTable.clear().draw();
+        privilegeTable.destroy();
+      }
       $("#privilegeList").empty();
     }
 
