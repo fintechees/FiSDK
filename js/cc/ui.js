@@ -1,6 +1,7 @@
 // account component
 window.fiac = {
   storageName: "fiac",
+  copyTradingPlatformId: "1267340",
   reset: function () {
     this.brokerName = null;
     this.accountId = null;
@@ -185,7 +186,238 @@ window.fiac = {
 
     window.fiui.stats.renderBr();
   },
-  getStorageName: function () {return this.storageName;}
+  getStorageName: function () {return this.storageName;},
+  calculateProfitFactor: function (trades) {
+      let totalProfit = 0;
+      let totalLoss = 0;
+
+      for (const trade of trades) {
+          if (trade.pl >= 0) {
+              totalProfit += trade.pl;
+          } else if (trade.pl < 0) {
+              totalLoss += Math.abs(trade.pl);
+          }
+      }
+
+      const profitFactor = totalProfit / totalLoss;
+      return profitFactor;
+  },
+  calculateWinRate: function (trades) {
+      const winTrades = trades.filter(trade => trade.pl >= 0);
+      const winRate = (winTrades.length / trades.length) * 100;
+      return winRate;
+  },
+  calculateAverageTrade: function (trades) {
+      const totalProfitLoss = trades.reduce((acc, trade) => acc + trade.pl, 0);
+      const averageTrade = totalProfitLoss / trades.length;
+      return averageTrade;
+  },
+  calculateAverageWin: function (trades) {
+      const winTrades = trades.filter(trade => trade.pl >= 0);
+      const totalWin = winTrades.reduce((sum, trade) => sum + trade.pl, 0);
+      const averageWin = totalWin / winTrades.length;
+      return averageWin;
+  },
+  calculateAverageLoss: function (trades) {
+      const lossTrades = trades.filter(trade => trade.pl < 0);
+      const totalLoss = lossTrades.reduce((sum, trade) => sum + Math.abs(trade.pl), 0);
+      const averageLoss = totalLoss / lossTrades.length;
+      return averageLoss;
+  },
+  calculateWinLossRatio: function (trades) {
+      const winTrades = trades.filter(trade => trade.pl >= 0).length;
+      const lossTrades = trades.filter(trade => trade.pl < 0).length;
+      const winLossRatio = winTrades / lossTrades;
+      return winLossRatio;
+  },
+  calculateRiskRewardRatio: function (trades) {
+      const averageWin = this.calculateAverageWin(trades);
+      const averageLoss = this.calculateAverageLoss(trades);
+      const riskRewardRatio = Math.abs(averageLoss / averageWin);
+      return riskRewardRatio;
+  },
+  calculateTradeCount: function (trades) {
+      const tradeCount = trades.length;
+      return tradeCount;
+  },
+  calculateLargestWin: function (trades) {
+      const winTrades = trades.filter(trade => trade.pl > 0).map(trade => trade.pl);
+      const largestWin = Math.max(...winTrades);
+      return largestWin;
+  },
+  calculateAverageTradeDuration: function (trades) {
+      const tradeDurations = trades.map(trade => trade.cTime - trade.time);
+      const averageDuration = tradeDurations.reduce((sum, duration) => sum + duration, 0) / tradeDurations.length;
+      return averageDuration;
+  },
+  calculateAverageHoldingPeriod: function (trades) {
+      const holdingPeriods = trades.map(trade => trade.cTime - trade.time);
+      const averageHoldingPeriod = holdingPeriods.reduce((sum, period) => sum + period, 0) / holdingPeriods.length;
+      return averageHoldingPeriod;
+  },
+  calculateWinningStreak: function (trades) {
+      let currentStreak = 0;
+      let maxStreak = 0;
+
+      for (const trade of trades) {
+          if (trade.pl >= 0) {
+              currentStreak++;
+              maxStreak = Math.max(maxStreak, currentStreak);
+          } else {
+              currentStreak = 0;
+          }
+      }
+
+      return maxStreak;
+  },
+  calculateLosingStreak: function (trades) {
+      let currentStreak = 0;
+      let maxStreak = 0;
+
+      for (const trade of trades) {
+          if (trade.pl < 0) {
+              currentStreak++;
+              maxStreak = Math.max(maxStreak, currentStreak);
+          } else {
+              currentStreak = 0;
+          }
+      }
+
+      return maxStreak;
+  },
+  calculateTradeWinPercentage: function (trades) {
+      const winTrades = trades.filter(trade => trade.pl >= 0);
+      const winPercentage = (winTrades.length / trades.length) * 100;
+      return winPercentage;
+  },
+  calculateExpectancyPerTrade: function (trades) {
+      const winRate = this.calculateWinRate(trades);
+      const averageWin = this.calculateAverageWin(trades);
+      const averageLoss = this.calculateAverageLoss(trades);
+
+      const expectancyPerTrade = (winRate * averageWin) - ((1 - winRate) * averageLoss);
+      return expectancyPerTrade;
+  },
+  calculateMaxDrawdown: function (trades) {
+      let peak = 0;
+      let maxDrawdown = 0;
+
+      for (const trade of trades) {
+          peak = Math.max(peak, trade.pl);
+          const drawdown = (peak - trade.pl) / peak;
+          maxDrawdown = Math.max(maxDrawdown, drawdown);
+      }
+
+      return maxDrawdown;
+  },
+  calculateProfitToDrawdownRatio: function (trades, riskFreeRate) {
+      const totalProfit = trades.reduce((sum, trade) => sum + trade.pl, 0);
+      const maxDrawdown = this.calculateMaxDrawdown(trades);
+
+      const profitToDrawdownRatio = totalProfit / maxDrawdown;
+      return profitToDrawdownRatio;
+  },
+  calculateExpectancy: function (trades) {
+      const positiveTrades = trades.filter(trade => trade.pl >= 0);
+      const negativeTrades = trades.filter(trade => trade.pl < 0);
+
+      const winRate = positiveTrades.length / trades.length;
+      const averageWin = this.calculateAverageWin(trades);
+      const averageLoss = this.calculateAverageLoss(trades);
+
+      const expectancy = (winRate * averageWin) - ((1 - winRate) * averageLoss);
+      return expectancy;
+  },
+  calculateSharpeRatio: function (trades, riskFreeRate) {
+      const returns = trades.map(trade => (trade.pl - riskFreeRate) / riskFreeRate);
+      const averageReturn = returns.reduce((sum, ret) => sum + ret, 0) / returns.length;
+      const riskStdDev = Math.sqrt(returns.reduce((sum, ret) => sum + Math.pow(ret - averageReturn, 2), 0) / returns.length);
+
+      const sharpeRatio = (averageReturn / riskStdDev).toFixed(2);
+      return sharpeRatio;
+  },
+  calculateZScore: function (trades) {
+      const mean = trades.reduce((sum, trade) => sum + trade.pl, 0) / trades.length;
+      const variance = trades.reduce((sum, trade) => sum + Math.pow(trade.pl - mean, 2), 0) / trades.length;
+      const stdDev = Math.sqrt(variance);
+
+      const zScores = trades.map(trade => (trade.pl - mean) / stdDev);
+      return zScores[zScores.length - 1];
+  },
+  calculateZIndex: function (trades, benchmark) {
+      const excessReturns = trades.map(trade => trade.pl - benchmark);
+      const positiveExcessReturns = excessReturns.filter(ret => ret > 0);
+
+      const zIndex = positiveExcessReturns.reduce((sum, ret) => sum + ret, 0) / trades.length;
+      return zIndex;
+  },
+  calculateRewardToVariabilityRatio: function (trades, riskFreeRate) {
+      const totalProfit = trades.reduce((sum, trade) => sum + trade.pl, 0);
+      const zScores = this.calculateZScore(trades);
+      const riskStdDev = Math.sqrt(zScores.reduce((sum, zScore) => sum + Math.pow(zScore, 2), 0) / zScores.length);
+
+      const rewardToVariabilityRatio = totalProfit / riskStdDev;
+      return rewardToVariabilityRatio;
+  },
+  calculateMaxConsecutiveWins: function (trades) {
+      let maxConsecutiveWins = 0;
+      let currentConsecutiveWins = 0;
+
+      for (const trade of trades) {
+          if (trade.pl >= 0) {
+              currentConsecutiveWins++;
+              maxConsecutiveWins = Math.max(maxConsecutiveWins, currentConsecutiveWins);
+          } else {
+              currentConsecutiveWins = 0;
+          }
+      }
+
+      return maxConsecutiveWins;
+  },
+  calculateMaxConsecutiveLosses: function (trades) {
+      let maxConsecutiveLosses = 0;
+      let currentConsecutiveLosses = 0;
+
+      for (const trade of trades) {
+          if (trade.pl < 0) {
+              currentConsecutiveLosses++;
+              maxConsecutiveLosses = Math.max(maxConsecutiveLosses, currentConsecutiveLosses);
+          } else {
+              currentConsecutiveLosses = 0;
+          }
+      }
+
+      return maxConsecutiveLosses;
+  },
+  calculateMaxConsecutiveProfit: function (trades) {
+      let maxConsecutiveProfit = 0;
+      let currentConsecutiveProfit = 0;
+
+      for (const trade of trades) {
+          if (trade.pl >= 0) {
+              currentConsecutiveProfit += trade.pl;
+              maxConsecutiveProfit = Math.max(maxConsecutiveProfit, currentConsecutiveProfit);
+          } else {
+              currentConsecutiveProfit = 0;
+          }
+      }
+      return maxConsecutiveProfit;
+  },
+  calculateMaxConsecutiveLoss: function (trades) {
+      let maxConsecutiveLoss = 0;
+      let currentConsecutiveLoss = 0;
+
+      for (const trade of trades) {
+          if (trade.pl < 0) {
+              currentConsecutiveLoss += trade.pl;
+              maxConsecutiveLoss = Math.min(maxConsecutiveLoss, currentConsecutiveLoss);
+          } else {
+              currentConsecutiveLoss = 0;
+          }
+      }
+
+      return maxConsecutiveLoss;
+  }
 }
 
 // layout component
@@ -4571,7 +4803,10 @@ window.fiui.stats = {
 
 // copytrade list component
 window.fiui.copyTradeList = {
+  pro: [],
   init: function () {
+    let that = this;
+
     let copyTradeListHtml =
     `<div class="content-header">
     <div class="container-fluid">
@@ -4616,26 +4851,73 @@ window.fiui.copyTradeList = {
     fetch("https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/shared.json")
     .then(response => response.json())
     .then(data => {
+      let sortedData = data.sort((a, b) => {
+        return parseFloat(b.pl) - parseFloat(a.pl);
+      })
       let cardsHtml = '<div class="row">';
 
-      for (let i in data) {
-        let account = data[i];
+      for (let i in sortedData) {
+        let account = sortedData[i];
 
-        cardsHtml += '<div>';
-        cardsHtml += `<div class="custom-card my-3">
-          <div class="username text-center">${account.accountId}</div>
-          <div class="rounded-label mx-5" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
-          <div class="graph">
-            <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${account.brokerName}-${account.accountId}.png" alt="">
-          </div>
-        </div>`;
-        cardsHtml += '</div>';
+        if (account.tradeNum > 0) {
+          that.pro[account.brokerName + ":" + account.accountId] = account;
+          cardsHtml += '<div>';
+          cardsHtml += `<div class="custom-card my-3">
+            <div class="username text-center">${account.accountId}</div>
+            <div class="rounded-label mx-5" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
+            <div class="graph">
+              <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${account.brokerName}-${account.accountId}.png" alt="">
+            </div>
+          </div>`;
+          cardsHtml += '</div>';
+        }
       }
       $("#proList").html(cardsHtml)
 
       $(".rounded-label").click(function() {
         let buttonId = $(this).attr("id");
         let pro = buttonId.split("_");
+        let account = that.pro[pro[1] + ":" + pro[2]];
+
+        $("#profitFactorCt").text("");
+        $("#winRateCt").text("");
+        $("#averageTradeCt").text("");
+        $("#largestWinCt").text("");
+        $("#tradeCountCt").text("");
+        $("#averageWinCt").text("");
+        $("#averageLossCt").text("");
+        $("#winLossRatioCt").text("");
+        $("#maxDrawdownCt").text("");
+        $("#expectancyCt").text("");
+        $("#sharpeRatioCt").text("");
+        $("#zScoreCt").text("");
+        $("#maxConsecutiveWinsCt").text("");
+        $("#maxConsecutiveLossesCt").text("");
+        $("#maxConsecutiveProfitCt").text("");
+        $("#maxConsecutiveLossCt").text("");
+
+        fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${pro[1]}-${pro[2]}.json`)
+        .then(response => response.json())
+        .then(data => {
+          const trades = data;
+
+          $("#profitFactorCt").text(window.fiac.calculateProfitFactor(trades).toFixed(2));
+          $("#winRateCt").text(window.fiac.calculateWinRate(trades).toFixed(2));
+          $("#averageTradeCt").text(window.fiac.calculateAverageTrade(trades).toFixed(2));
+          $("#largestWinCt").text(window.fiac.calculateLargestWin(trades).toFixed(2));
+          $("#tradeCountCt").text(window.fiac.calculateTradeCount(trades));
+          $("#averageWinCt").text(window.fiac.calculateAverageWin(trades).toFixed(2));
+          $("#averageLossCt").text(window.fiac.calculateAverageLoss(trades).toFixed(2));
+          $("#winLossRatioCt").text(window.fiac.calculateWinLossRatio(trades).toFixed(2));
+          $("#maxDrawdownCt").text(window.fiac.calculateMaxDrawdown(trades).toFixed(2));
+          $("#expectancyCt").text(window.fiac.calculateExpectancy(trades).toFixed(2));
+          $("#sharpeRatioCt").text(window.fiac.calculateSharpeRatio(trades, 0.02));
+          $("#zScoreCt").text(window.fiac.calculateZScore(trades).toFixed(2));
+          $("#maxConsecutiveWinsCt").text(window.fiac.calculateMaxConsecutiveWins(trades).toFixed(2));
+          $("#maxConsecutiveLossesCt").text(window.fiac.calculateMaxConsecutiveLosses(trades).toFixed(2));
+          $("#maxConsecutiveProfitCt").text(window.fiac.calculateMaxConsecutiveProfit(trades).toFixed(2));
+          $("#maxConsecutiveLossCt").text(window.fiac.calculateMaxConsecutiveLoss(trades).toFixed(2));
+        });
 
         $("#commentCt").val(pro[1] + ":" + pro[2]);
         $("#copyTradeDlg").modal("show");
@@ -4643,71 +4925,160 @@ window.fiui.copyTradeList = {
     })
 
 
-    let copyTradeDlgHtml = '\
-    <div class="modal fade" id="copyTradeDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Copy Trade</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Please propose to copy trade an account.</p>\
-    <form id="copyTradeForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="ID of Account to Copy Trade" style="color:#000;background:#eee" id="copyTradedCt">\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkReverseCt">\
-    <label for="chkReverseCt">\
-    Reverse\
-    </label>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="form-group">\
-    <div class="form-check">\
-    <input class="form-check-input" type="radio" name="modeCt" value="Lots" checked>\
-    <label class="form-check-label">Lots</label>\
-    </div>\
-    <div class="form-check">\
-    <input class="form-check-input" type="radio" name="modeCt" value="Multiplier">\
-    <label class="form-check-label">Multiplier</label>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Lots or Multiplier" style="color:#000;background:#eee" id="multiplierCt">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Comment" style="color:#000;background:#eee" id="commentCt">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnProposeCopyTrade">Propose</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let copyTradeDlgHtml = `
+    <div class="modal fade" id="copyTradeDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Copy Trade</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Please propose to copy trade an account.</p>
+    <div class="row text-center text-secondary" style="color:#fff!important;font-size:12px">
+        <div class="col-6 col-md-3 border-right">
+          <div class="row">
+              <div class="col-12 py-3">ProfitFactor
+                  <p class="h5" id="profitFactorCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">WinRate
+                  <p class="h5" id="winRateCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">AverageTrade
+                  <p class="h5" id="averageTradeCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">LargestWin
+                  <p class="h5" id="largestWinCt" style="font-size:12px"></p>
+              </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 border-right">
+          <div class="row">
+              <div class="col-12 py-3">TradeCount
+                  <p class="h5" id="tradeCountCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">AverageWin
+                  <p class="h5" id="averageWinCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">AverageLoss
+                  <p class="h5" id="averageLossCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">WinLossRatio
+                  <p class="h5" id="winLossRatioCt" style="font-size:12px"></p>
+              </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 border-right">
+          <div class="row">
+              <div class="col-12 py-3">MaxDrawdown
+                  <p class="h5" id="maxDrawdownCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">Expectancy
+                  <p class="h5" id="expectancyCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">SharpeRatio
+                  <p class="h5" id="sharpeRatioCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">ZScore
+                  <p class="h5" id="zScoreCt" style="font-size:12px"></p>
+              </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="row">
+              <div class="col-12 py-3">MaxConsecWins
+                  <p class="h5" id="maxConsecutiveWinsCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">MaxConsecLoss
+                  <p class="h5" id="maxConsecutiveLossesCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">MaxConsecProfit
+                  <p class="h5" id="maxConsecutiveProfitCt" style="font-size:12px"></p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12 py-3">MaxConsecLoss
+                  <p class="h5" id="maxConsecutiveLossCt" style="font-size:12px"></p>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <form id="copyTradeForm">
+    <div class="input-group mb-3">
+    <input type="hidden" id="copyTradedCt" value="${window.fiac.copyTradingPlatformId}">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Pro" style="color:#000;background:#eee" id="commentCt">
+    </div>
+    <div class="input-group mb-3">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkReverseCt">
+    <label for="chkReverseCt">
+    Reverse
+    </label>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <div class="form-group">
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="modeCt" value="Lots" checked>
+    <label class="form-check-label">Lots</label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="modeCt" value="Multiplier">
+    <label class="form-check-label">Multiplier</label>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Lots or Multiplier" style="color:#000;background:#eee" id="multiplierCt">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnProposeCopyTrade">Propose</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#copyTradeDlgSection").html(copyTradeDlgHtml);
-
-    let that = this;
 
     fisdk.subscribeToNotification("copytrade_added", function (res) {
       console.log("copytrade_added");
@@ -4829,13 +5200,15 @@ window.fiui.copyTradeList = {
 
     if (window.fiac.tradeToken != null) {
       if (res.bManager) {
-        res.copyTrades.columns.splice(res.copyTrades.columns.length - 1, 1)
+        res.copyTrades.columns.splice(res.copyTrades.columns.length - 1, 1);
         copyTradeTable = $("#copyTradeList").DataTable({
           "responsive": false, "lengthChange": false, "autoWidth": false,
           "buttons": ["copy", "csv", "print", "colvis"],
           "columns": res.copyTrades.columns
         });
       } else {
+        res.copyTrades.columns[0].title = "Platform";
+        res.copyTrades.columns[5].title = "Pro";
         copyTradeTable = $("#copyTradeList").DataTable({
           "responsive": false, "lengthChange": false, "autoWidth": false,
           "buttons": ["copy", "csv", "print", "colvis"],
