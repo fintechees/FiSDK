@@ -1,5 +1,6 @@
 ![Fintechee FiSDK dashboard template](https://github.com/fintechees/fisdk/blob/main/images/screenshot.png?raw=true)
 ![New layout of Fintechee](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/screenshot/fintechee_new_layout.png?raw=true)
+![Copy trading supported by Fintechee](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/screenshot/copytrading.png?raw=true)
 ![Fintechee extra fractals indicator](https://github.com/fintechees/Expert-Advisor-Studio/blob/master/Indicators/extra_fractals/extra_fractals_screenshot.png?raw=true)
 
 ### FiSDK
