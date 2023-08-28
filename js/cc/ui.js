@@ -304,6 +304,7 @@ window.fiac = {
 
       for (const trade of trades) {
           peak = Math.max(peak, trade.totalPl);
+          if (peak == 0) continue;
           const drawdown = (peak - trade.totalPl) / peak;
           maxDrawdown = Math.max(maxDrawdown, drawdown);
       }
