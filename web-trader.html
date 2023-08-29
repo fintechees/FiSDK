@@ -932,9 +932,11 @@
 				}
 				$("#bd2").attr("style", window.bd2CurrStyle + (window.bd2CurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
 				$("#cc_s_p_t").attr("style", window.bd2CurrStyle2 + (window.bd2CurrStyle2 == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight2 + ")!important");
+				$("#bd2").show();
 			} else if (window.currRightSidebar == "accountsummarysidebar") {
 				$("#accountsummarysidebar").addClass("visible");
 				$("#accountsummarysidebar").attr("style", window.accountCurrStyle + (window.accountCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
+				$("#accountsummarysidebar").show();
 			} else {
 				$("#news").addClass("visible");
 				$("#news").attr("style", window.newsCurrStyle + (window.newsCurrStyle == "" ? "" : ";") + "width:" + fixedWidth + "!important;height:calc(100% - " + fixedHeight + ")!important");
