@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 	<link rel="stylesheet" href="/adminlte/css/adminlte.min.css" />
 	<link rel="stylesheet" href="/css/dashboard.css" />
+	<link rel="stylesheet" href="/css/jquery.bracket.min.css" />
 	<!-- Favicon and touch icons -->
 	<link rel="shortcut icon" href="favicon.ico" />
 </head>
@@ -130,6 +131,24 @@ FIX Settings
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
 <li class="nav-item">
+<a href="#" class="nav-link" id="btnShowChampionship">
+<i class="nav-icon fas fa-trophy"></i>
+<p>
+Championship
+</p>
+</a>
+</li>
+
+<li class="nav-item">
+<a href="#" class="nav-link" id="btnShowCopyTrades">
+<i class="nav-icon fas fa-copy"></i>
+<p>
+Copy Trade
+</p>
+</a>
+</li>
+
+<li class="nav-item">
 <a href="#" class="nav-link" id="btnShowBrokers">
 <i class="nav-icon fas fa-landmark"></i>
 <p>
@@ -215,15 +234,6 @@ Payment
 <i class="nav-icon fas fa-chart-bar"></i>
 <p>
 Statistics
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="#" class="nav-link" id="btnShowCopyTrades">
-<i class="nav-icon fas fa-copy"></i>
-<p>
-Copy Trade
 </p>
 </a>
 </li>
@@ -375,6 +385,11 @@ FIX Settings
 </div>
 <!-- privilege -->
 
+<!-- championship -->
+<div class="content-wrapper" style="display:none" id="championshipSection">
+</div>
+<!-- championship -->
+
 <!-- sign up -->
 <div id="signUpSection">
 </div>
@@ -473,6 +488,7 @@ FIX Settings
 <script type="text/javascript" src="/js/cc/lang/enm.js"></script>
 <script type="text/javascript" src="/js/cc/brokers.js"></script>
 <script type="text/javascript" src="/js/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-bracket/jquery.bracket.min.js"></script>
 <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
