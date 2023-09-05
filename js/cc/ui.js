@@ -5566,6 +5566,8 @@ window.fiui.championship = {
       window.fiui.confirmDlg.nextProcessCallback = function () {
         if (window.fiac.info == null) {
           toastr.error("Please login.");
+        } else if (that.championship != null && that.championship.isFull) {
+          toastr.error("The capacity is full.");
         } else {
           $.ajax({
             type: "POST",
@@ -5593,29 +5595,25 @@ window.fiui.championship = {
     this.getChampionship();
   },
   getChampionship: async function () {
-    let that = this;
     let brokerId = window.fiac.brokerName == null ? "fe" : window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
 
     window.fiui.loadingDimmer.show();
 
     const response = await fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/championship/${brokerId}.json`);
     const data = await response.json();
-    // .then(response => response.json())
-    // .then(data => {
-      window.fiui.loadingDimmer.hide();
 
-      that.championship = data;
+    window.fiui.loadingDimmer.hide();
 
-      $("#brackets").bracket({
-        init: that.championship.brackets,
-        // teamWidth: 60,
-        // scoreWidth: 80,
-        // matchMargin: 100,
-        // roundMargin: 100,
-        skipConsolationRound: true
-      });
-    // })
-    // .catch(err => {});
+    this.championship = data;
+
+    $("#brackets").bracket({
+      init: this.championship.brackets,
+      // teamWidth: 60,
+      // scoreWidth: 80,
+      // matchMargin: 100,
+      // roundMargin: 100,
+      skipConsolationRound: true
+    });
   },
   show: function () {
     $("#championshipSection").show();
