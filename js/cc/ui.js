@@ -533,6 +533,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowManagers").on("click", function () {
@@ -549,6 +550,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
         window.fiui.managerList.adjustCol();
       });
 
@@ -566,6 +568,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
         window.fiui.accountList.adjustCol();
       });
 
@@ -583,6 +586,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowOpenPositions").on("click", function () {
@@ -599,6 +603,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowGroupedOpenPos").on("click", function () {
@@ -615,6 +620,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowFundingHistory").on("click", function () {
@@ -631,6 +637,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowExecReports").on("click", function () {
@@ -647,6 +654,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
         window.fiui.execReports.adjustCol();
       });
 
@@ -664,6 +672,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowStats").on("click", function () {
@@ -680,6 +689,7 @@ window.fiui = {
         window.fiui.stats.show();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowCopyTrades").on("click", function () {
@@ -696,6 +706,7 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.show();
         window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
       });
 
       $("#btnShowPrivileges").on("click", function () {
@@ -712,6 +723,24 @@ window.fiui = {
         window.fiui.stats.hide();
         window.fiui.copyTradeList.hide();
         window.fiui.privilegeList.show();
+        window.fiui.championship.hide();
+      });
+
+      $("#btnShowChampionship").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
+        window.fiui.accountList.hide();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
+        window.fiui.championship.show();
       });
     },
     showSummary: function () {
@@ -726,6 +755,9 @@ window.fiui = {
       window.fiui.execReports.hide();
       window.fiui.payment.hide();
       window.fiui.stats.hide();
+      window.fiui.copyTradeList.hide();
+      window.fiui.privilegeList.hide();
+      window.fiui.championship.hide();
     },
     showManagersMenu: function () {
       $("#btnShowManagers").show();
@@ -5486,6 +5518,124 @@ window.fiui.privilegeList = {
   }
 };
 
+// championship component
+window.fiui.championship = {
+  championship: null,
+  init: function () {
+    let championshipHtml =
+    `<div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Championship</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Championship</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Championship</h3>
+    </div>
+    <div class="card-body">
+    <div id="brackets"></div>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnJoinChampionship">Join</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
+
+    $("#championshipSection").html(championshipHtml);
+
+    let that = this;
+
+    $("#btnJoinChampionship").on("click", function () {
+      window.fiui.confirmDlg.nextProcessCallback = function () {
+        if (window.fiac.info == null) {
+          toastr.error("Please login.");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "https://nafy6vz88b.execute-api.eu-central-1.amazonaws.com/v1/championship",
+            data: JSON.stringify({
+              brokerName: window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId],
+              accountId: window.fiac.accountId,
+              tradeToken: window.fiac.tradeToken
+            }),
+            success: function (data) {
+              if (data.res == "success") {
+                toastr.info("You participated successfully.");
+                that.getChampionship();
+              } else {
+                toastr.error("The capacity is full.");
+              }
+            }
+          });
+        }
+      }
+
+      window.fiui.confirmDlg.show();
+    });
+
+    this.getChampionship();
+  },
+  getChampionship: async function () {
+    let that = this;
+    let brokerId = window.fiac.brokerName == null ? "fe" : window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
+
+    window.fiui.loadingDimmer.show();
+
+    const response = await fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/championship/${brokerId}.json`);
+    const data = await response.json();
+    // .then(response => response.json())
+    // .then(data => {
+      window.fiui.loadingDimmer.hide();
+
+      that.championship = data;
+
+      $("#brackets").bracket({
+        init: that.championship.brackets,
+        // teamWidth: 60,
+        // scoreWidth: 80,
+        // matchMargin: 100,
+        // roundMargin: 100,
+        skipConsolationRound: true
+      });
+    // })
+    // .catch(err => {});
+  },
+  show: function () {
+    $("#championshipSection").show();
+
+    if (this.championship != null) {
+      $("#brackets").bracket({
+        init: this.championship.brackets,
+        // teamWidth: 60,
+        // scoreWidth: 80,
+        // matchMargin: 100,
+        // roundMargin: 100,
+        skipConsolationRound: true
+      });
+    }
+  },
+  hide: function () {
+    $("#championshipSection").hide();
+  }
+};
+
 function loadDashboard () {
   $("#version").html("Version-" + getFintecheeVersion());
 
@@ -5518,6 +5668,7 @@ function loadDashboard () {
   window.fiui.summary.init();
   window.fiui.copyTradeList.init();
   window.fiui.privilegeList.init();
+  window.fiui.championship.init();
 
   window.fiac.load();
 }
