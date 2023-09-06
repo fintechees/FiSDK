@@ -21,7 +21,7 @@
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <!-- loading -->
-<div style="z-index:1000000000;position:absolute;height:100%;width:100%;margin:auto" id="loading">
+<div style="z-index:1000000000;position:absolute;height:100%;width:100%;margin:auto;top:0" id="loading">
 <div class="spinner-border" role="status" style="left:50%;top:50%;position:relative;margin-left:-1em;margin-top:-1em">
 <span class="sr-only">Loading...</span>
 </div>
@@ -40,6 +40,12 @@
 </ul>
 
 <ul class="navbar-nav ml-auto">
+<li class="nav-item">
+<a class="nav-link" target="web-trader" href="/web-trader/">
+<i class="fa fa-laptop"></i>
+</a>
+</li>
+
 <li class="nav-item dropdown">
 <a class="nav-link" data-toggle="dropdown" href="#" id="btnSyncMessage">
 <i class="far fa-comments"></i>
@@ -245,71 +251,6 @@ Statistics
 Privilege
 </p>
 </a>
-</li>
-
-<li class="nav-item">
-<a href="#" class="nav-link">
-<i class="nav-icon fas fa-folder-open"></i>
-<p>
-Dev Examples
-<i class="right fas fa-angle-left"></i>
-</p>
-</a>
-<ul class="nav nav-treeview">
-<li class="nav-item">
-<a href="/testadmin_signup.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-Sign Up
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="/testadmin_signin.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-Sign In
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="/testadmin_resetpw.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-Reset Password
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="/testadmin_mfa.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-MFA
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="/testadmin_changepw.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-Change Password
-</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="/testadmin_fix.html" class="nav-link">
-<i class="nav-icon fas fa-file"></i>
-<p>
-FIX Settings
-</p>
-</a>
-</li>
-</ul>
 </li>
 
 </ul>
