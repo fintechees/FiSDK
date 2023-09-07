@@ -950,6 +950,7 @@ window.fiui.signUp = {
       console.log(params.message);
       toastr.info(params.message);
       window.fiui.syncMsg.prepend(params);
+      $("#signUpDlg").modal("hide");
     });
 
     fisdk.subscribeToNotification("failed_to_sign_up", function (res) {
