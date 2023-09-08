@@ -2198,7 +2198,7 @@ window.fiui.brokerList = {
     <input type="text" class="form-control" placeholder="Success Redirect URL" style="color:#000;background:#eee" id="pgSuccessRedirectUrlBp">\
     </div>\
     <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Identifier(please type \"remove\" if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">\
+    <input type="text" class="form-control" placeholder="Identifier(please type remove if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">\
     </div>\
     <div class="row">\
     <div class="col-12" style="text-align:center">\
