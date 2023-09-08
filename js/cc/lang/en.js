@@ -329,6 +329,7 @@ var dict = {
     sHL6: 'Resend',
     sHL7: 'Verify',
     sHL8: 'IB Account ID',
+    sHL9: 'Optional',
     hP1: '-hour period.',
     mP1: ' minutes.',
     rPH1: 'Broker',
