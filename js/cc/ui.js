@@ -878,21 +878,34 @@ window.fiui.signUp = {
     </div>\
     </div>\
     </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Credits" style="color:#000;background:#eee" id="creditsSignUp">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-money-bill-alt"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-user"></span>\
-    </div>\
-    </div>\
+    <div class="panel box box-primary">\
+      <div class="box-header with-border">\
+        <p class="box-title" style="text-align:center">\
+          <a data-toggle="collapse" data-parent="#accordion" href="#optionalSignUp" aria-expanded="false" class="collapsed" style="color:#FFF">\
+          &lt; Optional &gt;\
+          </a>\
+        </p>\
+      </div>\
+      <div id="optionalSignUp" class="panel-collapse collapse" aria-expanded="false">\
+        <div class="box-body">\
+          <div class="input-group mb-3">\
+          <input type="text" class="form-control" placeholder="Credits" style="color:#000;background:#eee" id="creditsSignUp">\
+          <div class="input-group-append">\
+          <div class="input-group-text" style="background:#eee">\
+          <span class="fas fa-money-bill-alt"></span>\
+          </div>\
+          </div>\
+          </div>\
+          <div class="input-group mb-3">\
+          <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">\
+          <div class="input-group-append">\
+          <div class="input-group-text" style="background:#eee">\
+          <span class="fas fa-user"></span>\
+          </div>\
+          </div>\
+          </div>\
+        </div>\
+      </div>\
     </div>\
     <div class="row">\
     <div class="col-12">\
