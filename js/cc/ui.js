@@ -5845,8 +5845,12 @@ window.fiui.championship = {
               if (data.res == "success") {
                 toastr.info("You participated successfully.");
                 that.getChampionship(null);
-              } else {
+              } else if (data.res == "isFull") {
                 toastr.error("The capacity is full.");
+              } else if (data.res == "joined") {
+                toastr.error("You have already joined.");
+              } else {
+                toastr.error("Failed to participate.");
               }
             }
           });
