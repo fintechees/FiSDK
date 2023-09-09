@@ -80,6 +80,7 @@ window.fiac = {
       window.fiui.execReports.render(res);
       window.fiui.copyTradeList.render(res);
       window.fiui.privilegeList.render(res);
+      window.fiui.championship.render();
 
       that.calculateStats();
       if (that.info.bManager) {
@@ -448,11 +449,17 @@ window.fiui = {
     prepend: function (params) {
       $("#syncMessageList").prepend(
         '<a href="#" class="dropdown-item" style="white-space:normal">' +
-        '<i class="fas fa-envelope mr-2"></i>' + params.message +
-        '<span class="float-right text-muted text-sm">' + (new Date().toLocaleTimeString()) + '</span>' +
+        '<i class="fas fa-envelope mr-2"></i><p class="p-msg">' + params.message +
+        '</p><span class="float-right text-muted text-sm">' + (new Date().toLocaleTimeString()) + '</span>' +
         '</a>' +
         '<div class="dropdown-divider"></div>'
       );
+
+      $("#syncMessageList a").on("click", function() {
+        const pText = $(this).find("p.p-msg").text();
+        window.fiui.messageDlg.show(pText);
+      });
+
       window.fiac.syncMessageCount++;
       $("#syncMessageCount").html(window.fiac.syncMessageCount);
       $("#syncMessageCount").show();
@@ -487,13 +494,19 @@ window.fiui = {
         params.brokerName + " " + params.accountId +
         '<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>' +
         '</h3>' +
-        '<p class="text-sm">' + params.message + '</p>' +
+        '<p class="text-sm p-msg">' + params.message + '</p>' +
         '<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>' + (new Date().toLocaleTimeString()) + '</p>' +
         '</div>' +
         '</div>' +
         '</a>' +
         '<div class="dropdown-divider"></div>'
       );
+
+      $("#asyncMessageList a").on("click", function() {
+        const pText = $(this).find("p.p-msg").text();
+        window.fiui.messageDlg.show(pText);
+      });
+
       window.fiac.asyncMessageCount++;
       $("#asyncMessageCount").html(window.fiac.asyncMessageCount);
       $("#asyncMessageCount").show();
@@ -796,43 +809,43 @@ window.fiui = {
   },
   confirmDlg: {
     init: function () {
-      let html = '\
-      <div class="modal fade" id="confirmDlg">\
-      <div class="modal-dialog">\
-      <div class="modal-content bg-info">\
-      <div class="modal-header">\
-      <h4 class="modal-title">Confirmation</h4>\
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-      <span aria-hidden="true">&times;</span>\
-      </button>\
-      </div>\
-      <div class="modal-body">\
-      <div class="login-box" style="width:auto">\
-      <div class="card">\
-      <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-      <p class="login-box-msg">Please click Ok if you want to proceed.</p>\
-      <div class="row">\
-      <div class="col-12" style="text-align:center">\
-      <div class="btn-group">\
-      <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-      <button type="button" class="btn btn-primary" id="btnConfirm">Ok</button>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>\
-      </div>';
+      let html = `
+      <div class="modal fade" id="confirmDlg">
+      <div class="modal-dialog">
+      <div class="modal-content bg-info">
+      <div class="modal-header">
+      <h4 class="modal-title">Confirmation</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+      <div class="login-box" style="width:auto">
+      <div class="card">
+      <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+      <p class="login-box-msg">Please click Ok if you want to proceed.</p>
+      <div class="row">
+      <div class="col-12" style="text-align:center">
+      <div class="btn-group">
+      <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+      <button type="button" class="btn btn-primary" id="btnConfirm">Ok</button>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>`;
 
       $("#confirmSection").html(html);
 
       let that = this;
 
       $("#btnConfirm").on("click", function () {
-        $("#confirmDlg").modal("hide");
+        that.hide();
         that.nextProcessCallback();
       });
     },
@@ -844,99 +857,135 @@ window.fiui = {
     hide: function () {
       $("#confirmDlg").modal("hide");
     }
+  },
+  messageDlg: {
+    init: function () {
+      let html = `
+      <div class="modal fade" id="messageDlg">
+      <div class="modal-dialog">
+      <div class="modal-content bg-info">
+      <div class="modal-header">
+      <h4 class="modal-title">Message</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+      <div class="login-box" style="width:auto">
+      <div class="card">
+      <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+      <p class="login-box-msg" id="messageContent"></p>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>`;
+
+      $("#messageSection").html(html);
+    },
+    show: function (message) {
+      $("#messageContent").text(message);
+      $("#messageDlg").modal("show");
+    },
+    hide: function () {
+      $("#messageDlg").modal("hide");
+    }
   }
 }
 
 // signUp component
 window.fiui.signUp = {
   init: function () {
-    let html = '\
-    <div class="modal fade" id="signUpDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Sign Up</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Register for an account</p>\
-    <form id="signUpForm">\
-    <div class="input-group mb-3">\
-    <select class="form-control" style="color:#000;background:#eee" id="brokerNameSignUp">\
-    </select>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailSignUp">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-envelope"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="panel box box-primary">\
-      <div class="box-header with-border">\
-        <p class="box-title" style="text-align:center">\
-          <a data-toggle="collapse" data-parent="#accordion" href="#optionalSignUp" aria-expanded="false" class="collapsed" style="color:#FFF">\
-          &lt; Optional &gt;\
-          </a>\
-        </p>\
-      </div>\
-      <div id="optionalSignUp" class="panel-collapse collapse" aria-expanded="false">\
-        <div class="box-body">\
-          <div class="input-group mb-3">\
-          <input type="text" class="form-control" placeholder="Credits" style="color:#000;background:#eee" id="creditsSignUp">\
-          <div class="input-group-append">\
-          <div class="input-group-text" style="background:#eee">\
-          <span class="fas fa-money-bill-alt"></span>\
-          </div>\
-          </div>\
-          </div>\
-          <div class="input-group mb-3">\
-          <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">\
-          <div class="input-group-append">\
-          <div class="input-group-text" style="background:#eee">\
-          <span class="fas fa-user"></span>\
-          </div>\
-          </div>\
-          </div>\
-        </div>\
-      </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-12">\
-    <button type="button" class="btn btn-primary btn-block" id="btnSignUp">Sign Up</button>\
-    </div>\
-    </div>\
-    <div id="veriEmailAddrDiv" style="display:none">\
-    <div class="dropdown-divider"></div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Verification Code" style="color:#000;background:#eee" id="veriCodeSignUp">\
-    <span class="input-group-append">\
-    <button type="button" class="btn btn-primary btn-flat" id="btnResendVeriCode">Resend</button>\
-    </span>\
-    </div>\
-    <div class="row">\
-    <div class="col-12">\
-    <button type="button" class="btn btn-primary btn-block" id="btnVeriEmailAddr">Verify Email Address</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let html = `
+    <div class="modal fade" id="signUpDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Sign Up</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Register for an account</p>
+    <form id="signUpForm">
+    <div class="input-group mb-3">
+    <select class="form-control" style="color:#000;background:#eee" id="brokerNameSignUp">
+    </select>
+    </div>
+    <div class="input-group mb-3">
+    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailSignUp">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-envelope"></span>
+    </div>
+    </div>
+    </div>
+    <div class="panel box box-primary">
+      <div class="box-header with-border">
+        <p class="box-title" style="text-align:center">
+          <a data-toggle="collapse" data-parent="#accordion" href="#optionalSignUp" aria-expanded="false" class="collapsed" style="color:#FFF">
+          &lt; Optional &gt;
+          </a>
+        </p>
+      </div>
+      <div id="optionalSignUp" class="panel-collapse collapse" aria-expanded="false">
+        <div class="box-body">
+          <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Credits" style="color:#000;background:#eee" id="creditsSignUp">
+          <div class="input-group-append">
+          <div class="input-group-text" style="background:#eee">
+          <span class="fas fa-money-bill-alt"></span>
+          </div>
+          </div>
+          </div>
+          <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">
+          <div class="input-group-append">
+          <div class="input-group-text" style="background:#eee">
+          <span class="fas fa-user"></span>
+          </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-primary btn-block" id="btnSignUp">Sign Up</button>
+    </div>
+    </div>
+    <div id="veriEmailAddrDiv" style="display:none">
+    <div class="dropdown-divider"></div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Verification Code" style="color:#000;background:#eee" id="veriCodeSignUp">
+    <span class="input-group-append">
+    <button type="button" class="btn btn-primary btn-flat" id="btnResendVeriCode">Resend</button>
+    </span>
+    </div>
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-primary btn-block" id="btnVeriEmailAddr">Verify Email Address</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#signUpSection").html(html);
 
+    let that = this;
     let dropdownList = [];
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
@@ -952,7 +1001,7 @@ window.fiui.signUp = {
         console.log(res.message);
       }
       $("#veriEmailAddrDiv").show();
-      $("#signUpDlg").modal("show");
+      that.show();
     });
 
     fisdk.subscribeToNotification("signing_up_done", function (res) {
@@ -963,7 +1012,7 @@ window.fiui.signUp = {
       console.log(params.message);
       toastr.info(params.message);
       window.fiui.syncMsg.prepend(params);
-      $("#signUpDlg").modal("hide");
+      that.hide();
     });
 
     fisdk.subscribeToNotification("failed_to_sign_up", function (res) {
@@ -980,7 +1029,7 @@ window.fiui.signUp = {
         console.log(res.message);
         toastr.info(res.message);
       }
-      $("#signUpDlg").modal("show");
+      that.show();
     });
 
     fisdk.subscribeToNotification("failed_to_resend_verification_code", function (res) {
@@ -992,7 +1041,7 @@ window.fiui.signUp = {
     });
 
     $("#btnSignUp").on("click", function () {
-      $("#signUpDlg").modal("hide");
+      that.hide();
 
       fisdk.signUp($("#brokerNameSignUp").val(), $("#emailSignUp").val(), $("#creditsSignUp").val(), $("#refAccountIdSignUp").val());
     });
@@ -1019,127 +1068,131 @@ window.fiui.signUp = {
   },
   show: function () {
     $("#signUpDlg").modal("show");
+  },
+  hide: function () {
+    $("#signUpDlg").modal("hide");
   }
 };
 
 // signIn component
 window.fiui.signIn = {
   init: function () {
-    let signInHtml = '\
-    <div class="modal fade" id="signInDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Sign In</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Sign in to start your session</p>\
-    <form id="loginForm">\
-    <div class="input-group mb-3">\
-    <select class="form-control" style="color:#000;background:#eee" id="brokerNameSignIn">\
-    </select>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdSignIn">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-user"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="Password" style="color:#000;background:#eee" id="passwordSignIn">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-lock"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="Investor Password" style="color:#000;background:#eee" id="investorPasswordSignIn">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-lock"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-8">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkRemember">\
-    <label for="chkRemember">\
-    Remember Me\
-    </label>\
-    </div>\
-    </div>\
-    <div class="col-4">\
-    <button type="button" class="btn btn-primary btn-block" id="btnSignIn">Sign In</button>\
-    </div>\
-    </div>\
-    </form>\
-    <p class="mb-1">\
-    <a href="#" style="color:#fff" id="lnkResetPw">I forgot my password</a>\
-    </p>\
-    <p class="mb-0">\
-    <a href="#" class="text-center" style="color:#fff" id="lnkSignUp">Register a new membership</a>\
-    </p>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let signInHtml = `
+    <div class="modal fade" id="signInDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Sign In</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Sign in to start your session</p>
+    <form id="loginForm">
+    <div class="input-group mb-3">
+    <select class="form-control" style="color:#000;background:#eee" id="brokerNameSignIn">
+    </select>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdSignIn">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-user"></span>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Password" style="color:#000;background:#eee" id="passwordSignIn">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-lock"></span>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Investor Password" style="color:#000;background:#eee" id="investorPasswordSignIn">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-lock"></span>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-8">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkRemember">
+    <label for="chkRemember">
+    Remember Me
+    </label>
+    </div>
+    </div>
+    <div class="col-4">
+    <button type="button" class="btn btn-primary btn-block" id="btnSignIn">Sign In</button>
+    </div>
+    </div>
+    </form>
+    <p class="mb-1">
+    <a href="#" style="color:#fff" id="lnkResetPw">I forgot my password</a>
+    </p>
+    <p class="mb-0">
+    <a href="#" class="text-center" style="color:#fff" id="lnkSignUp">Register a new membership</a>
+    </p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#signInSection").html(signInHtml);
 
-    let verifyMfaHtml = '\
-    <div class="modal fade" id="verifyMfaDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">MFA</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Check your MFA APP</p>\
-    <form id="verifyMfaForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="MFA Code" style="color:#000;background:#eee" id="mfaCode">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-envelope"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <input type="hidden" id="mfaToken">\
-    <div class="row">\
-    <div class="col-12">\
-    <button type="button" class="btn btn-primary btn-block" id="btnVerifyMfa">Sign In</button>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let verifyMfaHtml = `
+    <div class="modal fade" id="verifyMfaDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">MFA</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Check your MFA APP</p>
+    <form id="verifyMfaForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="MFA Code" style="color:#000;background:#eee" id="mfaCode">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-envelope"></span>
+    </div>
+    </div>
+    </div>
+    <input type="hidden" id="mfaToken">
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-primary btn-block" id="btnVerifyMfa">Sign In</button>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#verifyMfaSection").html(verifyMfaHtml);
 
+    let that = this;
     let dropdownList = [];
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
@@ -1157,7 +1210,7 @@ window.fiui.signIn = {
       window.fiac.mfaEnabled = true;
       window.fiui.loadingDimmer.hide();
       $("#mfaToken").val(res.mfaToken);
-      $("#verifyMfaDlg").modal("show");
+      that.showMfa();
       $("#mfaCode").focus();
     });
 
@@ -1210,8 +1263,6 @@ window.fiui.signIn = {
       window.fiui.loadingDimmer.hide();
     });
 
-    let that = this;
-
     $("#btnSignIn").on("click", function () {
       that.signIn();
     });
@@ -1242,17 +1293,17 @@ window.fiui.signIn = {
     });
 
     $("#lnkResetPw").on("click", function () {
-      $("#signInDlg").modal("hide");
+      that.hide();
       window.fiui.resetPw.show();
     });
 
     $("#lnkSignUp").on("click", function () {
-      $("#signInDlg").modal("hide");
+      that.hide();
       window.fiui.signUp.show();
     });
   },
   signIn: function () {
-    $("#signInDlg").modal("hide");
+    this.hide();
 
     fisdk.logout();
 
@@ -1267,72 +1318,86 @@ window.fiui.signIn = {
     }
   },
   signInWithMfa: function () {
-    $("#verifyMfaDlg").modal("hide");
+    this.hideMfa();
     window.fiui.loadingDimmer.show();
 
     fisdk.signInByMfa($("#brokerNameSignIn").val(), $("#accountIdSignIn").val(), $("#mfaCode").val(), $("#mfaToken").val());
+  },
+  show: function () {
+    $("#signInDlg").modal("show");
+  },
+  hide: function () {
+    $("#signInDlg").modal("hide");
+  },
+  showMfa: function () {
+    $("#verifyMfaDlg").modal("show");
+  },
+  hideMfa: function () {
+    $("#verifyMfaDlg").modal("hide");
   }
 };
 
 // mfa component
 window.fiui.mfa = {
   init: function () {
-    let html = '\
-    <div class="modal fade" id="mfaDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">MFA</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Enable or disable MFA</p>\
-    <form id="mfaForm">\
-    <div class="input-group mb-3">\
-    <div class="attachment-block clearfix" style="width:100%;border:none;background-color:#17a2b8">\
-    <img class="attachment-img" src="/images/mfa.png" alt="Attachment Image" id="qrCode">\
-    <div class="attachment-pushed">\
-    <div class="attachment-text">\
-    MFA can help you improve the security of authentication. Please note that, if you have enabled MFA and start a new operation, regardless of the purpose of the new operation(to enable MFA or to disable MFA), your old MFA status will be reset to DISABLED and your old MFA key can NOT be restored. Fortunately, you can proceed to enable MFA again by scanning a new QR code.<br>\
-    The QR code contains your MFA secret key, so, please DO NOT share this image with anyone else.\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-12" id="chkConfirmMfaDiv" style="display:none">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkConfirmMfa">\
-    <label for="chkConfirmMfa">\
-    <p>Have you scanned the QR code?</p>\
-    </label>\
-    </div>\
-    </div>\
-    <input type="hidden" id="mfaEnabled">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnDisableMfa">Disable</button>\
-    <button type="button" class="btn btn-primary" id="btnEnableMfa">Enable</button>\
-    <button type="button" class="btn btn-primary" id="btnSetMfa" style="display:none">Ok</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let html = `
+    <div class="modal fade" id="mfaDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">MFA</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Enable or disable MFA</p>
+    <form id="mfaForm">
+    <div class="input-group mb-3">
+    <div class="attachment-block clearfix" style="width:100%;border:none;background-color:#17a2b8">
+    <img class="attachment-img" src="/images/mfa.png" alt="Attachment Image" id="qrCode">
+    <div class="attachment-pushed">
+    <div class="attachment-text">
+    MFA can help you improve the security of authentication. Please note that, if you have enabled MFA and start a new operation, regardless of the purpose of the new operation(to enable MFA or to disable MFA), your old MFA status will be reset to DISABLED and your old MFA key can NOT be restored. Fortunately, you can proceed to enable MFA again by scanning a new QR code.<br>
+    The QR code contains your MFA secret key, so, please DO NOT share this image with anyone else.
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-12" id="chkConfirmMfaDiv" style="display:none">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkConfirmMfa">
+    <label for="chkConfirmMfa">
+    <p>Have you scanned the QR code?</p>
+    </label>
+    </div>
+    </div>
+    <input type="hidden" id="mfaEnabled">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnDisableMfa">Disable</button>
+    <button type="button" class="btn btn-primary" id="btnEnableMfa">Enable</button>
+    <button type="button" class="btn btn-primary" id="btnSetMfa" style="display:none">Ok</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#mfaSection").html(html);
+
+    let that = this;
 
     fisdk.subscribeToNotification("triggering_mfa_done", function (res) {
       console.log("triggering_mfa_done");
@@ -1368,7 +1433,7 @@ window.fiui.mfa = {
       $("#btnEnableMfa").show();
       $("#btnSetMfa").hide();
       $("#chkConfirmMfaDiv").hide();
-      $("#mfaDlg").modal("hide");
+      that.hide();
     });
 
     fisdk.subscribeToNotification("failed_to_enable_or_disable_mfa", function (res) {
@@ -1382,7 +1447,7 @@ window.fiui.mfa = {
       $("#btnEnableMfa").show();
       $("#btnSetMfa").hide();
       $("#chkConfirmMfaDiv").hide();
-      $("#mfaDlg").modal("hide");
+      that.hide();
     });
 
     $("#btnEnableMfa").on("click", function () {
@@ -1393,7 +1458,7 @@ window.fiui.mfa = {
         $("#btnEnableMfa").hide();
         $("#chkConfirmMfaDiv").show();
       } else {
-        $("#mfaDlg").modal("hide");
+        that.hide();
 
         if (window.fiac.investorPassword != null) {
           toastr.error("You can't enable MFA in the investor mode.");
@@ -1411,7 +1476,7 @@ window.fiui.mfa = {
         $("#btnSetMfa").show();
         $("#chkConfirmMfaDiv").hide();
       } else {
-        $("#mfaDlg").modal("hide");
+        that.hide();
 
         if (window.fiac.investorPassword != null) {
           toastr.error("You can't disable MFA in the investor mode.");
@@ -1439,73 +1504,80 @@ window.fiui.mfa = {
         } else {
           toastr.error("Please login.");
         }
-        $("#mfaDlg").modal("hide");
+        that.hide();
       }
     });
+  },
+  show: function () {
+    $("#mfaDlg").modal("show");
+  },
+  hide: function () {
+    $("#mfaDlg").modal("hide");
   }
 };
 
 // reset password component
 window.fiui.resetPw = {
   init: function () {
-    let html = '\
-    <div class="modal fade" id="resetPwDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Reset Password</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Send a token to reset your password</p>\
-    <form id="resetPwForm">\
-    <div class="input-group mb-3">\
-    <select class="form-control" style="color:#000;background:#eee" id="brokerNameResetPw">\
-    </select>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailResetPw">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-envelope"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-12">\
-    <button type="button" class="btn btn-primary btn-block" id="btnSendResetPwToken">Send Reset Password Token</button>\
-    </div>\
-    </div>\
-    <div id="resetPwDiv" style="display:none">\
-    <div class="dropdown-divider"></div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Reset Password Token" style="color:#000;background:#eee" id="resetPwToken">\
-    <span class="input-group-append">\
-    <button type="button" class="btn btn-primary btn-flat" id="btnResendResetPwToken">Resend</button>\
-    </span>\
-    </div>\
-    <div class="row">\
-    <div class="col-12">\
-    <button type="button" class="btn btn-primary btn-block" id="btnResetPw">Reset Password</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let html = `
+    <div class="modal fade" id="resetPwDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Reset Password</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Send a token to reset your password</p>
+    <form id="resetPwForm">
+    <div class="input-group mb-3">
+    <select class="form-control" style="color:#000;background:#eee" id="brokerNameResetPw">
+    </select>
+    </div>
+    <div class="input-group mb-3">
+    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailResetPw">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-envelope"></span>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-primary btn-block" id="btnSendResetPwToken">Send Reset Password Token</button>
+    </div>
+    </div>
+    <div id="resetPwDiv" style="display:none">
+    <div class="dropdown-divider"></div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Reset Password Token" style="color:#000;background:#eee" id="resetPwToken">
+    <span class="input-group-append">
+    <button type="button" class="btn btn-primary btn-flat" id="btnResendResetPwToken">Resend</button>
+    </span>
+    </div>
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-primary btn-block" id="btnResetPw">Reset Password</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#resetPwSection").html(html);
 
+    let that = this;
     let dropdownList = [];
     for (let i in window.shownBrokerName) {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
@@ -1521,7 +1593,7 @@ window.fiui.resetPw = {
         console.log(res.message);
         toastr.info(res.message);
       }
-      $("#resetPwDlg").modal("show");
+      that.show();
     });
 
     fisdk.subscribeToNotification("failed_to_send_reset_pw_email", function (res) {
@@ -1555,7 +1627,7 @@ window.fiui.resetPw = {
     });
 
     $("#btnResetPw").on("click", function () {
-      $("#resetPwDlg").modal("hide");
+      that.hide();
 
       fisdk.resetPassword($("#brokerNameResetPw").val(), $("#emailResetPw").val(), $("#resetPwToken").val());
     });
@@ -1572,57 +1644,62 @@ window.fiui.resetPw = {
   },
   show: function () {
     $("#resetPwDlg").modal("show");
+  },
+  hide: function () {
+    $("#resetPwDlg").modal("hide");
   }
 };
 
 // change password component
 window.fiui.changePw = {
   init: function () {
-    let html = '\
-    <div class="modal fade" id="changePwDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Change Password</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Change your password and investor password</p>\
-    <form id="changePwForm">\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="Password" style="color:#000;background:#eee" id="passwordChangePw">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-lock"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="Investor Password" style="color:#000;background:#eee" id="investorPasswordChangePw">\
-    <div class="input-group-append">\
-    <div class="input-group-text" style="background:#eee">\
-    <span class="fas fa-lock"></span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <button type="button" class="btn btn-primary btn-block" id="btnChangePw">Change Password</button>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let html = `
+    <div class="modal fade" id="changePwDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Change Password</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Change your password and investor password</p>
+    <form id="changePwForm">
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Password" style="color:#000;background:#eee" id="passwordChangePw">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-lock"></span>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Investor Password" style="color:#000;background:#eee" id="investorPasswordChangePw">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-lock"></span>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <button type="button" class="btn btn-primary btn-block" id="btnChangePw">Change Password</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#changePwSection").html(html);
+
+    let that = this;
 
     fisdk.subscribeToNotification("changing_password_done", function (res) {
       console.log("changing_password_done");
@@ -1643,7 +1720,7 @@ window.fiui.changePw = {
     });
 
     $("#btnChangePw").on("click", function () {
-      $("#changePwDlg").modal("hide");
+      that.hide();
 
       if (window.fiac.tradeToken != null) {
         fisdk.changePassword(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, $("#passwordChangePw").val(), $("#investorPasswordChangePw").val());
@@ -1655,95 +1732,101 @@ window.fiui.changePw = {
         }
       }
     });
+  },
+  show: function () {
+    $("#changePwDlg").modal("show");
+  },
+  hide: function () {
+    $("#changePwDlg").modal("hide");
   }
 };
 
 // payment component
 window.fiui.payment = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Payments</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Payments</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-md-12">\
-    <p style="color:#ff5500">The payment gateway connected to the current Demo Server is on the Ethereum Testnet Goerli USDC, not the Mainnet USDC. Please do not use Mainnet USDC for payment transfers.</p>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <!-- invoice -->\
-    <div class="col-md-6">\
-    <div class="card card-primary">\
-    <div class="card-header">\
-    <h3 class="card-title">Deposit</h3>\
-    </div>\
-    <form>\
-    <div class="card-body">\
-    <div class="form-group">\
-    <label for="fundsInvoice">Funds</label>\
-    <input type="text" class="form-control" id="fundsInvoice" placeholder="Funds">\
-    </div>\
-    <div class="form-group">\
-    <label for="commentInvoice">Comment</label>\
-    <input type="text" class="form-control" id="commentInvoice" placeholder="Comment">\
-    </div>\
-    <div class="form-group">\
-    <label for="xpubInvoice">xpub (Your Etherium Public Address)</label>\
-    <input type="text" class="form-control" id="xpubInvoice" placeholder="xpub">\
-    </div>\
-    </div>\
-    <div class="card-footer">\
-    <button type="button" class="btn btn-primary" id="btnCreateInvoice">Deposit</button>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    <!-- invoice -->\
-    <!-- payout -->\
-    <div class="col-md-6">\
-    <div class="card card-primary">\
-    <div class="card-header">\
-    <h3 class="card-title">Withdraw</h3>\
-    </div>\
-    <form>\
-    <div class="card-body">\
-    <div class="form-group">\
-    <label for="fundsPayout">Funds</label>\
-    <input type="text" class="form-control" id="fundsPayout" placeholder="Funds">\
-    </div>\
-    <div class="form-group">\
-    <label for="commentPayout">Comment</label>\
-    <input type="text" class="form-control" id="commentPayout" placeholder="Comment">\
-    </div>\
-    <div class="form-group">\
-    <label for="xpubPayout">xpub (Your Etherium Public Address)</label>\
-    <input type="text" class="form-control" id="xpubPayout" placeholder="xpub">\
-    </div>\
-    </div>\
-    <div class="card-footer">\
-    <button type="button" class="btn btn-primary" id="btnCreatePayout">Withdraw</button>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    <!-- payout -->\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Payments</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Payments</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-12">
+    <p style="color:#ff5500">The payment gateway connected to the current Demo Server is on the Ethereum Testnet Goerli USDC, not the Mainnet USDC. Please do not use Mainnet USDC for payment transfers.</p>
+    </div>
+    </div>
+    <div class="row">
+    <!-- invoice -->
+    <div class="col-md-6">
+    <div class="card card-primary">
+    <div class="card-header">
+    <h3 class="card-title">Deposit</h3>
+    </div>
+    <form>
+    <div class="card-body">
+    <div class="form-group">
+    <label for="fundsInvoice">Funds</label>
+    <input type="text" class="form-control" id="fundsInvoice" placeholder="Funds">
+    </div>
+    <div class="form-group">
+    <label for="commentInvoice">Comment</label>
+    <input type="text" class="form-control" id="commentInvoice" placeholder="Comment">
+    </div>
+    <div class="form-group">
+    <label for="xpubInvoice">xpub (Your Etherium Public Address)</label>
+    <input type="text" class="form-control" id="xpubInvoice" placeholder="xpub">
+    </div>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnCreateInvoice">Deposit</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    <!-- invoice -->
+    <!-- payout -->
+    <div class="col-md-6">
+    <div class="card card-primary">
+    <div class="card-header">
+    <h3 class="card-title">Withdraw</h3>
+    </div>
+    <form>
+    <div class="card-body">
+    <div class="form-group">
+    <label for="fundsPayout">Funds</label>
+    <input type="text" class="form-control" id="fundsPayout" placeholder="Funds">
+    </div>
+    <div class="form-group">
+    <label for="commentPayout">Comment</label>
+    <input type="text" class="form-control" id="commentPayout" placeholder="Comment">
+    </div>
+    <div class="form-group">
+    <label for="xpubPayout">xpub (Your Etherium Public Address)</label>
+    <input type="text" class="form-control" id="xpubPayout" placeholder="xpub">
+    </div>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnCreatePayout">Withdraw</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    <!-- payout -->
+    </div>
+    </div>
+    </section>`;
 
     $("#paymentSection").html(html);
 
@@ -1822,114 +1905,116 @@ window.fiui.payment = {
 // FIX component
 window.fiui.fix = {
   init: function () {
-    let html = '\
-    <div class="modal fade" id="fixSettingsDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">FIX Settings</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Please do NOT forget to check the "Settings Done" option.</p>\
-    <form id="fixSettingsForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Setting ID" style="color:#000;background:#eee" id="indexFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Liquidity Provider" style="color:#000;background:#eee" id="lpFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkUat">\
-    <label for="chkUat">\
-    UAT\
-    </label>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data UserName" style="color:#000;background:#eee" id="dataUserNameFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data Password" style="color:#000;background:#eee" id="dataPasswordFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data Brand" style="color:#000;background:#eee" id="dataBrandFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data AccountId" style="color:#000;background:#eee" id="dataAccountFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data SenderCompID" style="color:#000;background:#eee" id="dataSenderFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data TargetCompID" style="color:#000;background:#eee" id="dataTargetFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Data TargetSubID" style="color:#000;background:#eee" id="dataTargetSubFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade UserName" style="color:#000;background:#eee" id="orderUserNameFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade Password" style="color:#000;background:#eee" id="orderPasswordFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade Brand" style="color:#000;background:#eee" id="orderBrandFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade AccountId" style="color:#000;background:#eee" id="orderAccountFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade SenderCompID" style="color:#000;background:#eee" id="orderSenderFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade TargetCompID" style="color:#000;background:#eee" id="orderTargetFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Trade TargetSubID" style="color:#000;background:#eee" id="orderTargetSubFix">\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkSendMarketDataRequestList">\
-    <label for="chkSendMarketDataRequestList">\
-    Send Data Request List\
-    </label>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="icheck-primary">\
-    <input type="checkbox" id="chkFixSettingsDone">\
-    <label for="chkFixSettingsDone">\
-    Settings Done\
-    </label>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnSetFIX">Set FIX</button>\
-    <button type="button" class="btn btn-primary" id="btnStartService">Start Service</button>\
-    <button type="button" class="btn btn-primary" id="btnStopService">Stop Service</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let html = `
+    <div class="modal fade" id="fixSettingsDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">FIX Settings</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Please do NOT forget to check the "Settings Done" option.</p>
+    <form id="fixSettingsForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Setting ID" style="color:#000;background:#eee" id="indexFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Liquidity Provider" style="color:#000;background:#eee" id="lpFix">
+    </div>
+    <div class="input-group mb-3">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkUat">
+    <label for="chkUat">
+    UAT
+    </label>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data UserName" style="color:#000;background:#eee" id="dataUserNameFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data Password" style="color:#000;background:#eee" id="dataPasswordFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data Brand" style="color:#000;background:#eee" id="dataBrandFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data AccountId" style="color:#000;background:#eee" id="dataAccountFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data SenderCompID" style="color:#000;background:#eee" id="dataSenderFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data TargetCompID" style="color:#000;background:#eee" id="dataTargetFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Data TargetSubID" style="color:#000;background:#eee" id="dataTargetSubFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade UserName" style="color:#000;background:#eee" id="orderUserNameFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade Password" style="color:#000;background:#eee" id="orderPasswordFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade Brand" style="color:#000;background:#eee" id="orderBrandFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade AccountId" style="color:#000;background:#eee" id="orderAccountFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade SenderCompID" style="color:#000;background:#eee" id="orderSenderFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade TargetCompID" style="color:#000;background:#eee" id="orderTargetFix">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Trade TargetSubID" style="color:#000;background:#eee" id="orderTargetSubFix">
+    </div>
+    <div class="input-group mb-3">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkSendMarketDataRequestList">
+    <label for="chkSendMarketDataRequestList">
+    Send Data Request List
+    </label>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <div class="icheck-primary">
+    <input type="checkbox" id="chkFixSettingsDone">
+    <label for="chkFixSettingsDone">
+    Settings Done
+    </label>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnSetFIX">Set FIX</button>
+    <button type="button" class="btn btn-primary" id="btnStartService">Start Service</button>
+    <button type="button" class="btn btn-primary" id="btnStopService">Stop Service</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#fixSettingsSection").html(html);
+
+    let that = this;
 
     fisdk.subscribeToNotification("setting_fix_done", function (res) {
       console.log("setting_fix_done");
@@ -1990,7 +2075,7 @@ window.fiui.fix = {
     });
 
     $("#btnSetFIX").on("click", function () {
-      $("#fixSettingsDlg").modal("hide");
+      that.hide();
 
       if (window.fiac.tradeToken != null) {
         let idx = Number.isInteger($("#indexFix").val()) ? parseInt($("#indexFix").val()) : -1;
@@ -2028,7 +2113,7 @@ window.fiui.fix = {
     });
 
     $("#btnStartService").on("click", function () {
-      $("#fixSettingsDlg").modal("hide");
+      that.hide();
 
       if (window.fiac.tradeToken != null) {
         window.fiui.loadingDimmer.show();
@@ -2044,7 +2129,7 @@ window.fiui.fix = {
     });
 
     $("#btnStopService").on("click", function () {
-      $("#fixSettingsDlg").modal("hide");
+      that.hide();
 
       if (window.fiac.tradeToken != null) {
         window.fiui.loadingDimmer.show();
@@ -2058,224 +2143,230 @@ window.fiui.fix = {
         }
       }
     });
+  },
+  show: function () {
+    $("#fixSettingsDlg").modal("show");
+  },
+  hide: function () {
+    $("#fixSettingsDlg").modal("hide");
   }
 };
 
 // white label component
 window.fiui.brokerList = {
   init: function () {
-    let brokerListHtml = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Brokers</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Brokers</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">White Label List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="brokerList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    <div class="card-footer">\
-    <button type="button" class="btn btn-primary" id="btnShowBroker">Add</button>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let brokerListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Brokers</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Brokers</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">White Label List</h3>
+    </div>
+    <div class="card-body">
+    <table id="brokerList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnShowBroker">Add</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#brokerSection").html(brokerListHtml);
 
-    let brokerProfileHtml = '\
-    <div class="modal fade" id="brokerProfileDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Broker Profile</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Leave the fields blank when you have no plan to change them.</p>\
-    <form id="brokerProfileForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Broker ID" style="color:#000;background:#eee" id="brokerIdBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="BrokerNameBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="email" class="form-control" placeholder="Contact Email Address" style="color:#000;background:#eee" id="contactBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Description" style="color:#000;background:#eee" id="descBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Balance" style="color:#000;background:#eee" id="balanceBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Level" style="color:#000;background:#eee" id="levelBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Opening Long" style="color:#000;background:#eee" id="commissionOpeningLongBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Closing Long" style="color:#000;background:#eee" id="commissionClosingLongBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Opening Short" style="color:#000;background:#eee" id="commissionOpeningShortBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Closing Short" style="color:#000;background:#eee" id="commissionClosingShortBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Ask Mark Up" style="color:#000;background:#eee" id="askMarkUpBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Bid Mark Up" style="color:#000;background:#eee" id="bidMarkUpBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Currency" style="color:#000;background:#eee" id="currencyBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="ToFixed" style="color:#000;background:#eee" id="toFixedBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Withdrawal Limit" style="color:#000;background:#eee" id="withdrawalLimitBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Margin Call Level" style="color:#000;background:#eee" id="marginCallLevelBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Margin Closeout Level" style="color:#000;background:#eee" id="marginCloseoutLevelBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="SMTP" style="color:#000;background:#eee" id="smtpBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="SMTP Port" style="color:#000;background:#eee" id="smtpPortBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="SMTP Password" style="color:#000;background:#eee" id="emailPasswordBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Credits Onboard(true or false)" style="color:#000;background:#eee" id="creditsOnboardBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Credits Onboard Limit" style="color:#000;background:#eee" id="creditsOnboardLimitBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="password" class="form-control" placeholder="Crypto Payment Gateway Key" style="color:#000;background:#eee" id="cryptoPaymentGatewayKeyBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Payment Gateway Store Id" style="color:#000;background:#eee" id="paymentGatewayStoreIdBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Payment Gateway Wallet Id" style="color:#000;background:#eee" id="paymentGatewayWalletIdBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Success Redirect URL" style="color:#000;background:#eee" id="pgSuccessRedirectUrlBp">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Identifier(please type remove if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnAddBroker">Add</button>\
-    <button type="button" class="btn btn-primary" id="btnModifyBroker">Modify</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let brokerProfileHtml = `
+    <div class="modal fade" id="brokerProfileDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Broker Profile</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Leave the fields blank when you have no plan to change them.</p>
+    <form id="brokerProfileForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Broker ID" style="color:#000;background:#eee" id="brokerIdBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="BrokerNameBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="email" class="form-control" placeholder="Contact Email Address" style="color:#000;background:#eee" id="contactBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Description" style="color:#000;background:#eee" id="descBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Balance" style="color:#000;background:#eee" id="balanceBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Level" style="color:#000;background:#eee" id="levelBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Opening Long" style="color:#000;background:#eee" id="commissionOpeningLongBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Closing Long" style="color:#000;background:#eee" id="commissionClosingLongBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Opening Short" style="color:#000;background:#eee" id="commissionOpeningShortBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Closing Short" style="color:#000;background:#eee" id="commissionClosingShortBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Ask Mark Up" style="color:#000;background:#eee" id="askMarkUpBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Bid Mark Up" style="color:#000;background:#eee" id="bidMarkUpBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Currency" style="color:#000;background:#eee" id="currencyBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="ToFixed" style="color:#000;background:#eee" id="toFixedBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Withdrawal Limit" style="color:#000;background:#eee" id="withdrawalLimitBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Margin Call Level" style="color:#000;background:#eee" id="marginCallLevelBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Margin Closeout Level" style="color:#000;background:#eee" id="marginCloseoutLevelBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="SMTP" style="color:#000;background:#eee" id="smtpBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="SMTP Port" style="color:#000;background:#eee" id="smtpPortBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="SMTP Password" style="color:#000;background:#eee" id="emailPasswordBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Credits Onboard(true or false)" style="color:#000;background:#eee" id="creditsOnboardBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Credits Onboard Limit" style="color:#000;background:#eee" id="creditsOnboardLimitBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Crypto Payment Gateway Key" style="color:#000;background:#eee" id="cryptoPaymentGatewayKeyBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Payment Gateway Store Id" style="color:#000;background:#eee" id="paymentGatewayStoreIdBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Payment Gateway Wallet Id" style="color:#000;background:#eee" id="paymentGatewayWalletIdBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Success Redirect URL" style="color:#000;background:#eee" id="pgSuccessRedirectUrlBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Identifier(please type remove if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnAddBroker">Add</button>
+    <button type="button" class="btn btn-primary" id="btnModifyBroker">Modify</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#brokerProfileSection").html(brokerProfileHtml);
 
-    let downloadReportHtml = '\
-    <div class="modal fade" id="downloadWlReportDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Download Report</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Download the report of the specific white label</p>\
-    <form id="downloadWlReportForm">\
-    <div class="input-group mb-3">\
-    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">\
-    <div class="input-group date" data-target-input="nearest">\
-    <input type="text" placeholder="Start Date" class="form-control datetimepicker-input" data-target="#startDtDwr" style="color:#000;background:#eee" id="startDtDwr" />\
-    <div class="input-group-append" data-target="#startDtDwr" data-toggle="datetimepicker">\
-    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">\
-    <div class="input-group date" data-target-input="nearest">\
-    <input type="text" placeholder="End Date" class="form-control datetimepicker-input" data-target="#endDtDwr" style="color:#000;background:#eee" id="endDtDwr" />\
-    <div class="input-group-append" data-target="#endDtDwr" data-toggle="datetimepicker">\
-    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="brokerNameDwr">\
-    </div>\
-    <input type="hidden" id="mainWhiteLabelDwr">\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnDownloadWlReport">Download</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let downloadReportHtml = `
+    <div class="modal fade" id="downloadWlReportDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Download Report</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Download the report of the specific white label</p>
+    <form id="downloadWlReportForm">
+    <div class="input-group mb-3">
+    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">
+    <div class="input-group date" data-target-input="nearest">
+    <input type="text" placeholder="Start Date" class="form-control datetimepicker-input" data-target="#startDtDwr" style="color:#000;background:#eee" id="startDtDwr" />
+    <div class="input-group-append" data-target="#startDtDwr" data-toggle="datetimepicker">
+    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">
+    <div class="input-group date" data-target-input="nearest">
+    <input type="text" placeholder="End Date" class="form-control datetimepicker-input" data-target="#endDtDwr" style="color:#000;background:#eee" id="endDtDwr" />
+    <div class="input-group-append" data-target="#endDtDwr" data-toggle="datetimepicker">
+    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="brokerNameDwr">
+    </div>
+    <input type="hidden" id="mainWhiteLabelDwr">
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnDownloadWlReport">Download</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#downloadWlReportSection").html(downloadReportHtml);
 
@@ -2351,14 +2442,14 @@ window.fiui.brokerList = {
 
     $("#btnShowBroker").on("click", function () {
       if (window.fiac.tradeToken != null) {
-        $("#brokerProfileDlg").modal("show");
+        that.showDlg();
       } else {
         toastr.error("Please login.");
       }
     });
 
     $("#btnAddBroker").on("click", function () {
-      $("#brokerProfileDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.tradeToken != null) {
         let newBroker = null;
@@ -2379,7 +2470,7 @@ window.fiui.brokerList = {
     });
 
     $("#btnModifyBroker").on("click", function () {
-      $("#brokerProfileDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.tradeToken != null) {
         let newBroker = null;
@@ -2400,7 +2491,7 @@ window.fiui.brokerList = {
     });
 
     $("#btnDownloadWlReport").on("click", function () {
-      $("#downloadWlReportDlg").modal("hide");
+      that.hideReport();
 
       if ($("#mainWhiteLabelDwr").val() == "false") {
         fisdk.downloadWhiteLabelReport(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, $("#brokerNameDwr").val(), Math.floor(new Date($("#startDtDwr").val()).getTime() / 1000), Math.floor(new Date($("#endDtDwr").val()).getTime() / 1000));
@@ -2584,7 +2675,7 @@ window.fiui.brokerList = {
         $("#currencyBp").val(data[res.brokers.colIndex.currency]);
         $("#toFixedBp").val(data[res.brokers.colIndex.toFixed]);
 
-        $("#brokerProfileDlg").modal("show");
+        that.showDlg();
       }
     });
 
@@ -2608,7 +2699,7 @@ window.fiui.brokerList = {
         $("#brokerNameDwr").val(data[res.brokers.colIndex.brokerName]);
         $("#mainWhiteLabelDwr").val(false + "");
 
-        $("#downloadWlReportDlg").modal("show");
+        that.showReport();
 
         $("#startDtDwr").datetimepicker({
           format: "L"
@@ -2626,7 +2717,7 @@ window.fiui.brokerList = {
         $("#brokerNameDwr").val(data[res.brokers.colIndex.brokerName]);
         $("#mainWhiteLabelDwr").val(true + "");
 
-        $("#downloadWlReportDlg").modal("show");
+        that.showReport();
 
         $("#startDtDwr").datetimepicker({
           format: "L"
@@ -2646,45 +2737,57 @@ window.fiui.brokerList = {
   },
   hide: function () {
     $("#brokerSection").hide();
+  },
+  showDlg: function () {
+    $("#brokerProfileDlg").modal("show");
+  },
+  hideDlg: function () {
+    $("#brokerProfileDlg").modal("hide");
+  },
+  showReport: function () {
+    $("#downloadWlReportDlg").modal("show");
+  },
+  hideReport: function () {
+    $("#downloadWlReportDlg").modal("hide");
   }
 };
 
 // manager list component
 window.fiui.managerList = {
   init: function () {
-    let managerListHtml = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Managers</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Managers</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Manager List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="managerList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let managerListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Managers</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Managers</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Manager List</h3>
+    </div>
+    <div class="card-body">
+    <table id="managerList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#managerSection").html(managerListHtml);
 
@@ -2791,256 +2894,256 @@ window.fiui.managerList = {
 // account list component
 window.fiui.accountList = {
   init: function () {
-    let accountListHtml = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Accounts</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Accounts</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Account List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="accountList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let accountListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Accounts</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Accounts</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Account List</h3>
+    </div>
+    <div class="card-body">
+    <table id="accountList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#accountSection").html(accountListHtml);
 
-    let bindAccountHtml = '\
-    <div class="modal fade" id="bindAccountDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Bind Account</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Bind your account with your FIX MAM identifier</p>\
-    <form id="bindAccountForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdBa">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Identifier" style="color:#000;background:#eee" id="identifierBa">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnBindAccount">Bind</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let bindAccountHtml = `
+    <div class="modal fade" id="bindAccountDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Bind Account</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Bind your account with your FIX MAM identifier</p>
+    <form id="bindAccountForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdBa">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Identifier" style="color:#000;background:#eee" id="identifierBa">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnBindAccount">Bind</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#bindAccountSection").html(bindAccountHtml);
 
-    let transferFundsHtml = '\
-    <div class="modal fade" id="transferFundsDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Transfer Funds</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Transfer funds</p>\
-    <form id="transferFundsForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="brokerNameTf">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailTf">\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="form-group">\
-    <div class="form-check">\
-    <input class="form-check-input" type="radio" name="creditOrDebitTf" value="credit" checked>\
-    <label class="form-check-label">Credit</label>\
-    </div>\
-    <div class="form-check">\
-    <input class="form-check-input" type="radio" name="creditOrDebitTf" value="debit">\
-    <label class="form-check-label">Debit</label>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Funds" style="color:#000;background:#eee" id="fundsTf">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Comment" style="color:#000;background:#eee" id="commentTf">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnTransferFunds">Transfer Funds</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let transferFundsHtml = `
+    <div class="modal fade" id="transferFundsDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Transfer Funds</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Transfer funds</p>
+    <form id="transferFundsForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Broker Name" style="color:#000;background:#eee" id="brokerNameTf">
+    </div>
+    <div class="input-group mb-3">
+    <input type="email" class="form-control" placeholder="Email Address" style="color:#000;background:#eee" id="emailTf">
+    </div>
+    <div class="input-group mb-3">
+    <div class="form-group">
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="creditOrDebitTf" value="credit" checked>
+    <label class="form-check-label">Credit</label>
+    </div>
+    <div class="form-check">
+    <input class="form-check-input" type="radio" name="creditOrDebitTf" value="debit">
+    <label class="form-check-label">Debit</label>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Funds" style="color:#000;background:#eee" id="fundsTf">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Comment" style="color:#000;background:#eee" id="commentTf">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnTransferFunds">Transfer Funds</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#transferFundsSection").html(transferFundsHtml);
 
-    let levelHtml = '\
-    <div class="modal fade" id="levelDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Level</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Change the level of the account</p>\
-    <form id="levelForm">\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Level" style="color:#000;background:#eee" id="levelL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Opening Long" style="color:#000;background:#eee" id="commissionOpeningLongL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Closing Long" style="color:#000;background:#eee" id="commissionClosingLongL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Opening Short" style="color:#000;background:#eee" id="commissionOpeningShortL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Commission Closing Short" style="color:#000;background:#eee" id="commissionClosingShortL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Ask Mark Up" style="color:#000;background:#eee" id="askMarkUpL">\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Bid Mark Up" style="color:#000;background:#eee" id="bidMarkUpL">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnChangeLevel">Change</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let levelHtml = `
+    <div class="modal fade" id="levelDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Level</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Change the level of the account</p>
+    <form id="levelForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Level" style="color:#000;background:#eee" id="levelL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Opening Long" style="color:#000;background:#eee" id="commissionOpeningLongL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Closing Long" style="color:#000;background:#eee" id="commissionClosingLongL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Opening Short" style="color:#000;background:#eee" id="commissionOpeningShortL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Commission Closing Short" style="color:#000;background:#eee" id="commissionClosingShortL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Ask Mark Up" style="color:#000;background:#eee" id="askMarkUpL">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Bid Mark Up" style="color:#000;background:#eee" id="bidMarkUpL">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnChangeLevel">Change</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#levelSection").html(levelHtml);
 
-    let downloadReportHtml = '\
-    <div class="modal fade" id="downloadTraderReportDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Download Report</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Download the report of the specific trader</p>\
-    <form id="downloadTraderReportForm">\
-    <div class="input-group mb-3">\
-    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">\
-    <div class="input-group date" data-target-input="nearest">\
-    <input type="text" placeholder="Start Date" class="form-control datetimepicker-input" data-target="#startDtDtr" style="color:#000;background:#eee" id="startDtDtr" />\
-    <div class="input-group-append" data-target="#startDtDtr" data-toggle="datetimepicker">\
-    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">\
-    <div class="input-group date" data-target-input="nearest">\
-    <input type="text" placeholder="End Date" class="form-control datetimepicker-input" data-target="#endDtDtr" style="color:#000;background:#eee" id="endDtDtr" />\
-    <div class="input-group-append" data-target="#endDtDtr" data-toggle="datetimepicker">\
-    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="input-group mb-3">\
-    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdDtr">\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnDownloadTraderReport">Download</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let downloadReportHtml = `
+    <div class="modal fade" id="downloadTraderReportDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Download Report</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Download the report of the specific trader</p>
+    <form id="downloadTraderReportForm">
+    <div class="input-group mb-3">
+    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">
+    <div class="input-group date" data-target-input="nearest">
+    <input type="text" placeholder="Start Date" class="form-control datetimepicker-input" data-target="#startDtDtr" style="color:#000;background:#eee" id="startDtDtr" />
+    <div class="input-group-append" data-target="#startDtDtr" data-toggle="datetimepicker">
+    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <div class="form-group col-12" style="padding-left:0px;padding-right:0px">
+    <div class="input-group date" data-target-input="nearest">
+    <input type="text" placeholder="End Date" class="form-control datetimepicker-input" data-target="#endDtDtr" style="color:#000;background:#eee" id="endDtDtr" />
+    <div class="input-group-append" data-target="#endDtDtr" data-toggle="datetimepicker">
+    <div class="input-group-text"><i class="fa fa-calendar" style="color:#fff"></i></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Account ID" style="color:#000;background:#eee" id="accountIdDtr">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnDownloadTraderReport">Download</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#downloadTraderReportSection").html(downloadReportHtml);
 
@@ -3244,13 +3347,13 @@ window.fiui.accountList = {
     });
 
     $("#btnBindAccount").on("click", function () {
-      $("#bindAccountDlg").modal("hide");
+      that.hideBind();
 
       fisdk.bindAccount($("#accountIdBa").val(), $("#identifierBa").val());
     });
 
     $("#btnTransferFunds").on("click", function () {
-      $("#transferFundsDlg").modal("hide");
+      that.hideFunding();
 
       if ($('input[name="creditOrDebitTf"]:checked', '#transferFundsForm').val() == "credit") {
         fisdk.transferFunds($("#brokerNameTf").val(), $("#emailTf").val(), parseFloat($("#fundsTf").val()), $("#commentTf").val());
@@ -3283,12 +3386,12 @@ window.fiui.accountList = {
           throw new Error("Bid Mark Up is required.")
         }
       } catch (e) {
-        $("#levelDlg").modal("hide");
+        that.hideLevel();
         toastr.error(e.message);
         return;
       }
 
-      $("#levelDlg").modal("hide");
+      that.hideLevel();
 
       fisdk.changeLevel($("#accountIdL").val(), parseInt($("#levelL").val()),
         parseFloat($("#commissionOpeningLongL").val()), parseFloat($("#commissionClosingLongL").val()), parseFloat($("#commissionOpeningShortL").val()), parseFloat($("#commissionClosingShortL").val()),
@@ -3296,7 +3399,7 @@ window.fiui.accountList = {
     });
 
     $("#btnDownloadTraderReport").on("click", function () {
-      $("#downloadTraderReportDlg").modal("hide");
+      that.hideReport();
 
       fisdk.downloadTraderReport(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, $("#accountIdDtr").val(), Math.floor(new Date($("#startDtDtr").val()).getTime() / 1000), Math.floor(new Date($("#endDtDtr").val()).getTime() / 1000));
     });
@@ -3316,6 +3419,7 @@ window.fiui.accountList = {
     }
   },
   render: function (res) {
+    let that = this;
     let accountTable = null;
 
     if ($.fn.dataTable.isDataTable("#accountList")) {
@@ -3422,7 +3526,7 @@ window.fiui.accountList = {
 
         $("#accountIdBa").val(data[res.accounts.colIndex.accountId]);
 
-        $("#bindAccountDlg").modal("show");
+        that.showBind();
       }
     });
 
@@ -3455,7 +3559,7 @@ window.fiui.accountList = {
         $("#brokerNameTf").val(brokerName);
         $("#emailTf").val(data[res.accounts.colIndex.email]);
 
-        $("#transferFundsDlg").modal("show");
+        that.showFunding();
       }
     });
 
@@ -3492,7 +3596,7 @@ window.fiui.accountList = {
         $("#askMarkUpL").val(data[res.accounts.colIndex.ask]);
         $("#bidMarkUpL").val(data[res.accounts.colIndex.bid]);
 
-        $("#levelDlg").modal("show");
+        that.showLevel();
       }
     });
 
@@ -3502,7 +3606,7 @@ window.fiui.accountList = {
 
         $("#accountIdDtr").val(data[res.accounts.colIndex.accountId]);
 
-        $("#downloadTraderReportDlg").modal("show");
+        that.showReport();
 
         $("#startDtDtr").datetimepicker({
           format: "L"
@@ -3536,6 +3640,30 @@ window.fiui.accountList = {
   hide: function () {
     $("#accountSection").hide();
   },
+  showBind: function () {
+    $("#bindAccountDlg").modal("show");
+  },
+  hideBind: function () {
+    $("#bindAccountDlg").modal("hide");
+  },
+  showFunding: function () {
+    $("#transferFundsDlg").modal("show");
+  },
+  hideFunding: function () {
+    $("#transferFundsDlg").modal("hide");
+  },
+  showLevel: function () {
+    $("#levelDlg").modal("show");
+  },
+  hideLevel: function () {
+    $("#levelDlg").modal("hide");
+  },
+  showReport: function () {
+    $("#downloadTraderReportDlg").modal("show");
+  },
+  hideReport: function () {
+    $("#downloadTraderReportDlg").modal("hide");
+  },
   adjustCol: function () {
     $("#accountList").DataTable().columns.adjust();
   },
@@ -3551,81 +3679,81 @@ window.fiui.accountList = {
 // symbol list component
 window.fiui.symbolList = {
   init: function () {
-    let symbolListHtml = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Symbols</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Symbols</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Symbol List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="symbolList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    <div class="card-footer">\
-    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg">Add</button>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let symbolListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Symbols</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Symbols</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Symbol List</h3>
+    </div>
+    <div class="card-body">
+    <table id="symbolList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg">Add</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#symbolSection").html(symbolListHtml);
 
-    let symbolsHtml = '\
-    <div class="modal fade" id="symbolsDlg">\
-    <div class="modal-dialog">\
-    <div class="modal-content bg-info">\
-    <div class="modal-header">\
-    <h4 class="modal-title">Symbols</h4>\
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    <span aria-hidden="true">&times;</span>\
-    </button>\
-    </div>\
-    <div class="modal-body">\
-    <div class="login-box" style="width:auto">\
-    <div class="card">\
-    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">\
-    <p class="login-box-msg">Import symbols</p>\
-    <form id="symbolsForm">\
-    <div class="input-group mb-3">\
-    <textarea class="form-control" rows="20" placeholder="Symbols" style="color:#000;background:#eee" id="symbols"></textarea>\
-    </div>\
-    <div class="row">\
-    <div class="col-12" style="text-align:center">\
-    <div class="btn-group">\
-    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>\
-    <button type="button" class="btn btn-primary" id="btnAddSymbols">Add</button>\
-    <button type="button" class="btn btn-primary" id="btnModifySymbol">Modify</button>\
-    </div>\
-    </div>\
-    </div>\
-    </form>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>';
+    let symbolsHtml = `
+    <div class="modal fade" id="symbolsDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Symbols</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Import symbols</p>
+    <form id="symbolsForm">
+    <div class="input-group mb-3">
+    <textarea class="form-control" rows="20" placeholder="Symbols" style="color:#000;background:#eee" id="symbols"></textarea>
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnAddSymbols">Add</button>
+    <button type="button" class="btn btn-primary" id="btnModifySymbol">Modify</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
 
     $("#symbolsSection").html(symbolsHtml);
 
@@ -3697,14 +3825,14 @@ window.fiui.symbolList = {
 
     $("#btnShowSymbolsDlg").on("click", function () {
       if (window.fiac.tradeToken != null) {
-        $("#symbolsDlg").modal("show");
+        that.showDlg();
       } else {
         toastr.error("Please login.");
       }
     });
 
     $("#btnAddSymbols").on("click", function () {
-      $("#symbolsDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.tradeToken != null) {
         fisdk.addSymbols($("#symbols").val());
@@ -3718,7 +3846,7 @@ window.fiui.symbolList = {
     });
 
     $("#btnModifySymbol").on("click", function () {
-      $("#symbolsDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.tradeToken != null) {
         fisdk.modifySymbol($("#symbols").val());
@@ -3791,13 +3919,15 @@ window.fiui.symbolList = {
     this.symbolTable = symbolTable;
     this.symbolDataTable = $("#symbolList").dataTable();
 
+    let that = this;
+
     $("#symbolList tbody").on("click", "[id*=btnEditSymbolInfo]", function () {
       if (symbolTable != null) {
         let data = symbolTable.row($(this).parents("tr")).data();
 
         $("#symbols").val(data[res.symbols.colIndex.symbolName]);
 
-        $("#symbolsDlg").modal("show");
+        that.showDlg();
       }
     });
 
@@ -3823,45 +3953,51 @@ window.fiui.symbolList = {
   },
   hide: function () {
     $("#symbolSection").hide();
+  },
+  showDlg: function () {
+    $("#symbolsDlg").modal("show");
+  },
+  hideDlg: function () {
+    $("#symbolsDlg").modal("hide");
   }
 };
 
 // open position list component
 window.fiui.openPosList = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Open Postions</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Open Postions</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Open Postion List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="openPosList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Open Postions</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Open Postions</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Open Postion List</h3>
+    </div>
+    <div class="card-body">
+    <table id="openPosList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#openPosSection").html(html);
 
@@ -3933,39 +4069,39 @@ window.fiui.openPosList = {
 // grouped open position list component
 window.fiui.groupedOpenPosList = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Grouped Open Postions</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Grouped Open Postions</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Grouped Open Postion List</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="groupedOpenPosList" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Grouped Open Postions</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Grouped Open Postions</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Grouped Open Postion List</h3>
+    </div>
+    <div class="card-body">
+    <table id="groupedOpenPosList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#groupedOpenPosSection").html(html);
 
@@ -4053,39 +4189,39 @@ window.fiui.groupedOpenPosList = {
 // funding history component
 window.fiui.fundingHistory = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Funding History</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Funding History</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Funding History</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="fundingHistory" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Funding History</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Funding History</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Funding History</h3>
+    </div>
+    <div class="card-body">
+    <table id="fundingHistory" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#fundingSection").html(html);
 
@@ -4151,39 +4287,39 @@ window.fiui.fundingHistory = {
 // execution report component
 window.fiui.execReports = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Execution Reports</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Execution Reports</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h3 class="card-title">Execution Reports</h3>\
-    </div>\
-    <div class="card-body">\
-    <table id="execReports" class="table table-bordered table-striped">\
-    </table>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Execution Reports</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Execution Reports</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Execution Reports</h3>
+    </div>
+    <div class="card-body">
+    <table id="execReports" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#execReportSection").html(html);
 
@@ -4232,153 +4368,153 @@ window.fiui.execReports = {
 // summary component
 window.fiui.summary = {
   init: function () {
-    let html = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Dashboard</h1>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-12 col-sm-6 col-md-3">\
-    <div class="info-box">\
-    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>\
-    <div class="info-box-content">\
-    <span class="info-box-text">Traders</span>\
-    <span class="info-box-number" id="traderCnt">0</span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="col-12 col-sm-6 col-md-3">\
-    <div class="info-box mb-3">\
-    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-shopping-cart"></i></span>\
-    <div class="info-box-content">\
-    <span class="info-box-text">Margin Used</span>\
-    <span class="info-box-number" id="marginUsedSum">0</span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="clearfix hidden-md-up"></div>\
-    <div class="col-12 col-sm-6 col-md-3">\
-    <div class="info-box mb-3">\
-    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-money-bill"></i></span>\
-    <div class="info-box-content">\
-    <span class="info-box-text">Balance</span>\
-    <span class="info-box-number" id="balanceSum">0</span>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="col-12 col-sm-6 col-md-3">\
-    <div class="info-box mb-3">\
-    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-coins"></i></span>\
-    <div class="info-box-content">\
-    <span class="info-box-text">Margin Available</span>\
-    <span class="info-box-number" id="marginAvailSum">0</span>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="row">\
-    <div class="col-md-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h5 class="card-title">Performance</h5>\
-    <div class="card-tools">\
-    <button type="button" class="btn btn-tool" data-card-widget="collapse">\
-    <i class="fas fa-minus"></i>\
-    </button>\
-    <button type="button" class="btn btn-tool" data-card-widget="remove">\
-    <i class="fas fa-times"></i>\
-    </button>\
-    </div>\
-    </div>\
-    <div class="card-body">\
-    <div class="row">\
-    <div class="col-md-8">\
-    <p class="text-center">\
-    <strong>Latest Total PL</strong>\
-    </p>\
-    <div class="chart">\
-    <canvas id="plChart" height="180" style="height: 180px;"></canvas>\
-    </div>\
-    </div>\
-    <div class="col-md-4">\
-    <p class="text-center">\
-    <strong>PL / Balance</strong>\
-    </p>\
-    <div class="progress-group">\
-    <span class="progress-text">ID: <a href="#" id="lnkAccountId0"></a></span>\
-    <span class="float-right" id="plBalance0"><b>0</b> / 0</span>\
-    <div class="progress progress-sm">\
-    <div class="progress-bar bg-success" style="width: 100%" id="performance0"></div>\
-    </div>\
-    </div>\
-    <div class="progress-group">\
-    <span class="progress-text">ID: <a href="#" id="lnkAccountId1"></a></span>\
-    <span class="float-right" id="plBalance1"><b>0</b> / 0</span>\
-    <div class="progress progress-sm">\
-    <div class="progress-bar bg-primary" style="width: 100%" id="performance1"></div>\
-    </div>\
-    </div>\
-    <div class="progress-group">\
-    <span class="progress-text">ID: <a href="#" id="lnkAccountId2"></a></span>\
-    <span class="float-right" id="plBalance2"><b>0</b> / 0</span>\
-    <div class="progress progress-sm">\
-    <div class="progress-bar bg-warning" style="width: 100%" id="performance2"></div>\
-    </div>\
-    </div>\
-    <div class="progress-group">\
-    <span class="progress-text">ID: <a href="#" id="lnkAccountId3"></a></span>\
-    <span class="float-right" id="plBalance3"><b>0</b> / 0</span>\
-    <div class="progress progress-sm">\
-    <div class="progress-bar bg-danger" style="width: 100%" id="performance3"></div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <div class="card-footer">\
-    <div class="row">\
-    <div class="col-sm-3 col-6">\
-    <div class="description-block border-right">\
-    <span class="description-percentage text-warning" id="totalPlIndi"><i class="fas fa-caret-left"></i></span>\
-    <h5 class="description-header" id="totalPl">0</h5>\
-    <span class="description-text">PROFIT &amp; LOSS</span>\
-    </div>\
-    </div>\
-    <div class="col-sm-3 col-6">\
-    <div class="description-block border-right">\
-    <span class="description-percentage text-warning" id="equityIndi"><i class="fas fa-caret-left"></i></span>\
-    <h5 class="description-header" id="equity">0</h5>\
-    <span class="description-text">EQUITY</span>\
-    </div>\
-    </div>\
-    <div class="col-sm-3 col-6">\
-    <div class="description-block border-right">\
-    <span class="description-percentage text-warning" id="marginUsedIndi"><i class="fas fa-caret-left"></i></span>\
-    <h5 class="description-header" id="marginUsed">0</h5>\
-    <span class="description-text">MARGIN USED</span>\
-    </div>\
-    </div>\
-    <div class="col-sm-3 col-6">\
-    <div class="description-block">\
-    <span class="description-percentage text-warning" id="marginAvailableIndi"><i class="fas fa-caret-left"></i></span>\
-    <h5 class="description-header" id="marginAvailable">0</h5>\
-    <span class="description-text">MARGIN AVAIL</span>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+    let html = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Dashboard</h1>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Traders</span>
+    <span class="info-box-number" id="traderCnt">0</span>
+    </div>
+    </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-shopping-cart"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Margin Used</span>
+    <span class="info-box-number" id="marginUsedSum">0</span>
+    </div>
+    </div>
+    </div>
+    <div class="clearfix hidden-md-up"></div>
+    <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-money-bill"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Balance</span>
+    <span class="info-box-number" id="balanceSum">0</span>
+    </div>
+    </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-coins"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Margin Available</span>
+    <span class="info-box-number" id="marginAvailSum">0</span>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    <div class="card">
+    <div class="card-header">
+    <h5 class="card-title">Performance</h5>
+    <div class="card-tools">
+    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+    <i class="fas fa-minus"></i>
+    </button>
+    <button type="button" class="btn btn-tool" data-card-widget="remove">
+    <i class="fas fa-times"></i>
+    </button>
+    </div>
+    </div>
+    <div class="card-body">
+    <div class="row">
+    <div class="col-md-8">
+    <p class="text-center">
+    <strong>Latest Total PL</strong>
+    </p>
+    <div class="chart">
+    <canvas id="plChart" height="180" style="height: 180px;"></canvas>
+    </div>
+    </div>
+    <div class="col-md-4">
+    <p class="text-center">
+    <strong>PL / Balance</strong>
+    </p>
+    <div class="progress-group">
+    <span class="progress-text">ID: <a href="#" id="lnkAccountId0"></a></span>
+    <span class="float-right" id="plBalance0"><b>0</b> / 0</span>
+    <div class="progress progress-sm">
+    <div class="progress-bar bg-success" style="width: 100%" id="performance0"></div>
+    </div>
+    </div>
+    <div class="progress-group">
+    <span class="progress-text">ID: <a href="#" id="lnkAccountId1"></a></span>
+    <span class="float-right" id="plBalance1"><b>0</b> / 0</span>
+    <div class="progress progress-sm">
+    <div class="progress-bar bg-primary" style="width: 100%" id="performance1"></div>
+    </div>
+    </div>
+    <div class="progress-group">
+    <span class="progress-text">ID: <a href="#" id="lnkAccountId2"></a></span>
+    <span class="float-right" id="plBalance2"><b>0</b> / 0</span>
+    <div class="progress progress-sm">
+    <div class="progress-bar bg-warning" style="width: 100%" id="performance2"></div>
+    </div>
+    </div>
+    <div class="progress-group">
+    <span class="progress-text">ID: <a href="#" id="lnkAccountId3"></a></span>
+    <span class="float-right" id="plBalance3"><b>0</b> / 0</span>
+    <div class="progress progress-sm">
+    <div class="progress-bar bg-danger" style="width: 100%" id="performance3"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="card-footer">
+    <div class="row">
+    <div class="col-sm-3 col-6">
+    <div class="description-block border-right">
+    <span class="description-percentage text-warning" id="totalPlIndi"><i class="fas fa-caret-left"></i></span>
+    <h5 class="description-header" id="totalPl">0</h5>
+    <span class="description-text">PROFIT &amp; LOSS</span>
+    </div>
+    </div>
+    <div class="col-sm-3 col-6">
+    <div class="description-block border-right">
+    <span class="description-percentage text-warning" id="equityIndi"><i class="fas fa-caret-left"></i></span>
+    <h5 class="description-header" id="equity">0</h5>
+    <span class="description-text">EQUITY</span>
+    </div>
+    </div>
+    <div class="col-sm-3 col-6">
+    <div class="description-block border-right">
+    <span class="description-percentage text-warning" id="marginUsedIndi"><i class="fas fa-caret-left"></i></span>
+    <h5 class="description-header" id="marginUsed">0</h5>
+    <span class="description-text">MARGIN USED</span>
+    </div>
+    </div>
+    <div class="col-sm-3 col-6">
+    <div class="description-block">
+    <span class="description-percentage text-warning" id="marginAvailableIndi"><i class="fas fa-caret-left"></i></span>
+    <h5 class="description-header" id="marginAvailable">0</h5>
+    <span class="description-text">MARGIN AVAIL</span>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#summarySection").html(html);
 
@@ -4662,52 +4798,53 @@ window.fiui.stats = {
   renderBr: function () {
     if (typeof window.fiac.brRanking == "undefined" || window.fiac.brRanking.length == 0) return;
 
-    let html1 = '\
-    <div class="content-header">\
-    <div class="container-fluid">\
-    <div class="row mb-2">\
-    <div class="col-sm-6">\
-    <h1 class="m-0">Statistics</h1>\
-    </div>\
-    <div class="col-sm-6">\
-    <ol class="breadcrumb float-sm-right">\
-    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>\
-    <li class="breadcrumb-item active">Statistics</li>\
-    </ol>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    <section class="content">\
-    <div class="container-fluid">\
-    <div class="row">\
-    <div class="col-md-12">\
-    <div class="card">\
-    <div class="card-header">\
-    <h5 class="card-title">Performance of Brokers</h5>\
-    <div class="card-tools">\
-    <button type="button" class="btn btn-tool" data-card-widget="collapse">\
-    <i class="fas fa-minus"></i>\
-    </button>\
-    <button type="button" class="btn btn-tool" data-card-widget="remove">\
-    <i class="fas fa-times"></i>\
-    </button>\
-    </div>\
-    </div>\
-    <div class="card-body">\
-    <div class="row">\
-    <div class="col-md-8">\
-    <p class="text-center">\
-    <strong>Latest PL</strong>\
-    </p>\
-    <div class="chart">\
-    <canvas id="brokerPlChart" height="180" style="height: 180px;"></canvas>\
-    </div>\
-    </div>\
-    <div class="col-md-4">\
-    <p class="text-center">\
-    <strong>PL / Balance</strong>\
-    </p>';
+    let html1 = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Statistics</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Statistics</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-12">
+    <div class="card">
+    <div class="card-header">
+    <h5 class="card-title">Performance of Brokers</h5>
+    <div class="card-tools">
+    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+    <i class="fas fa-minus"></i>
+    </button>
+    <button type="button" class="btn btn-tool" data-card-widget="remove">
+    <i class="fas fa-times"></i>
+    </button>
+    </div>
+    </div>
+    <div class="card-body">
+    <div class="row">
+    <div class="col-md-8">
+    <p class="text-center">
+    <strong>Latest PL</strong>
+    </p>
+    <div class="chart">
+    <canvas id="brokerPlChart" height="180" style="height: 180px;"></canvas>
+    </div>
+    </div>
+    <div class="col-md-4">
+    <p class="text-center">
+    <strong>PL / Balance</strong>
+    </p>`;
+
     let html2 = '';
     for (let i in window.fiac.brRanking) {
       let tmp =
@@ -4721,17 +4858,18 @@ window.fiui.stats = {
 
       html2 += tmp;
     }
-    let html3 = '\
-    </div>\
-    </div>\
-    </div>\
-    <div class="card-footer">\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </div>\
-    </section>';
+
+    let html3 = `
+    </div>
+    </div>
+    </div>
+    <div class="card-footer">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
 
     $("#statsSection").html(html1 + html2 + html3);
 
@@ -4882,6 +5020,7 @@ window.fiui.copyTradeList = {
     </div>
     <section class="content">
     <div class="container-fluid">
+    <p style="color:#ff5500">Please use accounts registered on the Fintechee Demo server to try out copy trading. We are currently testing additional hubs.</p>
     <div id="proList">
     </div>
     <div class="row">
@@ -4977,10 +5116,9 @@ window.fiui.copyTradeList = {
         });
 
         $("#commentCt").val(pro[1] + ":" + pro[2]);
-        $("#copyTradeDlg").modal("show");
+        that.showDlg();
       });
     })
-
 
     let copyTradeDlgHtml = `
     <div class="modal fade" id="copyTradeDlg">
@@ -5196,11 +5334,11 @@ window.fiui.copyTradeList = {
     });
 
     $("#btnShowCopyTrade").on("click", function () {
-      $("#copyTradeDlg").modal("show");
+      that.showDlg();
     });
 
     $("#btnProposeCopyTrade").on("click", function () {
-      $("#copyTradeDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.tradeToken != null) {
         if (!window.fiac.info.bManager) {
@@ -5330,6 +5468,12 @@ window.fiui.copyTradeList = {
   },
   hide: function () {
     $("#copyTradeSection").hide();
+  },
+  showDlg: function () {
+    $("#copyTradeDlg").modal("show");
+  },
+  hideDlg: function () {
+    $("#copyTradeDlg").modal("hide");
   },
   adjustCol: function () {
     $("#copyTradeList").DataTable().columns.adjust();
@@ -5463,11 +5607,11 @@ window.fiui.privilegeList = {
     });
 
     $("#btnShowPrivilege").on("click", function () {
-      $("#privilegeDlg").modal("show");
+      that.showDlg();
     });
 
     $("#btnGrantPrivilege").on("click", function () {
-      $("#privilegeDlg").modal("hide");
+      that.hideDlg();
 
       if (window.fiac.info.bManager && window.fiac.tradeToken != null) {
         fisdk.grantPrivilege($("#accountIdPv").val(), $("#privilegePv").val());
@@ -5537,6 +5681,12 @@ window.fiui.privilegeList = {
   hide: function () {
     $("#privilegeSection").hide();
   },
+  showDlg: function () {
+    $("#privilegeDlg").modal("show");
+  },
+  hideDlg: function () {
+    $("#privilegeDlg").modal("hide");
+  },
   adjustCol: function () {
     $("#privilegeList").DataTable().columns.adjust();
   }
@@ -5544,8 +5694,35 @@ window.fiui.privilegeList = {
 
 // championship component
 window.fiui.championship = {
+  area: "Guide",
   championship: null,
   init: function () {
+    const pageName = window.location.pathname.split('/').pop();
+    let desc = "";
+
+    if (pageName.indexOf("champion-dashboard") != -1) {
+      this.area = "Area 1";
+      $("a[target='web-trader']").attr("href", "/champion-trader");
+    } else if (pageName.indexOf("champion-dashboard2") != -1) {
+      this.area = "Area 2";
+    } else if (pageName.indexOf("champion-dashboard3") != -1) {
+      this.area = "Area 3";
+    } else if (pageName.indexOf("champion-dashboard4") != -1) {
+      this.area = "Area 4";
+    } else if (pageName.indexOf("dashboard") != -1) {
+      desc = `
+      <ul>
+      <li>No real funds except for the prize will be involved(risk-free).</li>
+      <li>After entering the respective area, please select the corresponding championship unit to register for the competition account.</li>
+      <li>Each championship area consists of three units, with 32 participants in each unit competing in an elimination format to determine the first-place winner, who will receive a $500 cash prize.</li>
+      <li>Please do not register with the same email for multiple championship units; any such duplications will result in disqualification.</li>
+      <li>Elimination rounds begin one week after the start of the competition, with each week pitting two participants against each other based on their net equity.</li>
+      <li>The participant with the higher net equity advances to the next week, while those with equal net equity are randomly drawn to determine the winner.</li>
+      <li>The ultimate winner of each unit will be determined over a five-week period. The starting date for each unit's competition will be announced one week before the championship begins.</li>
+      </ul>
+      <p class="text-warning">Please choose a Championship Area to enter.</p>`;
+    }
+
     let championshipHtml =
     `<div class="content-header">
     <div class="container-fluid">
@@ -5556,7 +5733,7 @@ window.fiui.championship = {
     <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
-    <li class="breadcrumb-item active">Championship</li>
+    <li class="breadcrumb-item active">${this.area}</li>
     </ol>
     </div>
     </div>
@@ -5568,13 +5745,64 @@ window.fiui.championship = {
     <div class="col-12">
     <div class="card">
     <div class="card-header">
-    <h3 class="card-title">Championship</h3>
+    <h3 class="card-title">${this.area}</h3>
     </div>
     <div class="card-body">
+    ${desc}
+    <div class="row">
+    <div class="col-12 col-sm-6 col-md-3" id="championshipArea1" style="cursor:pointer">
+    <div class="info-box">
+    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-trophy"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Area 1</span>
+    <span class="info-box-number"></span>
+    </div>
+    </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3" id="championshipArea2">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-trophy"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Area 2(Maintaining)</span>
+    <span class="info-box-number"></span>
+    </div>
+    </div>
+    </div>
+    <div class="clearfix hidden-md-up"></div>
+    <div class="col-12 col-sm-6 col-md-3" id="championshipArea3">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-trophy"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Area 3(Maintaining)</span>
+    <span class="info-box-number"></span>
+    </div>
+    </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3" id="championshipArea4">
+    <div class="info-box mb-3">
+    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-trophy"></i></span>
+    <div class="info-box-content">
+    <span class="info-box-text">Area 4(Maintaining)</span>
+    <span class="info-box-number"></span>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+    <p class="text-warning">Check the match status:</p>
+    <div class="btn-group">
+    <button class="btn btn-sm btn-success" id="championshipUnit1">Unit 1</button>
+    <button class="btn btn-sm btn-success" id="championshipUnit2">Unit 2</button>
+    <button class="btn btn-sm btn-success" id="championshipUnit3">Unit 3</button>
+    </div>
+    </div>
+    </div>
     <div id="brackets"></div>
     </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnJoinChampionship">Join</button>
+    <button type="button" class="btn btn-success" id="btnJoinChampionship">Join</button>
+    <button type="button" class="btn btn-primary" id="btnBackToDashboard">Back to Dashboard</button>
     </div>
     </div>
     </div>
@@ -5583,6 +5811,10 @@ window.fiui.championship = {
     </section>`;
 
     $("#championshipSection").html(championshipHtml);
+    if (this.area == "Guide") {
+      $("#btnJoinChampionship").hide();
+      $("#btnBackToDashboard").hide();
+    }
 
     let that = this;
 
@@ -5593,18 +5825,26 @@ window.fiui.championship = {
         } else if (that.championship != null && that.championship.isFull) {
           toastr.error("The capacity is full.");
         } else {
+          let brokerId = window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
+          const regex = /^c\d+$/;
+
+          if (!regex.test(brokerId)) {
+            toastr.error("Please select a hosting server for the championship.");
+            return;
+          }
+
           $.ajax({
             type: "POST",
             url: "https://nafy6vz88b.execute-api.eu-central-1.amazonaws.com/v1/championship",
             data: JSON.stringify({
-              brokerName: window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId],
+              brokerName: brokerId,
               accountId: window.fiac.accountId,
               tradeToken: window.fiac.tradeToken
             }),
             success: function (data) {
               if (data.res == "success") {
                 toastr.info("You participated successfully.");
-                that.getChampionship();
+                that.getChampionship(null);
               } else {
                 toastr.error("The capacity is full.");
               }
@@ -5616,10 +5856,35 @@ window.fiui.championship = {
       window.fiui.confirmDlg.show();
     });
 
-    this.getChampionship();
+    $("#btnBackToDashboard").on("click", function () {
+      window.location.href = "/dashboard";
+    });
+
+    $("#championshipArea1").on("click", function () {
+      window.location.href = "/champion-dashboard";
+    });
+
+    $("#championshipUnit1").on("click", function () {
+      that.getChampionship("c1");
+    });
   },
-  getChampionship: async function () {
-    let brokerId = window.fiac.brokerName == null ? "fe" : window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
+  getChampionship: async function (unit) {
+    if (unit == null && window.fiac.brokerName == null) {
+      if (this.area != "Guide") {
+        toastr.error("Please login.");
+      }
+      return;
+    }
+
+    let brokerId = unit == null ? window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId] : unit;
+    const regex = /^c\d+$/;
+
+    if (!regex.test(brokerId)) {
+      if ($("#championshipSection").css("display") == "block") {
+        toastr.error("Please select a hosting server unit for the championship.");
+      }
+      // return;
+    }
 
     window.fiui.loadingDimmer.show();
 
@@ -5639,19 +5904,12 @@ window.fiui.championship = {
       skipConsolationRound: true
     });
   },
+  render: function () {
+    window.fiui.championship.getChampionship(null);
+  },
   show: function () {
     $("#championshipSection").show();
-
-    if (this.championship != null) {
-      $("#brackets").bracket({
-        init: this.championship.brackets,
-        // teamWidth: 60,
-        // scoreWidth: 80,
-        // matchMargin: 100,
-        // roundMargin: 100,
-        skipConsolationRound: true
-      });
-    }
+    this.getChampionship(null);
   },
   hide: function () {
     $("#championshipSection").hide();
@@ -5672,6 +5930,7 @@ function loadDashboard () {
   window.fiui.profile.init();
   window.fiui.sidebar.init();
   window.fiui.confirmDlg.init();
+  window.fiui.messageDlg.init();
   window.fiui.signUp.init();
   window.fiui.signIn.init();
   window.fiui.mfa.init();
