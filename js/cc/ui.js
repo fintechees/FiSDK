@@ -1216,6 +1216,7 @@ window.fiui.signIn = {
 
     fisdk.subscribeToNotification("signing_in_done", function (res) {
       console.log("signing_in_done");
+      toastr.info("You signed in successfully.");
       if (typeof res.message != "undefined" && res.message != "") {
         console.log(res.message);
       }
