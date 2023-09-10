@@ -5881,6 +5881,10 @@ window.fiui.championship = {
       return;
     }
 
+    if (unit == null && window.fiac.info.brokers.data.length == 0) {
+      return;
+    }
+
     let brokerId = unit == null ? window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId] : unit;
     const regex = /^c\d+$/;
 
