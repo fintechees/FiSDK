@@ -5696,6 +5696,7 @@ window.fiui.privilegeList = {
 // championship component
 window.fiui.championship = {
   area: "Guide",
+  calendar: null,
   championship: null,
   init: function () {
     const pageName = window.location.pathname.split('/').pop();
@@ -5799,6 +5800,8 @@ window.fiui.championship = {
     </div>
     </div>
     </div>
+    <br>
+    <div id="championshipCalendar"></div>
     <div id="brackets"></div>
     </div>
     <div class="card-footer">
@@ -5813,24 +5816,25 @@ window.fiui.championship = {
 
     $("#championshipSection").html(championshipHtml);
     if (this.area == "Guide") {
-      $("#btnJoinChampionship").hide();
       $("#btnBackToDashboard").hide();
     }
+
+    this.getCalendar();
 
     let that = this;
 
     $("#btnJoinChampionship").on("click", function () {
       window.fiui.confirmDlg.nextProcessCallback = function () {
-        if (window.fiac.info == null) {
+        if (window.fiac.brokerName == null) {
           toastr.error("Please login.");
-        } else if (that.championship != null && that.championship.isFull) {
-          toastr.error("The capacity is full.");
+        } else if (window.fiac.info == null) {
+          toastr.error("Please wait for totally loading done.");
         } else {
           let brokerId = window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
           const regex = /^c\d+$/;
 
           if (!regex.test(brokerId)) {
-            toastr.error("Please select a hosting server for the championship.");
+            toastr.error("Please choose an AREA to enter and then join.");
             return;
           }
 
@@ -5870,8 +5874,13 @@ window.fiui.championship = {
     });
 
     $("#championshipUnit1").on("click", function () {
+      that.renderCalendar();
       that.getChampionship("c1");
     });
+  },
+  getCalendar: async function () {
+    const response = await fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/championship/calendar.json`);
+    this.calendar = await response.json();
   },
   getChampionship: async function (unit) {
     if (unit == null && window.fiac.brokerName == null) {
@@ -5881,7 +5890,7 @@ window.fiui.championship = {
       return;
     }
 
-    if (unit == null && window.fiac.info.brokers.data.length == 0) {
+    if (unit == null && (window.fiac.info == null || window.fiac.info.brokers.data.length == 0)) {
       return;
     }
 
@@ -5892,7 +5901,7 @@ window.fiui.championship = {
       if ($("#championshipSection").css("display") == "block") {
         toastr.error("Please select a hosting server unit for the championship.");
       }
-      // return;
+      return;
     }
 
     window.fiui.loadingDimmer.show();
@@ -5907,18 +5916,36 @@ window.fiui.championship = {
     $("#brackets").bracket({
       init: this.championship.brackets,
       // teamWidth: 60,
-      // scoreWidth: 80,
+      scoreWidth: 100,
       // matchMargin: 100,
       // roundMargin: 100,
       skipConsolationRound: true
     });
   },
   render: function () {
-    window.fiui.championship.getChampionship(null);
+    this.getChampionship(null);
+  },
+  renderCalendar: function () {
+    if (this.calendar != null) {
+      for (let i in this.calendar) {
+        const cal = this.calendar[i];
+        if (cal.unit == 'c1') {
+          $("#championshipCalendar").html(
+            `<ul>
+            <li>Week 1: ${cal.weeks[0]}</li>
+            <li>Week 2: ${cal.weeks[1]}</li>
+            <li>Week 3: ${cal.weeks[2]}</li>
+            <li>Week 4: ${cal.weeks[3]}</li>
+            <li>Week 5: ${cal.weeks[4]}</li>
+            </ul>`
+          );
+          break;
+        }
+      }
+    }
   },
   show: function () {
     $("#championshipSection").show();
-    this.getChampionship(null);
   },
   hide: function () {
     $("#championshipSection").hide();
