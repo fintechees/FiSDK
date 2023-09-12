@@ -5919,7 +5919,10 @@ window.fiui.championship = {
       scoreWidth: 100,
       // matchMargin: 100,
       // roundMargin: 100,
-      skipConsolationRound: true
+      skipConsolationRound: true,
+      onMatchClick: function (data) {
+        console.log("onclick(data: '" + data + "')")
+      }
     });
   },
   render: function () {
@@ -5932,11 +5935,11 @@ window.fiui.championship = {
         if (cal.unit == 'c1') {
           $("#championshipCalendar").html(
             `<ul>
-            <li>Week 1: ${cal.weeks[0]}</li>
-            <li>Week 2: ${cal.weeks[1]}</li>
-            <li>Week 3: ${cal.weeks[2]}</li>
-            <li>Week 4: ${cal.weeks[3]}</li>
-            <li>Week 5: ${cal.weeks[4]}</li>
+            <li>Week 1: ${cal.rounds[0]}</li>
+            <li>Week 2: ${cal.rounds[1]}</li>
+            <li>Week 3: ${cal.rounds[2]}</li>
+            <li>Week 4: ${cal.rounds[3]}</li>
+            <li>Week 5: ${cal.rounds[4]}</li>
             </ul>`
           );
           break;
