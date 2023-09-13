@@ -5897,14 +5897,14 @@ window.fiui.championship = {
             }),
             success: function (data) {
               if (data.res == "success") {
-                toastr.info("You participated successfully.");
+                toastr.info(`You participated the competition of ${window.fiac.brokerName} successfully.`);
                 that.getChampionship(null);
               } else if (data.res == "isFull") {
-                toastr.error("The capacity is full.");
+                toastr.error(`The capacity of ${window.fiac.brokerName} is full.`);
               } else if (data.res == "joined") {
-                toastr.error("You have already joined.");
+                toastr.error(`You have already joined the competition of ${window.fiac.brokerName}.`);
               } else if (data.res == "isStarted") {
-                toastr.error("The championship has already started.");
+                toastr.error(`The competition of ${window.fiac.brokerName} has already started.`);
               } else {
                 toastr.error("Failed to participate.");
               }
