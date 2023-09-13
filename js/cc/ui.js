@@ -5,7 +5,7 @@ window.ficfg = {
 // account component
 window.fiac = {
   storageName: "fiac",
-  copyTradingPlatformId: "1267340",
+  copyTradingPlatformId: [],
   reset: function () {
     this.brokerName = null;
     this.accountId = null;
@@ -22,6 +22,7 @@ window.fiac = {
     this.currBroker = null;
   },
   init: function () {
+    this.copyTradingPlatformId["fe"] = "1267340";
     this.reset();
 
     let that = this;
@@ -2888,7 +2889,9 @@ window.fiui.managerList = {
     $("#managerSection").hide();
   },
   adjustCol: function () {
-    $("#managerList").DataTable().columns.adjust();
+    if ($.fn.dataTable.isDataTable("#managerList")) {
+      $("#managerList").DataTable().columns.adjust();
+    }
   }
 };
 
@@ -3666,7 +3669,9 @@ window.fiui.accountList = {
     $("#downloadTraderReportDlg").modal("hide");
   },
   adjustCol: function () {
-    $("#accountList").DataTable().columns.adjust();
+    if ($.fn.dataTable.isDataTable("#accountList")) {
+      $("#accountList").DataTable().columns.adjust();
+    }
   },
   download: function (content, fileName, contentType) {
     let a = document.createElement("a");
@@ -4362,7 +4367,9 @@ window.fiui.execReports = {
     $("#execReportSection").hide();
   },
   adjustCol: function () {
-    $("#execReports").DataTable().columns.adjust();
+    if ($.fn.dataTable.isDataTable("#execReports")) {
+      $("#execReports").DataTable().columns.adjust();
+    }
   }
 };
 
@@ -5071,53 +5078,11 @@ window.fiui.copyTradeList = {
       }
       $("#proList").html(cardsHtml)
 
-      $(".rounded-label").click(function() {
+      $("#proList .rounded-label").click(function() {
         let buttonId = $(this).attr("id");
         let pro = buttonId.split("_");
-        let account = that.pro[pro[1] + ":" + pro[2]];
 
-        $("#profitFactorCt").text("");
-        $("#winRateCt").text("");
-        $("#averageTradeCt").text("");
-        $("#largestWinCt").text("");
-        $("#tradeCountCt").text("");
-        $("#averageWinCt").text("");
-        $("#averageLossCt").text("");
-        $("#winLossRatioCt").text("");
-        $("#maxDrawdownCt").text("");
-        $("#expectancyCt").text("");
-        $("#sharpeRatioCt").text("");
-        $("#zScoreCt").text("");
-        $("#maxConsecutiveWinsCt").text("");
-        $("#maxConsecutiveLossesCt").text("");
-        $("#maxConsecutiveProfitCt").text("");
-        $("#maxConsecutiveLossCt").text("");
-
-        fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${pro[1]}-${pro[2]}.json`)
-        .then(response => response.json())
-        .then(data => {
-          const trades = data;
-
-          $("#profitFactorCt").text(window.fiac.calculateProfitFactor(trades).toFixed(2));
-          $("#winRateCt").text(window.fiac.calculateWinRate(trades).toFixed(2));
-          $("#averageTradeCt").text(window.fiac.calculateAverageTrade(trades).toFixed(2));
-          $("#largestWinCt").text(window.fiac.calculateLargestWin(trades).toFixed(2));
-          $("#tradeCountCt").text(window.fiac.calculateTradeCount(trades));
-          $("#averageWinCt").text(window.fiac.calculateAverageWin(trades).toFixed(2));
-          $("#averageLossCt").text(window.fiac.calculateAverageLoss(trades).toFixed(2));
-          $("#winLossRatioCt").text(window.fiac.calculateWinLossRatio(trades).toFixed(2));
-          $("#maxDrawdownCt").text(window.fiac.calculateMaxDrawdown(trades).toFixed(2));
-          $("#expectancyCt").text(window.fiac.calculateExpectancy(trades).toFixed(2));
-          $("#sharpeRatioCt").text(window.fiac.calculateSharpeRatio(trades, 0.02));
-          $("#zScoreCt").text(window.fiac.calculateZScore(trades).toFixed(2));
-          $("#maxConsecutiveWinsCt").text(window.fiac.calculateMaxConsecutiveWins(trades).toFixed(2));
-          $("#maxConsecutiveLossesCt").text(window.fiac.calculateMaxConsecutiveLosses(trades).toFixed(2));
-          $("#maxConsecutiveProfitCt").text(window.fiac.calculateMaxConsecutiveProfit(trades).toFixed(2));
-          $("#maxConsecutiveLossCt").text(window.fiac.calculateMaxConsecutiveLoss(trades).toFixed(2));
-        });
-
-        $("#commentCt").val(pro[1] + ":" + pro[2]);
-        that.showDlg();
+        that.showCopyTradingDlg(pro);
       });
     })
 
@@ -5228,9 +5193,6 @@ window.fiui.copyTradeList = {
     </div>
 
     <form id="copyTradeForm">
-    <div class="input-group mb-3">
-    <input type="hidden" id="copyTradedCt" value="${window.fiac.copyTradingPlatformId}">
-    </div>
     <div class="input-group mb-3">
     <input type="text" class="form-control" placeholder="Pro" style="color:#000;background:#eee" id="commentCt">
     </div>
@@ -5343,17 +5305,18 @@ window.fiui.copyTradeList = {
 
       if (window.fiac.tradeToken != null) {
         if (!window.fiac.info.bManager) {
-          var copyTraded = null;
-          var bReverse = null;
-          var mode = null;
-          var multiplier = null;
-          var comment = null;
+          let copyTraded = null;
+          let bReverse = null;
+          let mode = null;
+          let multiplier = null;
+          let comment = null;
 
           try {
-            copyTraded = $("#copyTradedCt").val();
-            if (copyTraded == "") {
-              throw new Error("The ID of the account to copy trade is required.");
+            let brokerId = window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
+            if (typeof window.fiac.copyTradingPlatformId[brokerId] == "undefined") {
+              throw new Error("The copy trading hub of your broker is not supported yet.");
             }
+            copyTraded = window.fiac.copyTradingPlatformId[brokerId];
             bReverse = $("#chkReverseCt").prop("checked");
             mode = $('input[name="modeCt"]:checked', '#copyTradeForm').val();
             multiplier = $("#multiplierCt").val();
@@ -5470,6 +5433,50 @@ window.fiui.copyTradeList = {
   hide: function () {
     $("#copyTradeSection").hide();
   },
+  showCopyTradingDlg : function (pro) {
+    $("#profitFactorCt").text("");
+    $("#winRateCt").text("");
+    $("#averageTradeCt").text("");
+    $("#largestWinCt").text("");
+    $("#tradeCountCt").text("");
+    $("#averageWinCt").text("");
+    $("#averageLossCt").text("");
+    $("#winLossRatioCt").text("");
+    $("#maxDrawdownCt").text("");
+    $("#expectancyCt").text("");
+    $("#sharpeRatioCt").text("");
+    $("#zScoreCt").text("");
+    $("#maxConsecutiveWinsCt").text("");
+    $("#maxConsecutiveLossesCt").text("");
+    $("#maxConsecutiveProfitCt").text("");
+    $("#maxConsecutiveLossCt").text("");
+
+    fetch(`https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${pro[1]}-${pro[2]}.json`)
+    .then(response => response.json())
+    .then(data => {
+      const trades = data;
+
+      $("#profitFactorCt").text(window.fiac.calculateProfitFactor(trades).toFixed(2));
+      $("#winRateCt").text(window.fiac.calculateWinRate(trades).toFixed(2));
+      $("#averageTradeCt").text(window.fiac.calculateAverageTrade(trades).toFixed(2));
+      $("#largestWinCt").text(window.fiac.calculateLargestWin(trades).toFixed(2));
+      $("#tradeCountCt").text(window.fiac.calculateTradeCount(trades));
+      $("#averageWinCt").text(window.fiac.calculateAverageWin(trades).toFixed(2));
+      $("#averageLossCt").text(window.fiac.calculateAverageLoss(trades).toFixed(2));
+      $("#winLossRatioCt").text(window.fiac.calculateWinLossRatio(trades).toFixed(2));
+      $("#maxDrawdownCt").text(window.fiac.calculateMaxDrawdown(trades).toFixed(2));
+      $("#expectancyCt").text(window.fiac.calculateExpectancy(trades).toFixed(2));
+      $("#sharpeRatioCt").text(window.fiac.calculateSharpeRatio(trades, 0.02));
+      $("#zScoreCt").text(window.fiac.calculateZScore(trades).toFixed(2));
+      $("#maxConsecutiveWinsCt").text(window.fiac.calculateMaxConsecutiveWins(trades).toFixed(2));
+      $("#maxConsecutiveLossesCt").text(window.fiac.calculateMaxConsecutiveLosses(trades).toFixed(2));
+      $("#maxConsecutiveProfitCt").text(window.fiac.calculateMaxConsecutiveProfit(trades).toFixed(2));
+      $("#maxConsecutiveLossCt").text(window.fiac.calculateMaxConsecutiveLoss(trades).toFixed(2));
+    });
+
+    $("#commentCt").val(pro[1] + ":" + pro[2]);
+    this.showDlg();
+  },
   showDlg: function () {
     $("#copyTradeDlg").modal("show");
   },
@@ -5477,7 +5484,9 @@ window.fiui.copyTradeList = {
     $("#copyTradeDlg").modal("hide");
   },
   adjustCol: function () {
-    $("#copyTradeList").DataTable().columns.adjust();
+    if ($.fn.dataTable.isDataTable("#copyTradeList")) {
+      $("#copyTradeList").DataTable().columns.adjust();
+    }
   }
 };
 
@@ -5689,7 +5698,9 @@ window.fiui.privilegeList = {
     $("#privilegeDlg").modal("hide");
   },
   adjustCol: function () {
-    $("#privilegeList").DataTable().columns.adjust();
+    if ($.fn.dataTable.isDataTable("#privilegeList")) {
+      $("#privilegeList").DataTable().columns.adjust();
+    }
   }
 };
 
@@ -5794,6 +5805,7 @@ window.fiui.championship = {
     <div class="col-12 col-sm-12 col-md-12">
     <p class="text-warning">Check the match status:</p>
     <div class="btn-group">
+    <button class="btn btn-sm btn-success" id="championshipTest">Test</button>
     <button class="btn btn-sm btn-success" id="championshipUnit1">Unit 1</button>
     <button class="btn btn-sm btn-success" id="championshipUnit2">Unit 2</button>
     <button class="btn btn-sm btn-success" id="championshipUnit3">Unit 3</button>
@@ -5815,6 +5827,43 @@ window.fiui.championship = {
     </section>`;
 
     $("#championshipSection").html(championshipHtml);
+
+    let championshipDlgHtml = `
+    <div class="modal fade" id="championshipDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Championship</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Please check the match status between the two participants.</p>
+
+    <div id="participants" class="container-fluid">
+    </div>
+
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    </div>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
+
+    $("#championshipDlgSection").html(championshipDlgHtml);
+
     if (this.area == "Guide") {
       $("#btnBackToDashboard").hide();
     }
@@ -5833,8 +5882,8 @@ window.fiui.championship = {
           let brokerId = window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
           const regex = /^c\d+$/;
 
-          if (!regex.test(brokerId)) {
-            toastr.error("Please choose an AREA to enter and then join.");
+          if (!regex.test(brokerId) && brokerId != "fe") {
+            toastr.error("Please create an account in one AREA to enter and then join.");
             return;
           }
 
@@ -5854,6 +5903,8 @@ window.fiui.championship = {
                 toastr.error("The capacity is full.");
               } else if (data.res == "joined") {
                 toastr.error("You have already joined.");
+              } else if (data.res == "isStarted") {
+                toastr.error("The championship has already started.");
               } else {
                 toastr.error("Failed to participate.");
               }
@@ -5873,9 +5924,21 @@ window.fiui.championship = {
       window.location.href = "/champion-dashboard";
     });
 
+    $("#championshipTest").on("click", function () {
+      const unit = "fe";
+      that.renderCalendar(unit);
+      that.getChampionship(unit);
+    });
     $("#championshipUnit1").on("click", function () {
-      that.renderCalendar();
-      that.getChampionship("c1");
+      const unit = "c1";
+      that.renderCalendar(unit);
+      that.getChampionship(unit);
+    });
+    $("#championshipUnit2").on("click", function () {
+      toastr.error("Maintaining. Will be coming soon.");
+    });
+    $("#championshipUnit3").on("click", function () {
+      toastr.error("Maintaining. Will be coming soon.");
     });
   },
   getCalendar: async function () {
@@ -5897,9 +5960,9 @@ window.fiui.championship = {
     let brokerId = unit == null ? window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId] : unit;
     const regex = /^c\d+$/;
 
-    if (!regex.test(brokerId)) {
+    if (!regex.test(brokerId) && brokerId != "fe") {
       if ($("#championshipSection").css("display") == "block") {
-        toastr.error("Please select a hosting server unit for the championship.");
+        toastr.error("Please select a hosting server unit for the championship or test in Fintechee Demo server.");
       }
       return;
     }
@@ -5913,6 +5976,8 @@ window.fiui.championship = {
 
     this.championship = data;
 
+    let that = this;
+
     $("#brackets").bracket({
       init: this.championship.brackets,
       // teamWidth: 60,
@@ -5921,27 +5986,65 @@ window.fiui.championship = {
       // roundMargin: 100,
       skipConsolationRound: true,
       onMatchClick: function (data) {
-        console.log("onclick(data: '" + data + "')")
+        let cardsHtml = "";
+        if (typeof data != "undefined") {
+          for (let i in data) {
+            if (data[i] != null) {
+              cardsHtml += `<div class="custom-card my-3" style="width:50%">
+                <div class="username text-center">${data[i]}</div>
+                <div class="rounded-label mx-5" id="ct_${that.championship.brokerName}_${data[i]}">Copy</div>
+                <div class="graph">
+                  <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${that.championship.brokerName}-${data[i]}.png" alt="">
+                </div>
+              </div>`;
+            }
+
+            $("#participants").html(cardsHtml);
+
+            $("#participants .rounded-label").click(function() {
+              let buttonId = $(this).attr("id");
+              let pro = buttonId.split("_");
+
+              that.hideDlg();
+              window.fiui.copyTradeList.showCopyTradingDlg(pro);
+            });
+
+            that.showDlg();
+          }
+        }
       }
     });
   },
   render: function () {
     this.getChampionship(null);
   },
-  renderCalendar: function () {
+  renderCalendar: function (unit) {
     if (this.calendar != null) {
       for (let i in this.calendar) {
         const cal = this.calendar[i];
-        if (cal.unit == 'c1') {
-          $("#championshipCalendar").html(
-            `<ul>
-            <li>Week 1: ${cal.rounds[0]}</li>
-            <li>Week 2: ${cal.rounds[1]}</li>
-            <li>Week 3: ${cal.rounds[2]}</li>
-            <li>Week 4: ${cal.rounds[3]}</li>
-            <li>Week 5: ${cal.rounds[4]}</li>
-            </ul>`
-          );
+        if (cal.unit == unit) {
+          if (unit == "fe") {
+            $("#championshipCalendar").html(
+              `<ul>
+              <li>${cal.desc}</li>
+              <li>Round 1: ${cal.rounds[0]}</li>
+              <li>Round 2: ${cal.rounds[1]}</li>
+              <li>Round 3: ${cal.rounds[2]}</li>
+              <li>Round 4: ${cal.rounds[3]}</li>
+              </ul>`
+            );
+          } else {
+            $("#championshipCalendar").html(
+              `<ul>
+              <li>${cal.desc}</li>
+              <li>Round 1: ${cal.rounds[0]}</li>
+              <li>Round 2: ${cal.rounds[1]}</li>
+              <li>Round 3: ${cal.rounds[2]}</li>
+              <li>Round 4: ${cal.rounds[3]}</li>
+              <li>Round 5: ${cal.rounds[4]}</li>
+              </ul>`
+            );
+          }
           break;
         }
       }
@@ -5952,6 +6055,12 @@ window.fiui.championship = {
   },
   hide: function () {
     $("#championshipSection").hide();
+  },
+  showDlg: function () {
+    $("#championshipDlg").modal("show");
+  },
+  hideDlg: function () {
+    $("#championshipDlg").modal("hide");
   }
 };
 
@@ -5959,7 +6068,8 @@ function loadDashboard () {
   $("#version").html("Version-" + getFintecheeVersion());
 
   toastr.options = {
-    "closeButton": true
+    "closeButton": true,
+    "positionClass": 'toast-bottom-right'
   };
 
   window.fiac.init();
