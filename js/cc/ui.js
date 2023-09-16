@@ -2186,7 +2186,7 @@ window.fiui.brokerList = {
     </table>
     </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnShowBroker">Add</button>
+    <button type="button" class="btn btn-primary" id="btnShowBroker" style="display:none">Add</button>
     </div>
     </div>
     </div>
@@ -3714,7 +3714,7 @@ window.fiui.symbolList = {
     </table>
     </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg">Add</button>
+    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg" style="display:none">Add</button>
     </div>
     </div>
     </div>
