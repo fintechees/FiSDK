@@ -5561,7 +5561,7 @@ window.fiui.privilegeList = {
     <div class="col-12" style="text-align:center">
     <div class="btn-group">
     <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
-    <button type="button" class="btn btn-primary" id="btnGrantPrivilege">Propose</button>
+    <button type="button" class="btn btn-primary" id="btnGrantPrivilege">Grant</button>
     </div>
     </div>
     </div>
