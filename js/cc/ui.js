@@ -23,6 +23,7 @@ window.fiac = {
   },
   init: function () {
     this.copyTradingPlatformId["fe"] = "1267340";
+    this.copyTradingPlatformId["c1"] = "5367";
     this.reset();
 
     let that = this;
