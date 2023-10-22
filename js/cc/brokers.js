@@ -571,3 +571,5 @@ var BROKER_NAME = {
 	C10: shownBrokerName.c10,
 	C11: shownBrokerName.c11,
 }
+
+var noSwap = []

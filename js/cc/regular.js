@@ -142,3 +142,5 @@ var BROKER_NAME = {
 	WL2: shownBrokerName.wl2,
 	WL3: shownBrokerName.wl3
 }
+
+var noSwap = []
