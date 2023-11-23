@@ -75,6 +75,7 @@ window.fiac = {
       window.fiui.brokerList.render(res);
       window.fiui.managerList.render(res);
       window.fiui.accountList.render(res);
+      window.fiui.affiliateList.render(res);
       window.fiui.symbolList.render(res);
       window.fiui.openPosList.render(res);
       window.fiui.groupedOpenPosList.render(res);
@@ -543,6 +544,7 @@ window.fiui = {
         window.fiui.brokerList.show();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -560,6 +562,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.show();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -578,6 +581,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.show();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -591,11 +595,30 @@ window.fiui = {
         window.fiui.accountList.adjustCol();
       });
 
+      $("#btnShowAff").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
+        window.fiui.accountList.hide();
+        window.fiui.affiliateList.show();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
+      });
+
       $("#btnShowSymbols").on("click", function () {
         window.fiui.summary.hide();
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.show();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -613,6 +636,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.show();
         window.fiui.groupedOpenPosList.hide();
@@ -630,6 +654,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.show();
@@ -647,6 +672,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -664,6 +690,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -682,6 +709,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -699,6 +727,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -716,6 +745,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -733,6 +763,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -750,6 +781,7 @@ window.fiui = {
         window.fiui.brokerList.hide();
         window.fiui.managerList.hide();
         window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
         window.fiui.symbolList.hide();
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
@@ -767,6 +799,7 @@ window.fiui = {
       window.fiui.brokerList.hide();
       window.fiui.managerList.hide();
       window.fiui.accountList.hide();
+      window.fiui.affiliateList.hide();
       window.fiui.symbolList.hide();
       window.fiui.openPosList.hide();
       window.fiui.groupedOpenPosList.hide();
@@ -3683,6 +3716,95 @@ window.fiui.accountList = {
   }
 };
 
+// affiliate list component
+window.fiui.affiliateList = {
+  init: function () {
+    let affiliateListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Affiliates</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Affiliates</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Affiliate List</h3>
+    </div>
+    <div class="card-body">
+    <table id="affiliateList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
+
+    $("#affSection").html(affiliateListHtml);
+  },
+  render: function (res) {
+    let affiliateTable = null;
+
+    if ($.fn.dataTable.isDataTable("#affiliateList")) {
+      affiliateTable = $("#affiliateList").DataTable();
+      if (affiliateTable.data().count() > 0) {
+        affiliateTable.clear().draw();
+      }
+      affiliateTable.destroy();
+      $("#affiliateList").empty();
+    }
+
+    if (!res.bManager && window.fiac.tradeToken != null) {
+      affiliateTable = $("#affiliateList").DataTable({
+        "responsive": false, "lengthChange": true, "autoWidth": true,
+        "columns": [{title: "ID", sTitle: "ID"}, {title: "Commission", sTitle: "Commission"}]
+      });
+
+      this.affiliateTable = affiliateTable;
+      this.affiliateDataTable = $("#affiliateList").dataTable();
+
+      if (window.fiac.info.brokers.data.length > 0) {
+        let brokerId = window.fiac.info.brokers.data[0][window.fiac.info.brokers.colIndex.brokerId];
+
+        $.ajax({
+          type: "POST",
+          url: "https://0bd0rqzuga.execute-api.eu-central-1.amazonaws.com/v1/affcom",
+          data: JSON.stringify({
+            brokerName: brokerId,
+            accountId: window.fiac.accountId,
+            tradeToken: window.fiac.tradeToken
+          }),
+          success: function (data) {
+            for (let i in data.res) {
+              let aff = data.res[i];
+              affiliateTable.row.add([aff.id, aff.commission]).draw(false);
+            }
+          }
+        });
+      }
+    }
+  },
+  show: function () {
+    $("#affSection").show();
+  },
+  hide: function () {
+    $("#affSection").hide();
+  }
+};
+
 // symbol list component
 window.fiui.symbolList = {
   init: function () {
@@ -6091,6 +6213,7 @@ function loadDashboard () {
   window.fiui.brokerList.init();
   window.fiui.managerList.init();
   window.fiui.accountList.init();
+  window.fiui.affiliateList.init();
   window.fiui.symbolList.init();
   window.fiui.openPosList.init();
   window.fiui.groupedOpenPosList.init();
