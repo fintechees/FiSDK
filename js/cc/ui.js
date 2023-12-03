@@ -24,6 +24,7 @@ window.fiac = {
   init: function () {
     this.copyTradingPlatformId["fe"] = "1267340";
     this.copyTradingPlatformId["c1"] = "5367";
+    this.copyTradingPlatformId["phan"] = "525178";
     this.reset();
 
     let that = this;
@@ -47,6 +48,7 @@ window.fiac = {
         }
 
         window.fiui.sidebar.hideManagersMenu();
+        window.fiui.sidebar.hideTriggeredOrdersMenu();
         window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.showPaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
@@ -55,6 +57,7 @@ window.fiac = {
         window.fiui.stats.hide();
       } else if (that.info.bManager && that.tradeToken != null) {
         window.fiui.sidebar.showManagersMenu();
+        window.fiui.sidebar.showTriggeredOrdersMenu();
         window.fiui.sidebar.showExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.showStatsMenu();
@@ -63,6 +66,7 @@ window.fiac = {
         window.fiui.payment.hide();
       } else {
         window.fiui.sidebar.hideManagersMenu();
+        window.fiui.sidebar.hideTriggeredOrdersMenu();
         window.fiui.sidebar.hideExecReportsMenu();
         window.fiui.sidebar.hidePaymentMenu();
         window.fiui.sidebar.hideStatsMenu();
@@ -549,6 +553,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -567,6 +572,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -586,6 +592,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -605,6 +612,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -623,6 +631,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -641,6 +650,7 @@ window.fiui = {
         window.fiui.openPosList.show();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -659,6 +669,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.show();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -677,6 +688,26 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.show();
+        window.fiui.triggeredOrderList.hide();
+        window.fiui.execReports.hide();
+        window.fiui.payment.hide();
+        window.fiui.stats.hide();
+        window.fiui.copyTradeList.hide();
+        window.fiui.privilegeList.hide();
+        window.fiui.championship.hide();
+      });
+
+      $("#btnShowTriggeredOrders").on("click", function () {
+        window.fiui.summary.hide();
+        window.fiui.brokerList.hide();
+        window.fiui.managerList.hide();
+        window.fiui.accountList.hide();
+        window.fiui.affiliateList.hide();
+        window.fiui.symbolList.hide();
+        window.fiui.openPosList.hide();
+        window.fiui.groupedOpenPosList.hide();
+        window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.show();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -695,6 +726,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.show();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -714,6 +746,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.show();
         window.fiui.stats.hide();
@@ -732,6 +765,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.show();
@@ -750,6 +784,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -768,6 +803,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -786,6 +822,7 @@ window.fiui = {
         window.fiui.openPosList.hide();
         window.fiui.groupedOpenPosList.hide();
         window.fiui.fundingHistory.hide();
+        window.fiui.triggeredOrderList.hide();
         window.fiui.execReports.hide();
         window.fiui.payment.hide();
         window.fiui.stats.hide();
@@ -804,6 +841,7 @@ window.fiui = {
       window.fiui.openPosList.hide();
       window.fiui.groupedOpenPosList.hide();
       window.fiui.fundingHistory.hide();
+      window.fiui.triggeredOrderList.hide();
       window.fiui.execReports.hide();
       window.fiui.payment.hide();
       window.fiui.stats.hide();
@@ -816,6 +854,12 @@ window.fiui = {
     },
     hideManagersMenu: function () {
       $("#btnShowManagers").hide();
+    },
+    showTriggeredOrdersMenu: function () {
+      $("#btnShowTriggeredOrders").show();
+    },
+    hideTriggeredOrdersMenu: function () {
+      $("#btnShowTriggeredOrders").hide();
     },
     showExecReportsMenu: function () {
       $("#btnShowExecReports").show();
@@ -4413,6 +4457,122 @@ window.fiui.fundingHistory = {
   }
 };
 
+// triggered order list component
+window.fiui.triggeredOrderList = {
+  init: function () {
+    let triggeredOrderListHtml = `
+    <div class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">Triggered Orders</h1>
+    </div>
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="javascript:window.fiui.sidebar.showSummary()">Home</a></li>
+    <li class="breadcrumb-item active">Triggered Orders</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    </div>
+    <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-12">
+    <div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Triggered Order List</h3>
+    </div>
+    <div class="card-body">
+    <table id="triggeredOrderList" class="table table-bordered table-striped">
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnGetTriggeredOrders">Refresh</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </section>`;
+
+    $("#triggeredOrderSection").html(triggeredOrderListHtml);
+
+    let that = this;
+
+    fisdk.subscribeToNotification("getting_triggered_orders_done", function (res) {
+      console.log(res);
+
+      that.render(res);
+    });
+
+    fisdk.subscribeToNotification("failed_to_get_triggered_orders", function (res) {
+      console.error("failed_to_get_triggered_orders");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("triggered_order_added", function (res) {
+      if (typeof that.triggeredOrderTable != "undefined") {
+        that.triggeredOrderTable.row.add(res.newTriggeredOrder).draw(false);
+      }
+    });
+
+    fisdk.subscribeToNotification("triggered_order_removed", function (res) {
+      if (typeof that.triggeredOrderTable != "undefined") {
+        that.triggeredOrderTable.fnDeleteRow(res.rowId);
+      }
+    });
+
+    $("#btnGetTriggeredOrders").on("click", function () {
+      if (window.fiac.tradeToken != null) {
+        fisdk.getTriggeredOrders();
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't start the service in the investor mode.");
+        } else {
+          toastr.error("Please login.");
+        }
+      }
+    });
+  },
+  render: function (res) {
+    let triggeredOrderTable = null;
+
+    if ($.fn.dataTable.isDataTable("#triggeredOrderList")) {
+      triggeredOrderTable = $("#triggeredOrderList").DataTable();
+      if (triggeredOrderTable.data().count() > 0) {
+        triggeredOrderTable.clear().draw();
+      }
+      triggeredOrderTable.destroy();
+      $("#triggeredOrderList").empty();
+    }
+
+    if (res.bManager && window.fiac.tradeToken != null) {
+      triggeredOrderTable = $("#triggeredOrderList").DataTable({
+        "responsive": false, "lengthChange": true, "autoWidth": true,
+        "columns": res.triggeredOrders.columns
+      });
+
+      this.triggeredOrderTable = triggeredOrderTable;
+      this.triggeredOrderDataTable = $("#triggeredOrderList").dataTable();
+
+      for (let i in res.triggeredOrders.data) {
+        triggeredOrderTable.row.add(res.triggeredOrders.data[i]).draw(false);
+      }
+    }
+  },
+  show: function () {
+    $("#triggeredOrderSection").show();
+  },
+  hide: function () {
+    $("#triggeredOrderSection").hide();
+  }
+};
+
 // execution report component
 window.fiui.execReports = {
   init: function () {
@@ -6218,6 +6378,7 @@ function loadDashboard () {
   window.fiui.openPosList.init();
   window.fiui.groupedOpenPosList.init();
   window.fiui.fundingHistory.init();
+  window.fiui.triggeredOrderList.init();
   window.fiui.execReports.init();
   window.fiui.summary.init();
   window.fiui.copyTradeList.init();
