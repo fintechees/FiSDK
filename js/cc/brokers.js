@@ -92,7 +92,7 @@ var signInShownBrokerName = {
 	wl1: "Demo Server(tst1)",
 	wl2: "KBS Demo Server",
 	wl3: "Sochi Demo Server",
-	wl4: "Ulf Demo Server",
+	wl4: "Vet Demo Server",
 	c1: "Championship Unit 1",
 	c2: "Championship Unit 2",
 	c3: "Championship Unit 3",
@@ -110,7 +110,7 @@ var shownBrokerName = {
 	wl1: "Test Demo1",
 	wl2: "KBS Demo",
 	wl3: "Sochi Demo",
-	wl4: "Ulf Demo",
+	wl4: "Vet Demo",
 	c1: "Championship U1",
 	c2: "Championship U2",
 	c3: "Championship U3",
@@ -231,7 +231,7 @@ brokerCtx[brokerName.wl4] = {
 	defaultSymbolNames: [
 		"EUR/USD"
 	],
-	desc: "Ulf Demo",
+	desc: "Vet Demo",
 	startEndHour: 22,
 	swapCalcHour: 22,
 	pendingOdrsOpenTrdsNumLimit: 100,

@@ -37,14 +37,14 @@ var signInShownBrokerName = {
 	wl1: "Demo Server(tst1)",
 	wl2: "KBS Demo Server",
 	wl3: "Sochi Demo Server",
-	wl4: "Ulf Demo Server"
+	wl4: "Vet Demo Server"
 }
 
 var shownBrokerName = {
 	wl1: "Test Demo1",
 	wl2: "KBS Demo",
 	wl3: "Sochi Demo",
-	wl4: "Ulf Demo"
+	wl4: "Vet Demo"
 }
 
 var brokerCtx = []
@@ -154,7 +154,7 @@ brokerCtx[brokerName.wl4] = {
 	defaultSymbolNames: [
 		"EUR/USD"
 	],
-	desc: "Ulf Demo",
+	desc: "Vet Demo",
 	startEndHour: 22,
 	swapCalcHour: 22,
 	pendingOdrsOpenTrdsNumLimit: 100,
