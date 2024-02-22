@@ -1165,7 +1165,7 @@
       let rows = table.querySelectorAll('tr.historyType1');
       for (var i = 1; i < rows.length; i++) {
           let cells = rows[i].getElementsByTagName('td');
-          balance += parseFloat(cells[10].innerHTML) - parseFloat(cells[11].innerHTML) + parseFloat(cells[12].innerHTML);
+          balance += parseFloat(cells[10].innerHTML) + parseFloat(cells[11].innerHTML) - parseFloat(cells[12].innerHTML);
 
           let parts = cells[8].innerHTML.split(/[\s:-]/);
           let dateObject = new Date("20" + parts[0], parseInt(parts[1]) - 1, parts[2], parts[3], parts[4]);
