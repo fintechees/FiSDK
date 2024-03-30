@@ -225,6 +225,10 @@ var dictM = {
     m129: "[m129]: You successfully revoked the privilege.",
     m130: "[m130]: You failed to revoke the privilege.",
     m131: "[m131]: You failed to revoke the privilege due to investor mode.",
+    m132: "[m132]: You successfully liquidate the account.",
+    m133: "[m133]: You failed to liquidate the account.",
+    m134: "[m134]: You failed to liquidate the account due to investor mode.",
+    m135: "[m135]: Error occurs while getting broker log.",
     rB1: 'Broker ID',
     rB2: 'Description',
     rB3: 'Currency',
@@ -303,5 +307,11 @@ var dictM = {
     rCT9: "Op",
     rP1: "Account ID",
     rP2: "Privilege",
-    rP3: "Op"
+    rP3: "Op",
+    tO1: "Account",
+    tO2: "Order ID",
+    tO3: "Time",
+    tO4: "Symbol",
+    tO5: "Type",
+    tO6: "Lots"
 }
