@@ -2265,6 +2265,7 @@ window.fiui.brokerList = {
     </div>
     <div class="card-footer">
     <button type="button" class="btn btn-primary" id="btnShowBroker" style="display:none">Add</button>
+    <button type="button" class="btn btn-primary" id="btnGetBrokerLog" style="display:none">Check Log(Only for Root)</button>
     </div>
     </div>
     </div>
@@ -2520,11 +2521,41 @@ window.fiui.brokerList = {
       }
     });
 
+    fisdk.subscribeToNotification("getting_broker_log_done", function (res) {
+      console.log("getting_broker_log_done");
+
+      that.download(JSON.stringify(res.brokers), "broker_log.json", "text/plain");
+    });
+
+    fisdk.subscribeToNotification("failed_to_get_broker_log", function (res) {
+      console.error("failed_to_get_broker_log");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
     $("#btnShowBroker").on("click", function () {
       if (window.fiac.tradeToken != null) {
         that.showDlg();
       } else {
         toastr.error("Please login.");
+      }
+    });
+
+    $("#btnGetBrokerLog").on("click", function () {
+      if (window.fiac.tradeToken != null) {
+        window.fiui.confirmDlg.nextProcessCallback = function () {
+          fisdk.getBrokerLog(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken);
+        }
+
+        window.fiui.confirmDlg.show();
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't get the broker log without the root privilege.");
+        } else {
+          toastr.error("Please login.");
+        }
       }
     });
 
@@ -2698,6 +2729,7 @@ window.fiui.brokerList = {
       });
 
       $("#btnShowBroker").show();
+      $("#btnGetBrokerLog").show();
     } else {
       if (res.brokers.data.length > 1) {
         brokerTable = $("#brokerList").DataTable({
@@ -2720,6 +2752,7 @@ window.fiui.brokerList = {
       }
 
       $("#btnShowBroker").hide();
+      $("#btnGetBrokerLog").hide();
     }
     brokerTable.buttons().container().appendTo("#brokerList_wrapper .col-md-6:eq(0)");
     this.brokerTable = brokerTable;
@@ -2829,6 +2862,13 @@ window.fiui.brokerList = {
   },
   hideReport: function () {
     $("#downloadWlReportDlg").modal("hide");
+  },
+  download: function (content, fileName, contentType) {
+    let a = document.createElement("a");
+    let file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
   }
 };
 
@@ -2861,6 +2901,8 @@ window.fiui.managerList = {
     </div>
     <div class="card-body">
     <table id="managerList" class="table table-bordered table-striped">
+    </table>
+    <table id="alternativeList" class="table table-bordered table-striped">
     </table>
     </div>
     </div>
@@ -2933,7 +2975,7 @@ window.fiui.managerList = {
         if (managerTable != null) {
           let data = managerTable.row($(this).parents("tr")).data();
 
-          window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+          window.fiui.confirmDlg.nextProcessTarget = data[res.managers.colIndex.accountId];
           window.fiui.confirmDlg.nextProcessCallback = function () {
             fisdk.downgradeRole(window.fiui.confirmDlg.nextProcessTarget);
           }
@@ -2946,7 +2988,7 @@ window.fiui.managerList = {
         if (managerTable != null) {
           let data = managerTable.row($(this).parents("tr")).data();
 
-          window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+          window.fiui.confirmDlg.nextProcessTarget = data[res.managers.colIndex.accountId];
           window.fiui.confirmDlg.nextProcessCallback = function () {
             fisdk.getLog(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, window.fiui.confirmDlg.nextProcessTarget);
           }
@@ -2959,6 +3001,72 @@ window.fiui.managerList = {
         managerTable.row.add(res.managers.data[i]).draw(false);
       }
     }
+
+    let alternativeTable = null;
+
+    if ($.fn.dataTable.isDataTable("#alternativeList")) {
+      alternativeTable = $("#alternativeList").DataTable();
+      if (alternativeTable.data().count() > 0) {
+        alternativeTable.clear().draw();
+      }
+      alternativeTable.destroy();
+      $("#alternativeList").empty();
+    }
+
+    if (res.bManager && window.fiac.tradeToken != null) {
+      if (typeof res.alternatives != "undefined") {
+        alternativeTable = $("#alternativeList").DataTable({
+          "responsive": false, "lengthChange": false, "autoWidth": true, "scrollX": true,
+          "buttons": ["copy", "csv", "print", "colvis"],
+          "columns": res.alternatives.columns,
+          "columnDefs": [
+            {targets: -1, data: null,
+            defaultContent:
+            '<div class="btn-group">' +
+            '<button class="btn btn-sm" id="btnDowngradeRole2" title="Downgrade"><i class="fas fa-arrow-down nav-icon"></i></button>' +
+            '<button class="btn btn-sm" id="btnGetManagerLog2" title="Get log"><i class="fas fa-map nav-icon"></i></button>' +
+            '</div>'}
+          ],
+          "fixedColumns": {
+            left: 1
+          }
+        });
+
+        alternativeTable.buttons().container().appendTo("#alternativeList_wrapper .col-md-6:eq(0)");
+        this.alternativeTable = alternativeTable;
+        this.alternativeDataTable = $("#alternativeList").dataTable();
+
+        $("#alternativeList tbody").on("click", "[id*=btnDowngradeRole2]", function () {
+          if (alternativeTable != null) {
+            let data = alternativeTable.row($(this).parents("tr")).data();
+
+            window.fiui.confirmDlg.nextProcessTarget = data[res.alternatives.colIndex.accountId];
+            window.fiui.confirmDlg.nextProcessCallback = function () {
+              fisdk.downgradeRole(window.fiui.confirmDlg.nextProcessTarget);
+            }
+
+            window.fiui.confirmDlg.show();
+          }
+        });
+
+        $("#alternativeList tbody").on("click", "[id*=btnGetManagerLog2]", function () {
+          if (alternativeTable != null) {
+            let data = alternativeTable.row($(this).parents("tr")).data();
+
+            window.fiui.confirmDlg.nextProcessTarget = data[res.alternatives.colIndex.accountId];
+            window.fiui.confirmDlg.nextProcessCallback = function () {
+              fisdk.getLog(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, window.fiui.confirmDlg.nextProcessTarget);
+            }
+
+            window.fiui.confirmDlg.show();
+          }
+        });
+
+        for (let i in res.alternatives.data) {
+          alternativeTable.row.add(res.alternatives.data[i]).draw(false);
+        }
+      }
+    }
   },
   show: function () {
     $("#managerSection").show();
@@ -2969,6 +3077,10 @@ window.fiui.managerList = {
   adjustCol: function () {
     if ($.fn.dataTable.isDataTable("#managerList")) {
       $("#managerList").DataTable().columns.adjust();
+    }
+
+    if ($.fn.dataTable.isDataTable("#alternativeList")) {
+      $("#alternativeList").DataTable().columns.adjust();
     }
   }
 };
@@ -3289,6 +3401,22 @@ window.fiui.accountList = {
       }
     });
 
+    fisdk.subscribeToNotification("liquidating_account_done", function (res) {
+      console.log("liquidating_account_done");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_liquidate_account", function (res) {
+      console.error("failed_to_liquidate_account");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
     fisdk.subscribeToNotification("removing_account_done", function (res) {
       console.log("removing_account_done");
       console.log(res);
@@ -3417,7 +3545,7 @@ window.fiui.accountList = {
     fisdk.subscribeToNotification("getting_log_done", function (res) {
       console.log("getting_log_done");
 
-      that.download(JSON.stringify(res.transactions), "report.json", "text/plain");
+      that.download(JSON.stringify(res.transactions), "log.json", "text/plain");
     });
 
     fisdk.subscribeToNotification("failed_to_get_log", function (res) {
@@ -3527,6 +3655,7 @@ window.fiui.accountList = {
           defaultContent:
           '<div class="btn-group">' +
           '<button class="btn btn-sm" id="btnApproveTrading" title="Approve trading"><i class="fas fa-check nav-icon"></i></button>' +
+          '<button class="btn btn-sm" id="btnLiquidateAccount" title="Liquidate account"><i class="fas fa-box-open nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnRemoveAccount" title="Remove account"><i class="fas fa-eraser nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnShowBindAccountDlg" title="Bind account"><i class="fas fa-magnet nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnUpgradeRole" title="Upgrade"><i class="fas fa-arrow-up nav-icon"></i></button>' +
@@ -3583,6 +3712,19 @@ window.fiui.accountList = {
         window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
         window.fiui.confirmDlg.nextProcessCallback = function () {
           fisdk.approveTrading(window.fiui.confirmDlg.nextProcessTarget);
+        }
+
+        window.fiui.confirmDlg.show();
+      }
+    });
+
+    $("#accountList tbody").on("click", "[id*=btnLiquidateAccount]", function () {
+      if (accountTable != null) {
+        let data = accountTable.row($(this).parents("tr")).data();
+
+        window.fiui.confirmDlg.nextProcessTarget = data[res.accounts.colIndex.accountId];
+        window.fiui.confirmDlg.nextProcessCallback = function () {
+          fisdk.liquidateAccount(window.fiui.confirmDlg.nextProcessTarget);
         }
 
         window.fiui.confirmDlg.show();
