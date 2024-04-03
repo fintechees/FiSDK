@@ -2,49 +2,56 @@ var brokerDomain = {
 	wl1: "fintechee.cloud",
 	wl2: "kbdemo.fintechee.cloud",
 	wl3: "kbdemo.fintechee.cloud",
-	wl4: "kbdemo.fintechee.cloud"
+	wl4: "kbdemo.fintechee.cloud",
+	wl5: "kbdemo.fintechee.cloud"
 }
 
 var brokerPort = {
 	wl1: "",
 	wl2: "",
 	wl3: "",
-	wl4: ""
+	wl4: "",
+	wl5: ""
 }
 
 var brokerProtocol = {
 	wl1: "https://",
 	wl2: "https://",
 	wl3: "https://",
-	wl4: "https://"
+	wl4: "https://",
+	wl5: "https://"
 }
 
 var shopDomain = {
 	wl1: "fintechee.shop",
 	wl2: "fintechee.shop",
 	wl3: "fintechee.shop",
-	wl4: "fintechee.shop"
+	wl4: "fintechee.shop",
+	wl5: "fintechee.shop"
 }
 
 var brokerName = {
 	wl1: "tst1",
 	wl2: "kbdemo",
 	wl3: "sodemo",
-	wl4: "ulfdemo"
+	wl4: "ulfdemo",
+	wl5: "kobbdemo"
 }
 
 var signInShownBrokerName = {
 	wl1: "Demo Server(tst1)",
 	wl2: "KBS Demo Server",
 	wl3: "Sochi Demo Server",
-	wl4: "Vet Demo Server"
+	wl4: "Vet Demo Server",
+	wl5: "Kobb Demo Server"
 }
 
 var shownBrokerName = {
 	wl1: "Test Demo1",
 	wl2: "KBS Demo",
 	wl3: "Sochi Demo",
-	wl4: "Vet Demo"
+	wl4: "Vet Demo",
+	wl5: "Kobb Demo"
 }
 
 var brokerCtx = []
@@ -173,13 +180,45 @@ brokerCtx[brokerName.wl4] = {
 	creditsOnboard: false
 }
 
+brokerCtx[brokerName.wl5] = {
+	brokerName: brokerName.wl5,
+	dataStreamURL: brokerProtocol.wl5 + brokerDomain.wl5 + brokerPort.wl5,
+	dataBaseURL: brokerProtocol.wl5 + brokerDomain.wl5 + brokerPort.wl5,
+	orderStreamURL: brokerProtocol.wl5 + brokerDomain.wl5 + brokerPort.wl5,
+	orderBaseURL: brokerProtocol.wl5 + brokerDomain.wl5 + brokerPort.wl5,
+	shopURL: brokerProtocol.wl5 + shopDomain.wl5,
+	logoURL: "/images/logo.png",
+	syncServerSettingStatus: false,
+	defaultSymbolNames: [
+		"EUR/USD"
+	],
+	desc: "Kobb Demo",
+	startEndHour: 22,
+	swapCalcHour: 22,
+	pendingOdrsOpenTrdsNumLimit: 100,
+	demoMode: true,
+	currency: "USD",
+	lotsUnit: 100000,
+	toFixed: 100,
+	commentLengthLimit: 50,
+	lotsPerOrder: 0.01,
+	externalData: false,
+	externalURL: null,
+	externalTk: null,
+	externalMode: 0,
+	spreadBetting: false,
+	brokerless: false,
+	creditsOnboard: false
+}
+
 var BROKER_NAME = {
   DEMO: "Fintechee Demo",
 	FINTECHEE_DEMO: "Fintechee Demo",
 	WL1: shownBrokerName.wl1,
 	WL2: shownBrokerName.wl2,
 	WL3: shownBrokerName.wl3,
-	WL4: shownBrokerName.wl4
+	WL4: shownBrokerName.wl4,
+	WL5: shownBrokerName.wl5
 }
 
 var noSwap = []
