@@ -587,7 +587,7 @@ var dict = {
     m245: "[M245]: No data.",
     m246: "[M246]: The time is not correct.",
     m247: "[M247]: The value is not correct.",
-    m248: "[M248]: The signal ID is not correct.",
+    m248: "[M248]: The resource ID is not correct.",
     m249: "[M249]: The magic number is not correct.",
     m250: "[M250]: The expiration is not correct.",
     m251: "[M251]: The symbol component is missing.",
