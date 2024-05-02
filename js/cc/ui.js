@@ -6,6 +6,7 @@ window.ficfg = {
 window.fiac = {
   storageName: "fiac",
   copyTradingPlatformId: [],
+  copyTradingSharedList: "https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/shared.json",
   reset: function () {
     this.brokerName = null;
     this.accountId = null;
@@ -24,7 +25,7 @@ window.fiac = {
   init: function () {
     this.copyTradingPlatformId["fe"] = "1267340";
     this.copyTradingPlatformId["c1"] = "5367";
-    this.copyTradingPlatformId["phan"] = "525178";
+    this.copyTradingPlatformId["palv"] = "525087";
     this.reset();
 
     let that = this;
@@ -32,7 +33,6 @@ window.fiac = {
     // When fisdk.logout() is called, this event will be triggered as well.
     fisdk.subscribeToNotification("loading_done", function (res) {
       console.log(res);
-      window.fiac.currBroker = window.fiui.confirmDlg.nextProcessTarget != null ? window.fiui.confirmDlg.nextProcessTarget : window.fiac.brokerName;
       that.info = res;
       that.ranking = null;
       if (!that.info.bManager && that.tradeToken != null) {
@@ -1004,8 +1004,16 @@ window.fiui.signUp = {
     <span class="fas fa-envelope"></span>
     </div>
     </div>
+    </div>` +
+    (ibAccIdRequiredMode ? `<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">
+    <div class="input-group-append">
+    <div class="input-group-text" style="background:#eee">
+    <span class="fas fa-user"></span>
     </div>
-    <div class="panel box box-primary">
+    </div>
+    </div>` : '') +
+    `<div class="panel box box-primary">
       <div class="box-header with-border">
         <p class="box-title" style="text-align:center">
           <a data-toggle="collapse" data-parent="#accordion" href="#optionalSignUp" aria-expanded="false" class="collapsed" style="color:#FFF">
@@ -1022,16 +1030,16 @@ window.fiui.signUp = {
           <span class="fas fa-money-bill-alt"></span>
           </div>
           </div>
-          </div>
-          <div class="input-group mb-3">
+          </div>` +
+          (ibAccIdRequiredMode ? '' : `<div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">
           <div class="input-group-append">
           <div class="input-group-text" style="background:#eee">
           <span class="fas fa-user"></span>
           </div>
           </div>
-          </div>
-        </div>
+          </div>`) +
+        `</div>
       </div>
     </div>
     <div class="row">
@@ -1304,7 +1312,7 @@ window.fiui.signIn = {
       window.fiac.tradeToken = res.tradeToken;
       window.fiac.investorPassword = res.investorPassword;
       window.fiac.mfaEnabled = res.mfaEnabled;
-      window.fiac.currBroker = res.brokerName;
+      window.fiac.currBroker = res.brokerId;
       if (res.tradeToken != null) {
         window.fiui.profile.showSettings();
       } else {
@@ -2358,6 +2366,12 @@ window.fiui.brokerList = {
     <input type="text" class="form-control" placeholder="Credits Onboard Limit" style="color:#000;background:#eee" id="creditsOnboardLimitBp">
     </div>
     <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Crypto Payment Gateway API URL" style="color:#000;background:#eee" id="cryptoPaymentGatewayBp">
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Crypto Payment Gateway IP" style="color:#000;background:#eee" id="cryptoPaymentGatewayIpBp">
+    </div>
+    <div class="input-group mb-3">
     <input type="password" class="form-control" placeholder="Crypto Payment Gateway Key" style="color:#000;background:#eee" id="cryptoPaymentGatewayKeyBp">
     </div>
     <div class="input-group mb-3">
@@ -2370,7 +2384,7 @@ window.fiui.brokerList = {
     <input type="text" class="form-control" placeholder="Success Redirect URL" style="color:#000;background:#eee" id="pgSuccessRedirectUrlBp">
     </div>
     <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Identifier(please type remove if you want to remove this field in the database)" style="color:#000;background:#eee" id="identifierBp">
+    <input type="text" class="form-control" placeholder="Identifier" style="color:#000;background:#eee" id="identifierBp">
     </div>
     <div class="row">
     <div class="col-12" style="text-align:center">
@@ -2694,6 +2708,8 @@ window.fiui.brokerList = {
       syncBalanceURLForWP: "",
       creditsOnboard: ($("#creditsOnboardBp").val() == "true" ? true : false),
       creditsOnboardLimit: creditsOnboardLimitBp,
+      cryptoPaymentGateway: $("#cryptoPaymentGatewayBp").val(),
+      cryptoPaymentGatewayIp: $("#cryptoPaymentGatewayIpBp").val(),
       cryptoPaymentGatewayKey: $("#cryptoPaymentGatewayKeyBp").val(),
       paymentGatewayStoreId: $("#paymentGatewayStoreIdBp").val(),
       paymentGatewayWalletId: $("#paymentGatewayWalletIdBp").val(),
@@ -2763,12 +2779,16 @@ window.fiui.brokerList = {
       if (brokerTable != null) {
         let data = brokerTable.row($(this).parents("tr")).data();
 
-        if (window.fiac.currBroker != data[res.brokers.colIndex.brokerName]) {
-          window.fiui.confirmDlg.nextProcessTarget = data[res.brokers.colIndex.brokerName];
+        if (window.fiac.currBroker != data[res.brokers.colIndex.brokerId]) {
+          window.fiui.confirmDlg.nextProcessTarget = {
+            brokerId: data[res.brokers.colIndex.brokerId],
+            brokerName: data[res.brokers.colIndex.brokerName]
+          };
           window.fiui.confirmDlg.nextProcessCallback = function () {
             window.fiui.loadingDimmer.show();
 
-            fisdk.switchBroker(window.fiui.confirmDlg.nextProcessTarget);
+            window.fiac.currBroker = window.fiui.confirmDlg.nextProcessTarget.brokerId;
+            fisdk.switchBroker(window.fiui.confirmDlg.nextProcessTarget.brokerName);
           }
 
           window.fiui.confirmDlg.show();
@@ -2787,6 +2807,28 @@ window.fiui.brokerList = {
         $("#balanceBp").val(data[res.brokers.colIndex.balance]);
         $("#currencyBp").val(data[res.brokers.colIndex.currency]);
         $("#toFixedBp").val(data[res.brokers.colIndex.toFixed]);
+        $("#withdrawalLimitBp").val(data[res.brokers.colIndex.withdrawalLimit]);
+        $("#marginCallLevelBp").val(data[res.brokers.colIndex.marginCallLevel]);
+        $("#marginCloseoutLevelBp").val(data[res.brokers.colIndex.marginCloseoutLevel]);
+        $("#creditsOnboardBp").val(data[res.brokers.colIndex.creditsOnboard]);
+        $("#creditsOnboardLimitBp").val(data[res.brokers.colIndex.creditsOnboardLimit]);
+        $("#levelBp").val(data[res.brokers.colIndex.level]);
+        $("#smtpBp").val(data[res.brokers.colIndex.smtp]);
+        $("#smtpPortBp").val(data[res.brokers.colIndex.smtpPort]);
+        $("#emailPasswordBp").val(data[res.brokers.colIndex.emailPassword]);
+        $("#cryptoPaymentGatewayBp").val(data[res.brokers.colIndex.cryptoPaymentGateway]);
+        $("#cryptoPaymentGatewayIpBp").val(data[res.brokers.colIndex.cryptoPaymentGatewayIp]);
+        $("#cryptoPaymentGatewayKeyBp").val(data[res.brokers.colIndex.cryptoPaymentGatewayKey]);
+        $("#paymentGatewayWalletIdBp").val(data[res.brokers.colIndex.paymentGatewayWalletId]);
+        $("#paymentGatewayStoreIdBp").val(data[res.brokers.colIndex.paymentGatewayStoreId]);
+        $("#pgSuccessRedirectBp").val(data[res.brokers.colIndex.pgSuccessRedirect]);
+        $("#identifierBp").val(data[res.brokers.colIndex.identifier]);
+        $("#buyOpnCmmssnBp").val(data[res.brokers.colIndex.buyOpnCmmssn]);
+        $("#buyClsdCmmssnBp").val(data[res.brokers.colIndex.buyClsdCmmssn]);
+        $("#sellOpnCmmssnBp").val(data[res.brokers.colIndex.sellOpnCmmssn]);
+        $("#sellClsdCmmssnBp").val(data[res.brokers.colIndex.sellClsdCmmssn]);
+        $("#bidBp").val(data[res.brokers.colIndex.bid]);
+        $("#askBp").val(data[res.brokers.colIndex.ask]);
 
         that.showDlg();
       }
@@ -5453,7 +5495,7 @@ window.fiui.copyTradeList = {
     </div>
     <section class="content">
     <div class="container-fluid">
-    <p style="color:#ff5500">Please use accounts registered on the Fintechee Demo server to try out copy trading. We are currently testing additional hubs.</p>
+    <p style="color:#ff5500">We are currently developing more hubs.</p>
     <div id="proList">
     </div>
     <div class="row">
@@ -5477,7 +5519,7 @@ window.fiui.copyTradeList = {
 
     $("#copyTradeSection").html(copyTradeListHtml);
 
-    fetch("https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/shared.json")
+    fetch(window.fiac.copyTradingSharedList)
     .then(response => response.json())
     .then(data => {
       let sortedData = data.sort((a, b) => {
