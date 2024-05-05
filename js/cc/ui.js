@@ -2836,12 +2836,12 @@ window.fiui.brokerList = {
         $("#paymentGatewayStoreIdBp").val(data[res.brokers.colIndex.paymentGatewayStoreId]);
         $("#pgSuccessRedirectBp").val(data[res.brokers.colIndex.pgSuccessRedirect]);
         $("#identifierBp").val(data[res.brokers.colIndex.identifier]);
-        $("#buyOpnCmmssnBp").val(data[res.brokers.colIndex.buyOpnCmmssn]);
-        $("#buyClsdCmmssnBp").val(data[res.brokers.colIndex.buyClsdCmmssn]);
-        $("#sellOpnCmmssnBp").val(data[res.brokers.colIndex.sellOpnCmmssn]);
-        $("#sellClsdCmmssnBp").val(data[res.brokers.colIndex.sellClsdCmmssn]);
-        $("#bidBp").val(data[res.brokers.colIndex.bid]);
-        $("#askBp").val(data[res.brokers.colIndex.ask]);
+        $("#commissionOpeningLongBp").val(data[res.brokers.colIndex.buyOpnCmmssn]);
+        $("#commissionClosingLongBp").val(data[res.brokers.colIndex.buyClsdCmmssn]);
+        $("#commissionOpeningShortBp").val(data[res.brokers.colIndex.sellOpnCmmssn]);
+        $("#commissionClosingShortBp").val(data[res.brokers.colIndex.sellClsdCmmssn]);
+        $("#bidMarkUpBp").val(data[res.brokers.colIndex.bid]);
+        $("#askMarkUpBp").val(data[res.brokers.colIndex.ask]);
 
         that.showDlg();
       }
