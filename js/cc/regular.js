@@ -1,3 +1,5 @@
+var ibAccIdRequiredMode = false
+var blankPageMode = true
 var brokerDomain = {
 	wl1: "fintechee.cloud",
 	wl2: "kbdemo.fintechee.cloud",
