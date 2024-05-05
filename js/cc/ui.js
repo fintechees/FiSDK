@@ -1415,6 +1415,14 @@ window.fiui.signIn = {
     fisdk.logout();
     window.fiac.reset();
     window.fiui.profile.showAccountId("");
+    window.fiui.summary.init();
+    window.fiui.stats.renderBr();
+    this.resetAccIdPw();
+  },
+  resetAccIdPw: function () {
+    $("#accountIdSignIn").val("");
+    $("#passwordSignIn").val("");
+    $("#investorPasswordSignIn").val("");
   },
   show: function () {
     $("#signInDlg").modal("show");
