@@ -1411,6 +1411,11 @@ window.fiui.signIn = {
 
     fisdk.signInByMfa($("#brokerNameSignIn").val(), $("#accountIdSignIn").val(), $("#mfaCode").val(), $("#mfaToken").val());
   },
+  signOut: function () {
+    fisdk.logout();
+    window.fiac.reset();
+    window.fiui.profile.showAccountId("");
+  },
   show: function () {
     $("#signInDlg").modal("show");
   },
@@ -4065,7 +4070,7 @@ window.fiui.symbolList = {
     </table>
     </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg" style="display:none">Add</button>
+    <button type="button" class="btn btn-primary" id="btnShowSymbolsDlg" style="display:none">Import</button>
     </div>
     </div>
     </div>
@@ -4100,6 +4105,7 @@ window.fiui.symbolList = {
     <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
     <button type="button" class="btn btn-primary" id="btnAddSymbols">Add</button>
     <button type="button" class="btn btn-primary" id="btnModifySymbol">Modify</button>
+    <button type="button" class="btn btn-primary" id="btnUpdateSymbolSwap">Update Swap</button>
     </div>
     </div>
     </div>
@@ -4170,6 +4176,9 @@ window.fiui.symbolList = {
       if (typeof res.message != "undefined" && res.message != "") {
         toastr.info(res.message);
       }
+      if (typeof that.symbolDataTable != "undefined") {
+        that.symbolDataTable.fnDeleteRow(res.rowId);
+      }
     });
 
     fisdk.subscribeToNotification("failed_to_remove_symbol", function (res) {
@@ -4207,6 +4216,20 @@ window.fiui.symbolList = {
 
       if (window.fiac.tradeToken != null) {
         fisdk.modifySymbol($("#symbols").val());
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't modify the symbol's information in the investor mode.");
+        } else {
+          toastr.error("Please login.");
+        }
+      }
+    });
+
+    $("#btnUpdateSymbolSwap").on("click", function () {
+      that.hideDlg();
+
+      if (window.fiac.tradeToken != null) {
+        fisdk.updateSymbolSwap($("#symbols").val());
       } else {
         if (window.fiac.investorPassword != null) {
           toastr.error("You can't modify the symbol's information in the investor mode.");
@@ -4255,7 +4278,6 @@ window.fiui.symbolList = {
         "columnDefs": [{targets: -1, data: null,
           defaultContent:
           '<div class="btn-group">' +
-          '<button class="btn btn-sm" id="btnEditSymbolInfo" title="Edit symbol information"><i class="fas fa-pen nav-icon"></i></button>' +
           '<button class="btn btn-sm" id="btnRemoveSymbol" title="Remove symbol"><i class="fas fa-eraser nav-icon"></i></button>' +
           '</div>'}]
       });
@@ -4277,16 +4299,6 @@ window.fiui.symbolList = {
     this.symbolDataTable = $("#symbolList").dataTable();
 
     let that = this;
-
-    $("#symbolList tbody").on("click", "[id*=btnEditSymbolInfo]", function () {
-      if (symbolTable != null) {
-        let data = symbolTable.row($(this).parents("tr")).data();
-
-        $("#symbols").val(data[res.symbols.colIndex.symbolName]);
-
-        that.showDlg();
-      }
-    });
 
     $("#symbolList tbody").on("click", "[id*=btnRemoveSymbol]", function () {
       if (symbolTable != null) {
