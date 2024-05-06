@@ -2813,6 +2813,13 @@ window.fiui.brokerList = {
       if (brokerTable != null) {
         let data = brokerTable.row($(this).parents("tr")).data();
 
+        for (let i in window.fiac.info.brokers.data) {
+          if (window.fiac.info.brokers.data[i][res.brokers.colIndex.brokerId] == data[res.brokers.colIndex.brokerId]) {
+            data = window.fiac.info.brokers.data[i];
+            break;
+          }
+        }
+
         $("#brokerIdBp").val(data[res.brokers.colIndex.brokerId]);
         $("#BrokerNameBp").val(data[res.brokers.colIndex.brokerName]);
         $("#contactBp").val(data[res.brokers.colIndex.email]);
@@ -3865,6 +3872,13 @@ window.fiui.accountList = {
     $("#accountList tbody").on("click", "[id*=btnShowChangeLevelDlg]", function () {
       if (accountTable != null) {
         let data = accountTable.row($(this).parents("tr")).data();
+
+        for (let i in window.fiac.info.accounts.data) {
+          if (window.fiac.info.accounts.data[i][res.brokers.colIndex.accountId] == data[res.brokers.colIndex.accountId]) {
+            data = window.fiac.info.accounts.data[i];
+            break;
+          }
+        }
 
         $("#accountIdL").val(data[res.accounts.colIndex.accountId]);
         $("#levelL").val(data[res.accounts.colIndex.level]);
