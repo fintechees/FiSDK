@@ -3874,7 +3874,7 @@ window.fiui.accountList = {
         let data = accountTable.row($(this).parents("tr")).data();
 
         for (let i in window.fiac.info.accounts.data) {
-          if (window.fiac.info.accounts.data[i][res.brokers.colIndex.accountId] == data[res.brokers.colIndex.accountId]) {
+          if (window.fiac.info.accounts.data[i][res.accounts.colIndex.accountId] == data[res.accounts.colIndex.accountId]) {
             data = window.fiac.info.accounts.data[i];
             break;
           }
@@ -5530,6 +5530,7 @@ window.fiui.copyTradeList = {
     <section class="content">
     <div class="container-fluid">
     <p style="color:#ff5500">We are currently developing more hubs.</p>
+    <button type="button" class="btn btn-primary" id="btnShowSignalProvider">Signal Provider Settings</button>
     <div id="proList">
     </div>
     <div class="row">
@@ -5543,7 +5544,7 @@ window.fiui.copyTradeList = {
     </table>
     </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnShowCopyTrade">Add</button>
+    <!--<button type="button" class="btn btn-primary" id="btnShowCopyTrade">Add</button>-->
     </div>
     </div>
     </div>
@@ -5565,10 +5566,26 @@ window.fiui.copyTradeList = {
         let account = sortedData[i];
 
         if (account.tradeNum > 0) {
+          let signalName = typeof account.signalName == "string" ? account.signalName : "";
+          let cpTrdCommissionRate = typeof account.cpTrdCommissionRate != "undefined" ? (Math.round(account.cpTrdCommissionRate * 100) / 100) + "%" : 0;
+          let cpTrdPeriod = typeof account.cpTrdPeriod != "undefined" ? account.cpTrdPeriod : 0;
+          if (cpTrdPeriod == 86400) {
+            cpTrdPeriod = "1D";
+          } else if (cpTrdPeriod == 604800) {
+            cpTrdPeriod = "1W";
+          } else if (cpTrdPeriod == 1209600) {
+            cpTrdPeriod = "2W";
+          } else if (cpTrdPeriod == 2419200) {
+            cpTrdPeriod = "4W";
+          } else {
+            cpTrdPeriod = "Free";
+          }
           that.pro[account.brokerName + ":" + account.accountId] = account;
           cardsHtml += '<div>';
           cardsHtml += `<div class="custom-card my-3">
             <div class="username text-center">${account.accountId}</div>
+            <div class="username text-center">${signalName}</div>
+            <p class="text-center" style="font-size:10px">Fee: ${cpTrdCommissionRate} / ${cpTrdPeriod}</p>
             <div class="rounded-label mx-5" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
             <div class="graph">
               <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${account.brokerName}-${account.accountId}.png" alt="">
@@ -5739,6 +5756,56 @@ window.fiui.copyTradeList = {
 
     $("#copyTradeDlgSection").html(copyTradeDlgHtml);
 
+    let signalProviderDlgHtml =
+    `<div class="modal fade" id="signalProviderDlg">
+    <div class="modal-dialog">
+    <div class="modal-content bg-info">
+    <div class="modal-header">
+    <h4 class="modal-title">Signal Provider</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    <div class="login-box" style="width:auto">
+    <div class="card">
+    <div class="card-body login-card-body" style="border:none;background-color:#17a2b8">
+    <p class="login-box-msg">Please set your copy trading profile.</p>
+    <form id="signalProviderForm">
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Copy Trading Commission Rate" style="color:#000;background:#eee" id="cpTrdCommissionRateSp">
+    </div>
+    <div class="input-group mb-3">
+    <select class="form-control" style="color:#000;background:#eee" id="cpTrdPeriodSp">
+    <option value="0">Free</option>
+    <option value="86400">1 Day</option>
+  	<option value="604800">1 Week</option>
+    <option value="1209600">2 Weeks</option>
+    <option value="2419200">4 Weeks</option>
+    </select>
+    </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Signal Name" style="color:#000;background:#eee" id="signalNameSp">
+    </div>
+    <div class="row">
+    <div class="col-12" style="text-align:center">
+    <div class="btn-group">
+    <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="button" class="btn btn-primary" id="btnSetCopyTradeProfile">Apply</button>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
+
+    $("#signalProviderDlgSection").html(signalProviderDlgHtml);
+
     fisdk.subscribeToNotification("copytrade_added", function (res) {
       console.log("copytrade_added");
       console.log(res);
@@ -5797,6 +5864,22 @@ window.fiui.copyTradeList = {
       }
     });
 
+    fisdk.subscribeToNotification("setting_copytrade_profile_done", function (res) {
+      console.log("setting_copytrade_profile_done");
+      console.log(res);
+      if (typeof res.message != "undefined" && res.message != "") {
+        toastr.info(res.message);
+      }
+    });
+
+    fisdk.subscribeToNotification("failed_to_set_copytrade_profile", function (res) {
+      console.error("failed_to_set_copytrade_profile");
+      if (typeof res.message != "undefined" && res.message != "") {
+        console.error(res.message);
+        toastr.error(res.message);
+      }
+    });
+
     $("#btnShowCopyTrade").on("click", function () {
       that.showDlg();
     });
@@ -5845,6 +5928,38 @@ window.fiui.copyTradeList = {
         }
       }
     });
+
+    $("#btnShowSignalProvider").on("click", function () {
+      that.showSignalProviderDlg();
+    });
+
+    $("#btnSetCopyTradeProfile").on("click", function () {
+      that.hideSignalProviderDlg();
+
+      if (!window.fiac.info.bManager && window.fiac.tradeToken != null) {
+        let cpTrdCommissionRate = "";
+
+        try {
+          cpTrdCommissionRate = $("#cpTrdCommissionRateSp").val();
+          if (cpTrdCommissionRate == "") {
+            cpTrdCommissionRate = 0;
+          } else {
+            cpTrdCommissionRate = parseFloat(cpTrdCommissionRate);
+          }
+        } catch (e) {
+          toastr.error(e.message);
+        }
+        fisdk.setCopyTradeProfile(window.fiac.brokerName, window.fiac.accountId, window.fiac.tradeToken, cpTrdCommissionRate, parseInt($("#cpTrdPeriodSp").val()), $("#signalNameSp").val());
+      } else if (window.fiac.info.bManager && window.fiac.tradeToken != null) {
+        toastr.error("The managers can't set the copy trading profiles.");
+      } else {
+        if (window.fiac.investorPassword != null) {
+          toastr.error("You can't set the copy trading profile in the investor mode.");
+        } else {
+          toastr.error("Please login.");
+        }
+      }
+    });
   },
   render: function (res) {
     let copyTradeTable = null;
@@ -5877,7 +5992,7 @@ window.fiui.copyTradeList = {
             {targets: -1, data: null,
             defaultContent:
             '<div class="btn-group">' +
-            '<button class="btn btn-sm" id="btnApproveCopyTrade" title="Approve"><i class="fas fa-check nav-icon"></i></button>' +
+            // '<button class="btn btn-sm" id="btnApproveCopyTrade" title="Approve"><i class="fas fa-check nav-icon"></i></button>' +
             '<button class="btn btn-sm" id="btnDisableCopyTrade" title="Disable"><i class="fas fa-eraser nav-icon"></i></button>' +
             '</div>'}
           ]
@@ -5983,6 +6098,12 @@ window.fiui.copyTradeList = {
   },
   hideDlg: function () {
     $("#copyTradeDlg").modal("hide");
+  },
+  showSignalProviderDlg: function () {
+    $("#signalProviderDlg").modal("show");
+  },
+  hideSignalProviderDlg: function () {
+    $("#signalProviderDlg").modal("hide");
   },
   adjustCol: function () {
     if ($.fn.dataTable.isDataTable("#copyTradeList")) {
