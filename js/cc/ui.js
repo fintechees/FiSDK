@@ -5566,7 +5566,7 @@ window.fiui.copyTradeList = {
         let account = sortedData[i];
 
         if (account.tradeNum > 0) {
-          let signalName = typeof account.signalName == "string" ? account.signalName : "&nbsp;";
+          let signalName = typeof account.signalName == "string" ? (account.signalName == "" ? "__" : account.signalName) : "__";
           let cpTrdCommissionRate = typeof account.cpTrdCommissionRate != "undefined" ? Math.round(account.cpTrdCommissionRate * 100) + "%" : 0;
           let cpTrdPeriod = typeof account.cpTrdPeriod != "undefined" ? account.cpTrdPeriod : 0;
           if (cpTrdPeriod == 86400) {
