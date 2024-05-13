@@ -5567,7 +5567,7 @@ window.fiui.copyTradeList = {
 
         if (account.tradeNum > 0) {
           let signalName = typeof account.signalName == "string" ? account.signalName : "";
-          let cpTrdCommissionRate = typeof account.cpTrdCommissionRate != "undefined" ? (Math.round(account.cpTrdCommissionRate * 100) / 100) + "%" : 0;
+          let cpTrdCommissionRate = typeof account.cpTrdCommissionRate != "undefined" ? Math.round(account.cpTrdCommissionRate * 100) + "%" : 0;
           let cpTrdPeriod = typeof account.cpTrdPeriod != "undefined" ? account.cpTrdPeriod : 0;
           if (cpTrdPeriod == 86400) {
             cpTrdPeriod = "1D";
@@ -5773,7 +5773,7 @@ window.fiui.copyTradeList = {
     <p class="login-box-msg">Please set your copy trading profile.</p>
     <form id="signalProviderForm">
     <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Copy Trading Commission Rate" style="color:#000;background:#eee" id="cpTrdCommissionRateSp">
+    <input type="text" class="form-control" placeholder="Copy Trading Commission Rate(%)" style="color:#000;background:#eee" id="cpTrdCommissionRateSp">
     </div>
     <div class="input-group mb-3">
     <select class="form-control" style="color:#000;background:#eee" id="cpTrdPeriodSp">
@@ -5944,7 +5944,7 @@ window.fiui.copyTradeList = {
           if (cpTrdCommissionRate == "") {
             cpTrdCommissionRate = 0;
           } else {
-            cpTrdCommissionRate = parseFloat(cpTrdCommissionRate);
+            cpTrdCommissionRate = parseFloat(cpTrdCommissionRate) / 100;
           }
         } catch (e) {
           toastr.error(e.message);
