@@ -5567,6 +5567,8 @@ window.fiui.copyTradeList = {
 
         if (account.tradeNum > 0) {
           let signalName = typeof account.signalName == "string" ? (account.signalName == "" ? "__" : account.signalName) : "__";
+          let balance = Math.round((account.balance + account.pl) * 100) / 100;
+          let profitRate = Math.round(account.balance != 0 ? account.pl * 10000 / account.balance : 0) / 100;
           let cpTrdCommissionRate = typeof account.cpTrdCommissionRate != "undefined" ? Math.round(account.cpTrdCommissionRate * 100) + "%" : 0;
           let cpTrdPeriod = typeof account.cpTrdPeriod != "undefined" ? account.cpTrdPeriod : 0;
           if (cpTrdPeriod == 86400) {
@@ -5581,17 +5583,22 @@ window.fiui.copyTradeList = {
             cpTrdPeriod = "Free";
           }
           that.pro[account.brokerName + ":" + account.accountId] = account;
-          cardsHtml += '<div>';
-          cardsHtml += `<div class="custom-card my-3">
+          cardsHtml += `<div class="custom-card col-6 col-sm-2 col-md-2">
             <div class="username text-center">${account.accountId}</div>
             <div class="username text-center">${signalName}</div>
+            <p class="text-center" style="font-size:10px">PL / Balance: ${profitRate} % / ${balance}</p>
             <p class="text-center" style="font-size:10px">Fee: ${cpTrdCommissionRate} / ${cpTrdPeriod}</p>
-            <div class="rounded-label mx-5" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
+            <div class="text-center">
+              <div class="btn-group">
+                <div class="rounded-label btn btn-default" style="background:#17a2b8!important" id="ct_${account.brokerName}_${account.accountId}">Copy</div>
+                <div class="rounded-label btn btn-default" style="background:#17a2b8!important" id="lamm_${account.brokerName}_${account.accountId}">LAMM</div>
+                <div class="rounded-label btn btn-default" style="background:#17a2b8!important" id="pamm_${account.brokerName}_${account.accountId}">PAMM</div>
+              </div>
+            </div>
             <div class="graph">
               <img class="img-fluid" src="https://s3.eu-central-1.amazonaws.com/fintechee.net/trades2/${account.brokerName}-${account.accountId}.png" alt="">
             </div>
           </div>`;
-          cardsHtml += '</div>';
         }
       }
       $("#proList").html(cardsHtml)
@@ -5711,7 +5718,7 @@ window.fiui.copyTradeList = {
     </div>
 
     <form id="copyTradeForm">
-    <div class="input-group mb-3">
+    <div class="input-group mb-3" id="divCommentCt">
     <input type="text" class="form-control" placeholder="Pro" style="color:#000;background:#eee" id="commentCt">
     </div>
     <div class="input-group mb-3">
@@ -5722,7 +5729,7 @@ window.fiui.copyTradeList = {
     </label>
     </div>
     </div>
-    <div class="input-group mb-3">
+    <div class="input-group mb-3" id="divModeCt">
     <div class="form-group">
     <div class="form-check">
     <input class="form-check-input" type="radio" name="modeCt" value="Lots" checked>
@@ -5734,7 +5741,7 @@ window.fiui.copyTradeList = {
     </div>
     </div>
     </div>
-    <div class="input-group mb-3">
+    <div class="input-group mb-3" id="divMultiplierCt">
     <input type="text" class="form-control" placeholder="Lots or Multiplier" style="color:#000;background:#eee" id="multiplierCt">
     </div>
     <div class="row">
@@ -5742,6 +5749,7 @@ window.fiui.copyTradeList = {
     <div class="btn-group">
     <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
     <button type="button" class="btn btn-primary" id="btnProposeCopyTrade">Propose</button>
+    <input type="hidden" id="ctOrLammOrPamm">
     </div>
     </div>
     </div>
@@ -5900,18 +5908,34 @@ window.fiui.copyTradeList = {
             if (typeof window.fiac.copyTradingPlatformId[brokerId] == "undefined") {
               throw new Error("The copy trading hub of your broker is not supported yet.");
             }
-            copyTraded = window.fiac.copyTradingPlatformId[brokerId];
-            bReverse = $("#chkReverseCt").prop("checked");
-            mode = $('input[name="modeCt"]:checked', '#copyTradeForm').val();
-            multiplier = $("#multiplierCt").val();
-            if (multiplier == "") {
-              throw new Error("The multiplier is required.");
-            }
-            multiplier = parseFloat(multiplier);
             comment = $("#commentCt").val();
             if (comment == "") {
-              comment = null;
+              throw new Error("The signal provider is required.");
             }
+            let ctOrLammOrPamm = $("#ctOrLammOrPamm").val();
+            if (ctOrLammOrPamm == "ct") {
+              copyTraded = window.fiac.copyTradingPlatformId[brokerId];
+              mode = $('input[name="modeCt"]:checked', '#copyTradeForm').val();
+              multiplier = $("#multiplierCt").val();
+              if (multiplier == "") {
+                throw new Error("The multiplier is required.");
+              }
+              multiplier = parseFloat(multiplier);
+            } else {
+              let pro = comment.split(":");
+              if (pro[0] != brokerId) {
+                throw new Error("LAMM of PAMM doesn't support cross-platform.");
+              }
+              copyTraded = pro[1];
+              comment = null;
+              if (ctOrLammOrPamm == "lamm") {
+                mode = "LAMM";
+              } else {
+                mode = "PAMM";
+              }
+              multiplier = 1;
+            }
+            bReverse = $("#chkReverseCt").prop("checked");
           } catch (e) {
             toastr.error(e.message);
           }
@@ -6091,6 +6115,16 @@ window.fiui.copyTradeList = {
     });
 
     $("#commentCt").val(pro[1] + ":" + pro[2]);
+    $("#ctOrLammOrPamm").val(pro[0]);
+    if (pro[0] == "ct") {
+      $("#divCommentCt").show();
+      $("#divModeCt").show();
+      $("#divMultiplierCt").show();
+    } else {
+      $("#divCommentCt").hide();
+      $("#divModeCt").hide();
+      $("#divMultiplierCt").hide();
+    }
     this.showDlg();
   },
   showDlg: function () {
