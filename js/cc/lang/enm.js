@@ -276,6 +276,7 @@ var dictM = {
   	bPGS1: "Payment Gateway Store ID",
     bPGW1: "Payment Gateway Wallet ID",
     bPSR1: "Success Redirect URL",
+    bAU1: "Activation URL",
     aBN1: 'Broker ID',
     aAI1: 'Account ID',
     aUG1: 'Upgrade',

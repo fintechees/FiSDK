@@ -275,6 +275,7 @@ var dictM = {
   	bPGS1: "支付网关店铺ID",
     bPGW1: "支付网关钱包ID",
     bPSR1: "支付成功重定向URL",
+    bAU1: "激活URL",
     aBN1: '经纪商编号',
     aAI1: '账户编号',
     aUG1: '升级',

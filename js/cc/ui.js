@@ -1,5 +1,7 @@
 window.ficfg = {
-  isShowDefault: true
+  isShowDefault: true,
+  defaultBrokerName: "Fintechee Demo",
+  defaultBrokerNameListed: "Fintechee Demo Server"
 }
 
 // account component
@@ -107,6 +109,41 @@ window.fiac = {
     });
   },
   load: function () {
+    var locationHash = location.hash.substr(1);
+    if (locationHash != "") {
+      let hashArray = locationHash.split(":::");
+
+      if (hashArray.length == 3) {
+        let veriBrokerName = hashArray[0];
+      	let veriEmail = hashArray[1];
+      	let veriCode = hashArray[2];
+
+        if (veriBrokerName != "" && veriEmail != "" && veriCode != "") {
+          window.fiui.loadingDimmer.hide();
+
+          let idxFound = null;
+
+          for (let i in brokerName) {
+            if (brokerName[i] == veriBrokerName) {
+              idxFound = i
+            }
+          }
+
+          if (idxFound != null) {
+            $("#brokerNameSignUp").val(shownBrokerName[idxFound]);
+          } else {
+            $("#brokerNameSignUp").val(window.ficfg.defaultBrokerName);
+          }
+          $("#emailSignUp").val(veriEmail);
+          $("#veriCodeSignUp").val(veriCode);
+          $("#veriEmailAddrDiv").show();
+          window.fiui.signUp.show();
+
+          return;
+        }
+      }
+    }
+
     let fiac = localStorage.getItem(this.storageName);
 
     if (fiac != null) {
@@ -1078,7 +1115,7 @@ window.fiui.signUp = {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
     }
     if (window.ficfg.isShowDefault) {
-      dropdownList.push('<option value="Fintechee Demo">Fintechee Demo Server</option>');
+      dropdownList.push(`<option value="${window.ficfg.defaultBrokerName}">${window.ficfg.defaultBrokerNameListed}</option>`);
     }
     $("#brokerNameSignUp").html(dropdownList.join("\n"));
 
@@ -1285,7 +1322,7 @@ window.fiui.signIn = {
       dropdownList.push('<option value="' + window.shownBrokerName[i] + '">' + window.signInShownBrokerName[i] + '</option>');
     }
     if (window.ficfg.isShowDefault) {
-      dropdownList.push('<option value="Fintechee Demo">Fintechee Demo Server</option>');
+      dropdownList.push(`<option value="${window.ficfg.defaultBrokerName}">${window.ficfg.defaultBrokerNameListed}</option>`);
     }
     $("#brokerNameSignIn").html(dropdownList.join("\n"));
 
@@ -2399,6 +2436,9 @@ window.fiui.brokerList = {
     <div class="input-group mb-3">
     <input type="text" class="form-control" placeholder="Identifier" style="color:#000;background:#eee" id="identifierBp">
     </div>
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Activation URL" style="color:#000;background:#eee" id="activationUrlBp">
+    </div>
     <div class="row">
     <div class="col-12" style="text-align:center">
     <div class="btn-group">
@@ -2714,7 +2754,7 @@ window.fiui.brokerList = {
       smtpPort: parseInt($("#smtpPortBp").val()),
       emailPassword: $("#emailPasswordBp").val(),
       password: "",
-      domainWP: "",
+      domainWP: $("#activationUrlBp").val(),
       userNameWP: "",
       passwordWP: "",
       getBalanceURLForWP: "",
@@ -2841,7 +2881,7 @@ window.fiui.brokerList = {
         $("#cryptoPaymentGatewayKeyBp").val(data[res.brokers.colIndex.cryptoPaymentGatewayKey]);
         $("#paymentGatewayWalletIdBp").val(data[res.brokers.colIndex.paymentGatewayWalletId]);
         $("#paymentGatewayStoreIdBp").val(data[res.brokers.colIndex.paymentGatewayStoreId]);
-        $("#pgSuccessRedirectBp").val(data[res.brokers.colIndex.pgSuccessRedirect]);
+        $("#pgSuccessRedirectUrlBp").val(data[res.brokers.colIndex.pgSuccessRedirect]);
         $("#identifierBp").val(data[res.brokers.colIndex.identifier]);
         $("#commissionOpeningLongBp").val(data[res.brokers.colIndex.buyOpnCmmssn]);
         $("#commissionClosingLongBp").val(data[res.brokers.colIndex.buyClsdCmmssn]);
@@ -2849,6 +2889,7 @@ window.fiui.brokerList = {
         $("#commissionClosingShortBp").val(data[res.brokers.colIndex.sellClsdCmmssn]);
         $("#bidMarkUpBp").val(data[res.brokers.colIndex.bid]);
         $("#askMarkUpBp").val(data[res.brokers.colIndex.ask]);
+        $("#activationUrlBp").val(data[res.brokers.colIndex.activationUrl]);
 
         that.showDlg();
       }
