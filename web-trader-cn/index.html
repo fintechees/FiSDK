@@ -444,9 +444,12 @@ var isShowDefault = false
 	var sharedInvestorPassword = null
 	var locationHash = location.hash.substr(1)
 	if (locationHash != "") {
-		sharedBrokerName = locationHash.split(":::")[0]
-		sharedAccount = locationHash.split(":::")[1]
-		sharedInvestorPassword = locationHash.split(":::")[2]
+		var hashArray = locationHash.split(":::")
+		if (hashArray.length == 3) {
+			sharedBrokerName = hashArray[0]
+			sharedAccount = hashArray[1]
+			sharedInvestorPassword = hashArray[2]
+		}
 	}
 
 	if (widgetMode) {
