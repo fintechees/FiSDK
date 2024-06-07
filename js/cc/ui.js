@@ -109,7 +109,7 @@ window.fiac = {
     });
   },
   load: function () {
-    var locationHash = location.hash.substr(1);
+    let locationHash = location.hash.substr(1);
     if (locationHash != "") {
       let hashArray = locationHash.split(":::");
 
@@ -1743,11 +1743,13 @@ window.fiui.resetPw = {
     });
 
     fisdk.subscribeToNotification("resetting_password_done", function (res) {
+      let params = {
+        message: "Please remember your account info. Account ID: " + res.accountId + ", Password: " + res.password + ", Investor Password: " + res.investorPassword
+      };
       console.log("resetting_password_done");
-      if (typeof res.message != "undefined" && res.message != "") {
-        console.log(res.message);
-        toastr.info(res.message);
-      }
+      console.log(params.message);
+      toastr.info(params.message);
+      window.fiui.syncMsg.prepend(params);
     });
 
     fisdk.subscribeToNotification("failed_to_reset_password", function (res) {
