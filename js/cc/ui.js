@@ -114,17 +114,17 @@ window.fiac = {
       let hashArray = locationHash.split(":::");
 
       if (hashArray.length == 3) {
-        let veriBrokerName = hashArray[0];
+        let veriBrokerId = hashArray[0];
       	let veriEmail = hashArray[1];
       	let veriCode = hashArray[2];
 
-        if (veriBrokerName != "" && veriEmail != "" && veriCode != "") {
+        if (veriBrokerId != "" && veriEmail != "" && veriCode != "") {
           window.fiui.loadingDimmer.hide();
 
           let idxFound = null;
 
           for (let i in brokerName) {
-            if (brokerName[i] == veriBrokerName) {
+            if (brokerName[i] == veriBrokerId) {
               idxFound = i
             }
           }
@@ -1042,7 +1042,7 @@ window.fiui.signUp = {
     </div>
     </div>
     </div>` +
-    (ibAccIdRequiredMode ? `<div class="input-group mb-3">
+    ((typeof ibAccIdRequiredMode == 'boolean' && ibAccIdRequiredMode) ? `<div class="input-group mb-3">
     <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">
     <div class="input-group-append">
     <div class="input-group-text" style="background:#eee">
@@ -1068,7 +1068,7 @@ window.fiui.signUp = {
           </div>
           </div>
           </div>` +
-          (ibAccIdRequiredMode ? '' : `<div class="input-group mb-3">
+          ((typeof ibAccIdRequiredMode == 'boolean' && ibAccIdRequiredMode) ? '' : `<div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="IB Account ID" style="color:#000;background:#eee" id="refAccountIdSignUp">
           <div class="input-group-append">
           <div class="input-group-text" style="background:#eee">
