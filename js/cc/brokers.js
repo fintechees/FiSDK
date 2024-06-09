@@ -76,7 +76,7 @@ var shopDomain = {
 
 var brokerName = {
 	wl1: "tst1",
-	wl2: "kbdemo",
+	wl2: "kbdemo2",
 	wl3: "sodemo",
 	wl4: "ulfdemo",
 	wl5: "kobbdemo",
@@ -114,7 +114,7 @@ var signInShownBrokerName = {
 
 var shownBrokerName = {
 	wl1: "Test Demo1",
-	wl2: "KBS Demo",
+	wl2: "KBS Demo 2",
 	wl3: "Sochi Demo",
 	wl4: "Vet Demo",
 	wl5: "Kobb Demo",
