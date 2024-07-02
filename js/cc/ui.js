@@ -5764,7 +5764,7 @@ window.fiui.copyTradeList = {
     <div class="input-group mb-3" id="divCommentCt">
     <input type="text" class="form-control" placeholder="Pro" style="color:#000;background:#eee" id="commentCt">
     </div>
-    <div class="input-group mb-3">
+    <div class="input-group mb-3" id="divReverseCt">
     <div class="icheck-primary">
     <input type="checkbox" id="chkReverseCt">
     <label for="chkReverseCt">
@@ -5941,7 +5941,7 @@ window.fiui.copyTradeList = {
       if (window.fiac.tradeToken != null) {
         if (!window.fiac.info.bManager) {
           let copyTraded = null;
-          let bReverse = null;
+          let bReverse = false;
           let mode = null;
           let multiplier = null;
           let comment = null;
@@ -5978,7 +5978,9 @@ window.fiui.copyTradeList = {
               }
               multiplier = 1;
             }
-            bReverse = $("#chkReverseCt").prop("checked");
+            if (ctOrLammOrPamm != "pamm") {
+              bReverse = $("#chkReverseCt").prop("checked");
+            }
           } catch (e) {
             toastr.error(e.message);
           }
@@ -6161,10 +6163,16 @@ window.fiui.copyTradeList = {
     $("#ctOrLammOrPamm").val(pro[0]);
     if (pro[0] == "ct") {
       $("#divCommentCt").show();
+      $("#divReverseCt").show();
       $("#divModeCt").show();
       $("#divMultiplierCt").show();
     } else {
       $("#divCommentCt").hide();
+      if (pro[0] == "pamm") {
+        $("#divReverseCt").hide();
+      } else {
+        $("#divReverseCt").show();
+      }
       $("#divModeCt").hide();
       $("#divMultiplierCt").hide();
     }
