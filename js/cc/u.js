@@ -1,15 +1,15 @@
 /*
- * 
+ *
  *  Shi Nai Jun (Mark Sea) CONFIDENTIAL
  * __________________
- * 
+ *
  *  Shi Nai Jun (Mark Sea)
  *  All Rights Reserved.
- * 
- * NOTICE:  All information and all copyrights contained herein are, 
+ *
+ * NOTICE:  All information and all copyrights contained herein are,
  * and remain the property of Shi Nai Jun, if any.
- * The intellectual and technical concepts contained herein are 
- * proprietary to Shi Nai Jun and may be covered by patents, patents 
+ * The intellectual and technical concepts contained herein are
+ * proprietary to Shi Nai Jun and may be covered by patents, patents
  * in process, and are protected by trade secret or copyright law.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
@@ -671,7 +671,7 @@ f6.aBW=function(transform){var g=document.createElementNS("http://www.w3.org/200
  return;
 }for(var i in this.bI){var T=this.bI[i];if(T.J==J){T.aF=aF;T.aA=aA;for(var j in aA){var bF=aA[j];if(bF.ah.includes("/")){T.ds[this.nd(bF.iE,bF.fq)]=bF}}if(f6.dZ==f6.eK.eg){T.aE=this.aXJ(T.H,T.K)}else{T.aE=[]}if(T.aE.length>0){for(var j=T.aE.length-1;j>=0;j -= 1){var aJ=false;for(var k in aA){if(T.aE[j]==aA[k].ah){aJ=true;break}}if(!aJ){T.aE.splice(j,1)}}if(T.aE.length>0){f6.fm.IJ(J,T.H,T.K,T.aE,this.aa==null?true:false);if(f6.bY){var H=T.H;var K=T.K;var CX=[];for(var j in T.aE){var bL=this.lw(H,K,T.aE[j]);CX.push({symbolName:T.aE[j],displayName:bL})}this.av(this.bz.IJ,{brokerId:H,accountId:K,symbols:CX})}}}this.fl.ky(this.bB,this.aZ,J,JSON.parse(JSON.stringify(T.aE)));break}}},lw:function(H,K,ah){for(var i in this.bI){var T=this.bI[i];if(T.H==H&&T.K==K){if(T.aA!=null){for(var j in T.aA){if(T.aA[j].ah==ah){return T.aA[j].bL}}}break}}return ""},sB:function(H,K,bL){for(var i in this.bI){var T=this.bI[i];if(T.H==H&&T.K==K){if(T.aA!=null){for(var j in T.aA){if(T.aA[j].bL==bL){return T.aA[j].ah}}}break}}return null},lQ:function(aA,ah){for(var i in aA){if(aA[i].ah==ah){return aA[i]}}return null},apH:function(bv,K,bL){
  if(typeof bv!=f6.C.bh){throw new Error(f6.L.kc)}var H=f6.jb(bv);if(H==null){throw new Error(f6.L.jU)}if(typeof K!=f6.C.bh){throw new Error(f6.L.gj)}if(typeof bL!=f6.C.bh){throw new Error(f6.L.qz)}var ay=this.bb(H,K);var T=this.bI[ay];if(typeof T==f6.C.bp){throw new Error(f6.L.jU)}for(var i in T.aA){var pK=T.aA[i];if(pK.bL==bL){
-  var aF=this.fl.aDJ(this.aa,H,K);var aFs=false;if(aF!=null&&aF!=""&&(aF==pK.fq||aF==pK.iE)){aFs=true}var LD=this.LH(pK,aF);var au={symbolName:pK.bL,tradable:aFs,toFixed:pK.bc,swapLong:LD.auG,swapShort:LD.aDV,bSpecialDay:pK.IW,specialDay:pK.Ey,leverage:pK.oV,lotsLimit:pK.Am,lotsMinLimit:pK.yn,lotsStep:pK.ue};return au;
+  var aF=this.fl.aDJ(this.aa,H,K);var aFs=false;if(aF!=null&&aF!=""&&(aF==pK.fq||aF==pK.iE)){aFs=true}var LD=this.LH(pK,aF);var au={symbolName:pK.bL,tradable:aFs,toFixed:pK.bc,swapLong:LD.auG,swapShort:LD.aDV,bSpecialDay:pK.IW,specialDay:pK.Ey,leverage:pK.oV,lotsLimit:pK.Am,lotsMinLimit:pK.yn,lotsStep:pK.ue,lotsUnit:pK.eB};return au;
  }}return null;
 },rr:function(aB,aj){if(typeof aB==f6.C.bh&&f6.oM(aj)){if(typeof this.kT[aB]==f6.C.bp){this.kT[aB]=[]}this.kT[aB].push(aj)}},av:function(aB,bj){if(typeof this.kT[aB]!=f6.C.bp){var xy=this.kT[aB];for(var i in xy){xy[i](bj)}}},LH:function(au,aF){if(aF==au.fq||(aF!=au.fq&&aF!=au.iE)){return{auG:au.RG,aDV:au.Qt}}else{return{auG:au.aaW,aDV:au.aaA}}},bak:function(H,K,aE){
  if (f6.dZ==f6.eK.jA) {
