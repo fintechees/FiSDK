@@ -519,7 +519,7 @@ var dict = {
     m177: "[M177]: 参数: volume不正确。",
     m178: "[M178]: 参数: orderType既不是ORDER_TYPE.OP_BUY也不是ORDER_TYPE.OP_SELL。",
     m179: "[M179]: 参数: price不正确。",
-    m180: "[M180]: 参数: slippage应该是个数值型并且大于零。",
+    m180: "[M180]: 参数: slippage应该是个数值型并且大于等于零。",
     m181: "[M181]: 参数: takeProfit不正确。",
     m182: "[M182]: 参数: stopLoss不正确。",
     m183: "[M183]: 参数: comment应该是字符串类型并且长度不应该超过限制。",

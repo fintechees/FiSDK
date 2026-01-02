@@ -519,7 +519,7 @@ var dict = {
     m177: "[M177]: The parameter: volume is not correct.",
     m178: "[M178]: The parameter: orderType is neither ORDER_TYPE.OP_BUY nor ORDER_TYPE.OP_SELL.",
     m179: "[M179]: The parameter: price is not correct.",
-    m180: "[M180]: The parameter: slippage should be a numeric type and greater than zero.",
+    m180: "[M180]: The parameter: slippage should be a numeric type and greater than or equal to zero.",
     m181: "[M181]: The parameter: takeProfit is not correct.",
     m182: "[M182]: The parameter: stopLoss is not correct.",
     m183: "[M183]: The parameter: comment should be a string type and the length should not exceed the limitation.",
